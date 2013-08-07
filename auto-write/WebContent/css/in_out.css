@@ -1,0 +1,97 @@
+@charset "utf-8";
+/*input Style*/
+div.inputBox {width:783px;letter-spacing:-0.04em;}
+div.inputBox .title {font-size:20px;font-weight:bold;margin:15px 0 15px 0;text-align:center;font-family:Tahoma,Verdana,dotum;}
+div.inputBox .star {color:#de5a0c;}
+div.inputBox .starNote {padding-bottom:3px;text-align:right;}
+div.inputTB table {width:100%;border-left:1px solid #ccc;border-right:1px solid #ccc;border-bottom:1px solid #ccc;border-top:2px solid #b0c3d6;}
+div.inputTB th {background:#e6eef5;text-align:left;padding:3px 3px 1px 5px;color:#3a3a3a;border:1px solid #ccc;height:18px;font-weight:normal;}
+div.inputTB td  {padding:1px 3px 2px 3px;border:1px solid #ccc;height:20px;}
+div.inputTB .section1 {background:#e7ebef;padding:0;}
+div.inputTB .section2 {background:#e4e7f3;font-weight:bold;color:#897f95;}
+div.inputTB .section3 {background:#e7ebef;font-weight:bold;color:#6a7988;}
+div.inputTB .part{background:#f4f2e9;text-align:center;}
+
+div.sectionTB {height:20px;padding:4px 5px 2px 5px;}
+div.sectionTB .l {float:left;color:#6a7988;font-weight:bold;padding-top:3px;}
+div.sectionTB .r {float:right;height:18px;}
+
+div.inputTB01 table {width:100%;border-left:1px solid #ccc;border-right:1px solid #ccc;border-bottom:1px solid #ccc;border-top:2px solid #b0c3d6;}
+div.inputTB01 th {background:#e6eef5;padding:3px 3px 1px 5px;color:#3a3a3a;border:1px solid #ccc;text-align:center;height:20px;font-weight:normal;}
+div.inputTB01 td  {padding:1px 6px 2px 6px;border:1px solid #ccc;height:18px;text-align:center;}
+div.inputTB01 .no {text-align:left;background:#e7ebef;font-weight:bold;color:#6a7988;}
+div.inputTB01 .part2 {background:#e5e5e5;}
+div.inputTB01 .part3 {text-align:left;}
+
+div.inputTB02 table {width:100%;_width:97.5%;border:1px solid #ccc;}
+div.inputTB02 th {background:#f4f2e9;padding:4px 3px 1px 3px;color:#3a3a3a;border:1px solid #ccc;height:18px;font-weight:normal;text-align:center;}
+div.inputTB02 td  {padding:1px 6px 2px 6px;border:1px solid #ccc;height:20px;text-align:center;}
+
+div.inputTB03 table {width:100%;border-left:1px solid #ccc;border-right:1px solid #ccc;border-bottom:1px solid #ccc;border-top:2px solid #b0c3d6;}
+div.inputTB03 th {background:#e6eef5;padding:3px 3px 1px 5px;color:#3a3a3a;border:1px solid #ccc;height:20px;font-weight:normal;text-align:left;}
+div.inputTB03 td  {padding:1px 6px 2px 6px;border:1px solid #ccc;height:18px;text-align:left;}
+
+div.inputTB04 table {width:100%;border-left:1px solid #ccc;border-right:1px solid #ccc;border-bottom:1px solid #ccc;border-top:2px solid #b0c3d6;}
+div.inputTB04 th {background:#e6eef5;padding:3px 3px 1px 5px;color:#3a3a3a;border:1px solid #ccc;height:20px;font-weight:normal;text-align:left;}
+div.inputTB04 td  {padding:1px 6px 2px 6px;border:1px solid #ccc;height:18px;text-align:left;}
+
+div.inputTB05 table {width:100%;border-left:1px solid #ccc;border-right:1px solid #ccc;border-bottom:1px solid #ccc;border-top:2px solid #b0c3d6;}
+div.inputTB05 th {background:#e7ebef;font-weight:bold;color:#6a7988;border:1px solid #ccc;text-align:left;height:20px;padding:3px 3px 1px 5px;}
+div.inputTB05 td  {padding:5px 6px 2px 6px;border:1px solid #ccc;height:20px;}
+div.inputTB05 .textbox {color:#65a5dd;font-weight:bold;font-size:11px;padding-bottom:5px;}
+div.inputTB05 .number {font-weight:bold;padding-bottom:5px;}
+div.inputTB05 .section4 {background:#e7ebef;font-weight:bold;color:#6a7988;}
+div.inputTB05 .section5 {background:#e6eef5;color:#3a3a3a;text-align:center;height:20px;font-weight:normal;}
+
+
+
+
+/*output Style*/
+div.outputBox {width:700px;letter-spacing:-0.04em;}
+div.outputBox .title {font-size:20px;font-weight:bold;margin:15px 0 15px 0;text-align:center;font-family:Tahoma,Verdana,dotum;}
+div.outputBox .star {color:#de5a0c;}
+div.outputBox .starNote {padding-bottom:3px;text-align:right;}
+div.outputTB table {width:100%;border:1px solid #393939;}
+div.outputTB th {background:#e5e5e5;text-align:left;padding:3px 3px 1px 5px;color:#3a3a3a;border:1px solid #393939;height:18px;font-weight:normal;}
+div.outputTB td  {padding:1px 6px 2px 6px;border:1px solid #393939;height:20px;}
+div.outputTB .section1 {background:#d0d0d0;padding:0;}
+div.ioutputTB .section2 {background:#e4e7f3;font-weight:bold;color:#897f95;}
+div.outputTB .section3 {background:#d0d0d0;font-weight:bold;color:#565656;}
+div.outputTB .part{background:#f4f2e9;text-align:center;}
+
+
+
+div.outputTB01 table {width:100%;border:1px solid #393939;}
+div.outputTB01 th {background:#e5e5e5;padding:3px 3px 1px 5px;color:#3a3a3a;border:1px solid #393939;text-align:center;height:20px;font-weight:normal;}
+div.outputTB01 td  {padding:1px 6px 2px 6px;border:1px solid #393939;height:18px;text-align:center;}
+div.outputTB01 .no {text-align:left;background:#d0d0d0;font-weight:bold;color:#565656;padding:5px 3px 3px 5px;}
+div.outputTB01 .no1 {text-align:center;background:#d0d0d0;font-weight:bold;color:#565656;}
+div.outputTB01 .no3 {background:#f2f2f2;font-weight:normal;text-align:left;}
+div.outputTB01 .no4 {background:#f2f2f2;font-weight:normal;text-align:center;}
+div.outputTB01 .part2 {background:#e5e5e5;}
+div.outputTB01 .part3 {text-align:left;}
+
+div.outputTB02 table {width:100%;border:1px solid #393939;}
+div.outputTB02 th {background:#f4f2e9;padding:4px 3px 1px 3px;color:#3a3a3a;border:1px solid #393939;height:18px;font-weight:normal;text-align:center;}
+div.outputTB02 td  {padding:1px 6px 2px 6px;border:1px solid #393939;height:20px;text-align:center;}
+
+div.outputTB03 table {width:100%;border:1px solid #393939;}
+div.outputTB03 th {background:#e5e5e5;padding:3px 3px 1px 5px;color:#3a3a3a;border:1px solid #393939;height:20px;font-weight:normal;text-align:left;}
+div.outputTB03 td  {padding:1px 6px 2px 6px;border:1px solid #393939;height:18px;text-align:left;}
+
+div.outputTB04 table {width:100%;border-left:1px solid #393939;border-right:1px solid #393939;border-bottom:1px solid #393939;border-top:2px solid #ababab;}
+div.outputTB04 th {background:#e5e5e5;padding:3px 3px 1px 5px;color:#3a3a3a;border:1px solid #393939;height:20px;font-weight:normal;text-align:left;}
+div.outputTB04 td  {padding:1px 6px 2px 6px;border:1px solid #393939;height:18px;text-align:left;}
+
+div.outputTB05 table {width:100%;border:1px solid #393939;font-family:dotum;}
+div.outputTB05 th {background:#d0d0d0;font-weight:bold;color:#565656;border:1px solid #393939;text-align:left;height:20px;padding:3px 3px 1px 5px;}
+div.outputTB05 td  {padding:5px 6px 2px 6px;border:1px solid #393939;height:20px;}
+div.outputTB05 .textbox {color:#4d4d4d;font-weight:bold;font-size:11px;padding-bottom:5px;}
+div.outputTB05 .number {font-weight:bold;padding-bottom:5px;}
+div.outputTB05 .section4 {background:#d0d0d0;font-weight:bold;color:#565656;}
+div.outputTB05 .section5 {background:#e5e5e5;color:#3a3a3a;text-align:center;height:20px;font-weight:normal;}
+
+div.sign {text-align:right;font-size:14px;margin:30px 0 10px 0;}
+div.sign span {padding-right:150px;border-bottom:2px solid #3d3d3d;font-weight:bold;padding-bottom:3px;}
+div.outputBt {text-align:right;margin:15px 0 3px 0;}
+

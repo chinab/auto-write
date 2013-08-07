@@ -1,0 +1,149 @@
+@import url('./css/board.css');
+@font-face{font-family:NanumGothic; color: #cccccc; src:url('./NanumGothic.eot')}
+@font-face{font-family:NanumGothic; color: #cccccc; src:url('./MalgunGothic.eot')}
+@font-face { font-family:'NanumGothic'; font-style:normal; font-weight:400; src: url('./NanumGothicCompact.woff') format('woff');}
+@font-face { font-family:'NanumGothic'; font-style:normal; font-weight:400; src: url('./NanumGothicCompact.ttf') format('truetype');}
+
+html { overflow-y:scroll; }
+html, body {margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; width:100%; height:100%;}
+td {height:100%}
+html, body, table, div, input,  textarea, select,  h1, h2, h3, h4, h5, h6 { color:#666666; font-size:12px; font-family:   Dotum, DotumChe ; }
+html,body,div,ul,ol,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,form,p,blockquote,fieldset,input { margin: 0; padding: 0; }
+ul,ol,li,dl { list-style: none; }
+
+a {font-family: ""; font-size: 9pt; line-height: 140%; color: #545454; text-decoration: none}
+a:hover {  font-family: ""; font-size: 9pt; line-height: 140%; color: #996633; text-decoration: none}
+a:link { font-family: ""; color: #545454; text-decoration: none; font-size: 9pt; line-height: 140%;}
+a:visited { font-family: ""; color: #545454; text-decoration: none; font-size: 9pt; line-height: 140%;}
+
+html{scrollbar-face-color: #FFFFFF; scrollbar-shadow-color: #E3E2E2; scrollbar-highlight-color: #E3E2E2; scrollbar-3dlight-color: #FFFFFF; scrollbar-darkshadow-color: #FFFFFF; scrollbar-track-color: #FFFFFF;
+scrollbar-arrow-color: #E3E2E2;}
+
+IMG  border: none;}
+img {border:0}
+
+
+/* 기타 공통  */
+.Sub_Table {margin-top:40px; min-height:300px;}
+.hand {cursor:hand}
+.su_input {background-color:eeeeee; border-width:1px; font-family:Verdana, 굴림, Gulim;font-size:12px;color:#000000;border: }
+.input_form, {background-color:#F5F4F4;font-family:Verdana, 굴림, Gulim;font-size:12px;color:#636163;border: 1px solid #E5E5E5}
+.input {background-color:#ffffff;font-family:Verdana, 굴림, Gulim;font-size:12px; color:#636163;border: 1px solid #A8A8A8}
+.input1 {background-color:#FFFFFF;font-family:Verdana, 굴림, Gulim;font-size:12px;color:#000000;border: 1px solid #A8A8A8}
+.input2 {background-color:rgb(247,247,247); border-width:1px; border-color:rgb(51,51,51); border-style:double;}
+.input3, {background-color:#F2F0F0; border-width:1px; border-color:#CCCCCC; border-style:double;}
+.input_white  {background-color:#ffffff;font-family:Verdana, 굴림, Gulim;font-size:12px; color:#636163;border: 1 solid #ffffff}
+.input_gray  {background-color:#E6E6E6; border-width:1px; border-color:#E6E6E6); font-family:"Verdana", "굴림", "Gulim";font-size:12px;bold:1; border: 1 solid #E6E6E6  } 
+.login_name    {font-family:돋움; font-size:9pt; color:#44700f;letter-spacing:-1; font-weight:bold;}
+.input_black  {background-color:000000; border-width:1px; border-color:#000000); font-family:"Verdana", "굴림", "Gulim";font-size:12px;color:#ffffff; border: 1 solid #000000  }
+.input_gr,  {background-color:#B1FB8A; border-width:1px; border-color:#B1FB8A); font-family:"Verdana", "굴림", "Gulim";font-size:12px;color:#B08864; border: 1 solid #A8C7EE  } 
+.input_ye,  {background-color:#F4EF82; border-width:1px; border-color:#F4EF82); font-family:"Verdana", "굴림", "Gulim";font-size:12px;color:#000000; border: 1 solid #A8C7EE  } 
+.input_bo,  {background-color:#F66CFF; border-width:1px; border-color:#F4EF82); font-family:"Verdana", "굴림", "Gulim";font-size:12px;color:#3E3E3E; border: 1 solid #EF23FC  } 
+.name { font-size:12px; color:#336699; font-weight: bold; }
+.input_bo1,  {background-color:#D4DAFF; border-width:1px; border-color:#F4EF82); font-family:"Verdana", "굴림", "Gulim";font-size:12px;color:#000000; border: 1 solid #D4DAFF  } 
+.input_blue   {background-color:#CDE3F5; border-width:1px; border-color:A59D73); font-family:Verdana, 굴림, Gulim;font-size:12px;color:#000000; border: 1 solid #A8C7EE }
+.input_red    {background-color:#FFBFDD; border-width:1px; border-color:D292B0;  font-family:Verdana, 굴림, Gulim;font-size:12px;color:#636163; border: 1 solid #D292B0}
+.input_green {background-color:#92FFC3; border-width:1px; border-color:D292B0;  font-family:Verdana, 굴림, Gulim;font-size:12px;color:#515553; border: 1 solid #60FAA5}	
+.s_h {background-color:#ffffff; font-family:tahoma; font-size:30px; color:#003497; border: 1px solid #ffffff; font-weight:bold; padding:19px 10px; }
+.s_id {background-color:#ffffff; font-family:Verdana, 돋음; font-size:12px; color:#666666;  border: 1px solid #cccccc; padding:4px;}
+.M_id {background-color:#ffffff; font-family:Verdana, 돋음; font-size:15px; color:#666666;  border: 3px solid #6393c3; height:21px; padding:6px;}
+.F_id {background-color:#ffffff; font-family:Verdana, 돋음; font-size:12px; color:#666666;  border: 1px solid #cccccc; height:15px; padding:3px;}
+.s_mem {background-color:#ffffff; font-family:Verdana, 굴림, Gulim;font-size:12px; color:#666666; border: 1px solid #cccccc; font-weight:bold; height:22px; padding:4px 0 0 0;}
+
+.mem {   color: #326698;   font-size:11px;   padding:0 0 0 10px;   }
+.mem_1 {   color: #326698;   font-size:11px;   padding:0 0 0 0px;   }
+.mem_yes_no {   color: #326698;   font-size:11px;   padding:0 0  5px 5px;  width:120px; display:inline-block; }
+.mem_yes_no1 {color: #326698; font-size:11px; padding-top:3px; width:40px;}
+.top_Smenu {color:#326698; font-size:11px; padding:0 0  5px 5px; }
+.top_Smenu .Sme a { font-family:Malgun Gothic;  color:#666666; font-size:11px; padding:0 0  5px 5px; }
+.top_Smenu .Sme a:hover { font-family:Malgun Gothic; color:#735429; font-size:11px; padding:0 0  5px 5px; }
+
+
+/* 탑 텍스트메뉴  */
+.top_Menu_All {width:100%; height:26px; text-align:center; border-bottom:solid 1px #eeeeee;}
+.top_Menu_All .t_Menus {width:1000px; margin-top:3px; text-align:right; height:17px; font-family: Malgun Gothic; font-size:12px; }
+.top_Menu_All .t_Menus .TopMenus {text-align:left; font-size:11px; line-height:160%; margin-bottom:10px;}
+.top_Menu_All .t_Menus .TopMenus a{font-size:11px;}
+.top_Menu_All .t_Menus .TopMenus a:hover {font-size:11px; color:#ff6600; font-family: Malgun Gothic; }
+
+
+/* 탑 메뉴 로고포함  */
+.top_Menu_All1 {width:100%; height:128px; text-align:center; border-bottom:solid 3px #29bfa1;}
+.top_Menu_All1 .Top_Logo {margin-top:7px;}
+.top_Menu_All1 .Top_Main_menus {margin-top:15px; width:1000px;}
+
+.top_Menu_All1 .Top_Main_menus .Menus_tl {float:left; width:166px; font-size:30px; font-family: Malgun Gothic; border-left:solid 1px #eeeeee;border-right:solid 1px #eeeeee; display:table;}
+.top_Menu_All1 .Top_Main_menus .Menus_tl a {font-size:15px;}
+.top_Menu_All1 .Top_Main_menus .Menus_tl a:hover {font-size:15px; color:#ff6600; font-family: Malgun Gothic; }
+
+.top_Menu_All1 .Top_Main_menus .Menus_t {float:left; width:165px; font-size:30px; font-family: Malgun Gothic; border-right:solid 1px #eeeeee; display:inline-bloc; display:table;}
+.top_Menu_All1 .Top_Main_menus .Menus_t a {font-size:15px;}
+.top_Menu_All1 .Top_Main_menus .Menus_t a:hover {font-size:15px; color:#ff6600; font-family: Malgun Gothic; }
+
+/*서브좌측메뉴*/
+.L_Menus {width:220px;  line-height:150%;  }
+.L_Menus .Menu_Title {text-align:right; font-weight:bold; margin-top:10px; font-family: Malgun Gothic; font-size:25px; color:#219075; margin-bottom:20px;}
+
+.L_Menus .Menu_tex { text-align:right; margin-right:30px; width:220px; display:table; font-family:Malgun Gothic; color: #216302; font-size:17px; line-height: 190%;}
+.L_Menus .Menu_tex a { text-align:right; margin-right:30px; width:220px; display:table; font-family:Malgun Gothic; color: #219075; font-size:17px; line-height: 190%;}
+.L_Menus .Menu_tex a:link { text-align:right; width:220px; font-family:Malgun Gothic; color: #545454; font-size:17px; line-height: 190%;}
+.L_Menus .Menu_tex a:hover { text-align:right; width:220px; font-size:17px; color:#219075; font-family:Malgun Gothic; }
+.L_Menus .Menu_img_1 {height:39px; margin-bottom:15px;}
+.L_Menus .Menu_img {margin-top:10px; margin-left:23px;}
+
+
+/* 버튼 */
+.in_btn {background-color:#ffffff; border:solid 1px #cccccc; width:100px; height:23px; padding-top:4px;}
+.in_btnc {background-color:#4993d5; border:solid 1px #cccccc; width:100px; height:23px; padding-top:4px; color:#ffffff;}
+.in_btnc2 {background-color:#e0f6bc; border:solid 1px #cccccc; width:100px; height:23px; padding-top:4px; color:#666666;}
+.in_btnc1 {background-color:#e0f6bc; border:solid 1px #cccccc; width:100px; height:20px; padding-top:2px; color:#666666;}
+
+
+
+/*서브페이지*/
+.Left_Banners_all {margin-left:13px; margin-top:55px;}
+.Sub_Allpages {margin-left:16px; min-height:550px; min-height:550px; }
+.Sub_Allpages .title {margin-top:40px; text-align:right; margin-bottom:20px; width:800px;}
+.Sub_Allpages .text {margin-left:2px; text-align:right; color:#666666; font-family: Malgun Gothic; font-size:12px; margin-bottom:10px; line-height:180%;}
+.Sub_Allpages .cont {margin-top:50px;}
+.Sub_Allpages .cont_text {margin-top:30px;}
+
+.Sub_Allpages .Search_Bar {width:800px; height:120px; margin-bottom:20px; background:url('../images/community/faq_topimg.gif')}
+.Sub_Allpages .Search_Bar .Sea_input {position:relative; top:76px; left:20px; width:500px;}
+
+.Sub_Allpages .text_01 {margin-left:2px;  font-family:Malgun Gothic; margin-top:20px; color:#666666; font-size:12px; line-height:180%;}
+.Sub_Allpages .text_02 {margin-left:2px;  font-family: Malgun Gothic; margin-top:5px;  color:#666666; font-size:12px; line-height:180%;}
+.Sub_Allpages .text_left {margin-left:16px;  font-family: Malgun Gothic; margin-top:7px;  color:#666666; font-size:12px; line-height:180%;}
+.Sub_Allpages .text_color {margin-top:20px;  font-family: Malgun Gothic; color:#666666; font-size:12px; line-height:180%;}
+.Sub_Allpages .text_cobold {font-weight:bold; font-family: Malgun Gothic; margin-top:20px;  color:#3f6dac; font-size:13px; line-height:180%;}
+.Sub_Allpages .text_bold {font-weight:bold; font-family: Malgun Gothic; margin-top:20px;  color:#ff6600; font-size:12px; line-height:180%;}
+.Sub_Allpages .text_bold01 {font-weight:bold; font-family: Malgun Gothic; margin-top:20px;  color:#333333; font-size:14px; line-height:180%;}
+.Sub_Allpages .S_stitle {margin-top:50px;}
+.Sub_Allpages .S_board {margin-top:50px; min-height:400px;}
+.Sub_Allpages .S_table {margin-top:10px;}
+.Sub_Allpages .Login_Bg {height:190px; width:685px; margin-top:55px; background:url('../images/members/bg_login.gif')}
+.Sub_Allpages .Loginok_Bg {height:185px; width:685px; margin-top:55px; background:url('../images/members/join_okbg.gif')}
+.Sub_Allpages .Loginok_Bg .bold {font-weight:bold; color:#3f6dac;}
+.Sub_Allpages .idpass_serbg {height:235px; width:685px; margin-top:15px; background:url('../images/members/idpass_serbg.gif')}
+.Sub_Allpages .idpass_serbg .bold {font-weight:bold; font-family:Malgun Gothic; width:70px; display:inline-block; font-size:13px; color:#333333;}
+
+.Sub_Allpages .Agree_tab {height:53px; width:685px; margin-top:25px;}
+.Sub_Allpages .Agree_s_title {height:27px; width:685px; margin-top:25px;}
+.Sub_Allpages .edu_s_title {height:27px; width:685px; margin-top:25px;}
+.Sub_Allpages .Agree_s_title1 {height:27px; width:685px; margin-top:35px;}
+.Sub_Allpages .Agree_Box {min-height:27px; width:685px; margin-top:5px;}
+.Sub_Allpages .idpass_Bg {height:185px; width:685px; margin-top:55px; background:url('../images/members/idpass_okbg.gif')}
+.Sub_Allpages .idpass_Bg .bold {font-weight:bold; color:#3f6dac;}
+
+
+
+
+/*테이블리스트*/
+.list01 {width:100%; text-align:center; border:solid 1px #cccccc; margin-top:10px;}
+.list01 th {text-align:center; background-color:#d9e8f5; height:25px; border-top:solid 2px #eeeeee; border:solid 1px #cccccc;}
+.list01 td {background:none; border:1px solid #cccccc; padding:6px 0; font-family:Tohoma;}
+
+
+/* 푸터  */
+.Footer_bg_all {width:100%; margin-top:30px;  text-align:center; border-top:solid 1px #eeeeee;}
+.Footer_bg_all .F_img {margin-top:25px; margin-bottom:30px;}

@@ -1,0 +1,53 @@
+#css
+
+#Summary-tab{
+ margin-top:10px;
+ width:100%;
+ height:31px;
+ border-bottom:2px solid #e3e3e3;
+}
+#Summary-tab .tab{
+ margin-right:2px;
+ width:55px;
+ height:20px;
+ border-top:2px solid #e3e3e3;
+ border-right:2px solid #e3e3e3;
+ border-bottom:2px solid #e3e3e3;
+ border-left:2px solid #e3e3e3;
+ background:#FFFFFF;
+ float:left;
+ vertical-align:middle;
+ text-align:center;
+ font-size:12px;
+ color:#000000;
+ line-height:20px;
+}
+#Summary-tab .tab-ov{
+ margin-right:2px;
+ width:55px;
+ height:20px;
+ border-top:2px solid #e3e3e3;
+ border-right:2px solid #e3e3e3;
+ border-bottom:2px solid #e3e3e3;
+ border-left:2px solid #e3e3e3;
+ background:#e3e3e3;
+ float:left;
+ vertical-align:middle;
+ text-align:center;
+ font-size:12px;
+ font-weight:bold;
+ color:#8c8c8c;
+ line-height:20px;
+ text-decoration:none;
+}
+.Summary-dl{
+ width:100%;
+ margin:20px 0 15px 0;
+}
+.Summary-dl dt{
+ margin:0;
+ padding-left:15px;
+ background:url(../images/04_report/Summary_Bullet.gif) no-repeat;
+ color:#403f3f;
+ font-weight:bold;
+}

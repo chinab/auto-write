@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MEMO">
+	<insert id="memo.write" parameterClass="java.util.HashMap">
+		<![CDATA[
+			insert into $TABLE_NAME$ (
+				SEND_MESSAGE_SEQ_ID, SND_USER_SEQ_ID, SND_USER_ID, SND_USER_NIC, RCV_USER_SEQ_ID, RCV_USER_ID, RCV_USER_NIC, TITLE, CONTENT, RCV_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+			) values (
+				#SEND_MESSAGE_SEQ_ID#, #SND_USER_SEQ_ID#, #SND_USER_ID#, #SND_USER_NIC#, #RCV_USER_SEQ_ID#, #RCV_USER_ID#, #RCV_USER_NIC#, #TITLE#, #CONTENT#, #RCV_YN#, #DEL_YN#, #WRITER_IP#, sysdate()
+			)
+		]]>
+		 <selectKey keyProperty="seqId" resultClass="Long">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+	<statement id="memo.read" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MemoEntity">
+		select
+			SEND_MESSAGE_SEQ_ID, 
+			SND_USER_SEQ_ID, SND_USER_ID, SND_USER_NIC, 
+			RCV_USER_SEQ_ID, RCV_USER_ID, RCV_USER_NIC, 
+			TITLE, CONTENT, RCV_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+		from
+			$TABLE_NAME$
+		where
+			SEQ_ID = #SEQ_ID#
+			and $CONDITION_USER$ = #USER_SEQ_ID#
+	</statement>
+	
+	<statement id="memo.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MemoEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					SEQ_ID, SEND_MESSAGE_SEQ_ID, 
+					SND_USER_SEQ_ID, SND_USER_ID, SND_USER_NIC, 
+					RCV_USER_SEQ_ID, RCV_USER_ID, RCV_USER_NIC, 
+					TITLE, CONTENT, RCV_YN, RCV_DATETIME, DEL_YN, WRITER_IP, WRITE_DATETIME
+				from
+					$TABLE_NAME$
+				where
+					$CONDITION_USER$ = #USER_SEQ_ID#
+				order by
+					WRITE_DATETIME desc
+			) Q
+		) R limit #START_NUM#, #PAGE_SIZE#
+	</statement>
+	
+	<statement id="memo.move" parameterClass="java.util.HashMap">
+		insert into $TARGET_TABLE_NAME$
+			(
+				SEND_MESSAGE_SEQ_ID, SND_USER_SEQ_ID, SND_USER_ID, SND_USER_NIC, RCV_USER_SEQ_ID, RCV_USER_ID, RCV_USER_NIC, TITLE, CONTENT, RCV_YN, DEL_YN, WRITER_IP, WRITE_DATETIME, MV_USER_SEQ_ID
+			)
+			(
+			select 
+				SEND_MESSAGE_SEQ_ID, SND_USER_SEQ_ID, SND_USER_ID, SND_USER_NIC, RCV_USER_SEQ_ID, RCV_USER_ID, RCV_USER_NIC, TITLE, CONTENT, RCV_YN, DEL_YN, WRITER_IP, WRITE_DATETIME, #USER_SEQ_ID# as MV_USER_SEQ_ID
+			from
+				$TABLE_NAME$
+			where
+				SEQ_ID = #SEQ_ID#
+			)
+	</statement>
+	
+	<statement id="memo.delete" parameterClass="java.util.HashMap">
+		delete from
+			$TABLE_NAME$
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+
+	<statement id="memo.update.received.read.flag" parameterClass="java.util.HashMap">
+		update
+			T_MESSAGE_RECEIVED
+		set
+			RCV_YN = 'Y', 
+			RCV_DATETIME = sysdate()
+		where
+			RCV_USER_SEQ_ID = #USER_SEQ_ID#
+			and SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	<statement id="memo.update.sent.read.flag" parameterClass="java.util.HashMap">
+		update
+			T_MESSAGE_SEND
+		set 
+			RCV_YN = 'Y', 
+			RCV_DATETIME = sysdate()
+		where
+			RCV_USER_SEQ_ID = #USER_SEQ_ID#
+			and SEQ_ID = #SEND_MESSAGE_SEQ_ID#
+	</statement>
+</sqlMap>

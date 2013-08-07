@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="USER">
+    <typeAlias alias="UserEntity.class" type="com.jekyll.common.framework.entity.UserEntity"/>
+    
+    <statement id="user.info.certificate" parameterClass="java.util.HashMap" resultClass="UserEntity.class">
+		select
+			u.SEQ_ID, u.NAME, u.ID, u.NIC, u.PASSWORD, u.EMAIL, u.POINT, u.TYPE_CODE, u.STATUS_CODE, u.REG_DATETIME, u.APPROVE_DATETIME, u.APPROVAL_USER_SEQ_ID
+		from
+			U_INFO u
+		where
+			u.ID = #u_id# 
+			and u.PASSWORD = #password#
+	</statement>
+	
+	<statement id="user.info.certificate_s" parameterClass="java.util.HashMap" resultClass="UserEntity.class">
+		select
+			u.SEQ_ID, u.NAME, u.ID, u.NIC, u.PASSWORD, u.EMAIL, u.POINT, u.TYPE_CODE, u.STATUS_CODE, u.REG_DATETIME, u.APPROVE_DATETIME, u.APPROVAL_USER_SEQ_ID
+		from
+			U_INFO u
+		where
+			u.ID = #u_id# 
+			and u.PASSWORD = #password#
+	</statement>
+	
+	<statement id="test.user" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select u_id as userId, password, tp_code as tpCode, u_name as userName from CM_USER 
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="u_id">
+				u_id = #u_id#
+			</isNotNull>
+			<isNotNull prepend="and" removeFirstPrepend="true" property="password">
+				password = #password#
+			</isNotNull>
+		</dynamic>
+	</statement>
+		
+	<statement id="tp.userinfo.insert">
+	insert into CM_USER
+		(
+			u_id,
+			password,
+			u_type,
+			u_name,
+			tp_code,
+			E_MAIL,
+			address1,
+			address2,
+			address3,
+			tel_no,
+			e_mail,
+			fax_no,
+			approved		
+		)
+		values
+		(
+		#U_ID#,
+		#PASSWORD#,
+		#U_TYPE#,
+		#TP_CODE#,
+		#E_MAIL#,
+		#ADDRESS1#,
+		#ADDRESS2#,
+		#ADDRESS3#,
+		#TEL_NO#,
+		#FAX_NO#,
+		#APPROVED#
+		
+		)	
+	</statement>
+	<select id="tp.userinfo.search" parameterClass="String" resultClass="java.util.HashMap">
+			SELECT 
+				u_id,
+			password,
+			u_type,
+			u_name,
+			tp_code,
+			E_MAIL,
+			address1,
+			address2,
+			address3,
+			tel_no,
+			e_mail,
+			fax_no,
+			approved	
+				
+			FROM CM_USER
+			WHERE u_id=#value#
+	</select>
+	<update id="tp.userinfo.update" parameterClass="java.util.HashMap"> 
+		update 	CM_USER
+		set    	
+		<isNotEmpty property="PASSWORD" removeFirstPrepend="true">
+			PASSWORD=#PASSWORD#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="," property="U_TYPE" removeFirstPrepend="true">
+			U_TYPE=#U_TYPE#
+		</isNotEmpty>
+		<isNotNull prepend="," property="TP_CODE" removeFirstPrepend="true">
+			TP_CODE=#TP_CODE#
+		</isNotNull>
+		<isNotNull prepend="," property="E_MAIL" removeFirstPrepend="true">
+			E_MAIL=#E_MAIL#
+		</isNotNull>
+		<isNotNull prepend="," property="ADDRESS1" removeFirstPrepend="true">
+			ADDRESS1=#ADDRESS1#
+		</isNotNull>
+		<isNotNull prepend="," property="ADDRESS2" removeFirstPrepend="true">
+			ADDRESS2=#ADDRESS2#
+		</isNotNull>
+		<isNotNull prepend="," property="ADDRESS3" removeFirstPrepend="true">
+			ADDRESS3=#ADDRESS3#
+		</isNotNull>
+		<isNotNull prepend="," property="TEL_NO" removeFirstPrepend="true">
+			TEL_NO=#TEL_NO#
+		</isNotNull>
+		<isNotNull prepend="," property="FAX_NO" removeFirstPrepend="true">
+			FAX_NO=#FAX_NO#
+		</isNotNull>
+		<isNotNull prepend="," property="APPROVED" removeFirstPrepend="true">
+			APPROVED=#APPROVED#
+		</isNotNull>
+				
+		where U_ID = #U_ID#
+	</update>
+	
+	<sql id="user.search.where">
+		<dynamic prepend="where" >
+			<isNotEmpty property="TP_CODE" removeFirstPrepend="true">
+					TP_CODE=#TP_CODE#
+			</isNotEmpty>
+			<isNotEmpty property="U_ID" prepend="and" removeFirstPrepend="true">
+					U_ID=#U_ID#
+			</isNotEmpty>
+			<isNotEmpty property="U_NAME" prepend="and" removeFirstPrepend="true">
+					U_NAME=#U_NAME#
+			</isNotEmpty>
+			<isNotEmpty property="APPROVED" prepend="and" removeFirstPrepend="true">
+					APPROVED=#APPROVED#
+			</isNotEmpty>
+		</dynamic>
+	</sql>
+	<select id="user.search" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select * from (
+		select * from (
+		select 
+			ROWNUM RM, 
+			rownum ROW_ID, $selSmt$ from (		
+		select $selSmt$ 
+		from CM_USER
+		<include refid="user.search.where" />
+		<isNotNull property="orderBy">
+			order by $orderBy$
+		</isNotNull>
+		))
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[
+				ROWNUM <= ((#autoLoadingCnt#) * (#page#) )
+			]]>				
+			</isNotNull>
+		</dynamic> 
+		)
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[	
+				RM <= (#autoLoadingCnt# * #page#) and RM > ( #autoLoadingCnt# * (#page# -1))
+			]]>						 
+			</isNotNull>
+		</dynamic>  
+	</select>
+	<select id="user.searchCnt" parameterClass="java.util.HashMap" resultClass="integer">
+		select count(1) from CM_USER
+		<include refid="user.search.where" />
+	</select>
+	<statement id="user.duplicated.id" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select count(*) as DUPL_CNT FROM U_INFO 
+		<dynamic prepend="where">
+			<isNotNull prepend="where" removeFirstPrepend="true" property="ID">
+				id = #ID#
+			</isNotNull>
+		</dynamic>
+	</statement>
+	
+	<statement id="user.duplicated.nic" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select count(*) as DUPL_CNT FROM U_INFO
+		<dynamic prepend="where">
+			<isNotNull prepend="where" removeFirstPrepend="true" property="NIC">
+				nic = #NIC#
+			</isNotNull>
+		</dynamic>
+	</statement>
+	
+	<statement id="user.duplicated.regicode" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select count(*) as DUPL_CNT FROM CM_TPCODE 
+		<dynamic prepend="where">
+			<isNotNull prepend="where" removeFirstPrepend="true" property="selected_value">
+				register_no = #selected_value#
+			</isNotNull>
+		</dynamic>
+	</statement>
+	
+	<statement id="user.duplicated.tpcode" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select count(*) as DUPL_CNT FROM CM_TPCODE 
+		<dynamic prepend="where">
+			<isNotNull prepend="where" removeFirstPrepend="true" property="selected_value">
+				tp_code = #selected_value#
+			</isNotNull>
+		</dynamic>
+	</statement>
+
+	<statement id="member.tpcode.insert" parameterClass="java.util.HashMap">
+		insert into CM_TPCODE
+		(
+					tp_code,
+					register_no,
+					register_name,
+					register_date,
+					company_name,
+					company_type,
+					ceo_name,
+					company_item,
+					address1,
+					address2,
+					address3,
+					
+					charge_name,
+					charge_pos,
+					charge_dep,
+					charge_zipcode,
+					charge_add1,
+					charge_add2,
+					charge_add3,
+					charge_tel,
+					charge_email,
+					charge_fax
+		)
+		values
+		(
+			<dynamic>
+				<isNotNull property="TP_CODE">
+					#TP_CODE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="REGISTER_NO">
+					#REGISTER_NO#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="REGISTER_NAME">
+					#REGISTER_NAME#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="REGISTER_DATE">
+					#REGISTER_DATE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="COMPANY_NAME">
+					#COMPANY_NAME#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="COMPANY_TYPE">
+					#COMPANY_TYPE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CEO_NAME">
+					#CEO_NAME#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="COMPANY_ITEM">
+					#COMPANY_ITEM#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ADDRESS1">
+					#ADDRESS1#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ADDRESS2">
+					#ADDRESS2#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ADDRESS3">
+					#ADDRESS3#
+				</isNotNull>
+				
+				
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_NAME">
+					#CHARGE_NAME#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_POS">
+					#CHARGE_POS#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_DEP">
+					#CHARGE_DEP#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_ZIPCODE">
+					#CHARGE_ZIPCODE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_ADD1">
+					#CHARGE_ADD1#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_ADD2">
+					#CHARGE_ADD2#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_ADD3">
+					#CHARGE_ADD3#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_TEL">
+					#CHARGE_TEL#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_EMAIL">
+					#CHARGE_EMAIL#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="CHARGE_FAX">
+					#CHARGE_FAX#
+				</isNotNull>
+			</dynamic>
+		)	
+	</statement>
+	
+	<statement id="member.user.insert">
+	insert into CM_USER
+		(			
+			approved,
+			u_id,
+			password,
+			u_name,
+			u_type,
+			tp_code,
+			zip_code,
+			address1,
+			address2,
+			address3,
+			tel_no,
+			e_mail,
+			fax_no,
+			position,
+			dep_name,
+			service_date		
+		)
+		values
+		(	
+			'W',
+			<dynamic>
+				<isNotNull property="U_ID">
+					#U_ID#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="PASSWORD">
+					#PASSWORD#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="U_NAME">
+					#U_NAME#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="U_TYPE">
+					#U_TYPE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="TP_CODE">
+					#TP_CODE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ZIP_CODE">
+					#ZIP_CODE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ADDRESS1">
+					#ADDRESS1#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ADDRESS2">
+					#ADDRESS2#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ADDRESS3">
+					#ADDRESS3#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="TEL_NO">
+					#TEL_NO#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="E_MAIL">
+					#E_MAIL#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="FAX_NO">
+					#FAX_NO#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="POSITION">
+					#POSITION#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="DEP_NAME">
+					#DEP_NAME#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="SERVICE_DATE">
+					#SERVICE_DATE#
+				</isNotNull>
+			</dynamic>
+		)	
+	</statement>
+	<statement id="user.myinfo.info" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT *
+		FROM CM_USER
+		WHERE u_id = #U_ID#
+	</statement>
+	<statement id="member.user.create" parameterClass="java.util.HashMap">
+		insert into CM_USER
+		(
+			approved,
+			u_id,
+			password,
+			u_name,
+			u_type,
+			tp_code,
+			zip_code,
+			address1,
+			address2,
+			address3,
+			tel_no,
+			e_mail,
+			fax_no,
+			dep_name,
+			position,
+			AUTH_GROUP_ID
+		)
+		values
+		(
+			'A',
+			<dynamic>
+				<isNotNull property="U_ID">
+					#U_ID#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="PASSWORD">
+					#PASSWORD#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="U_NAME">
+					#U_NAME#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="U_TYPE">
+					#U_TYPE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="TP_CODE">
+					#TP_CODE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ZIP_CODE">
+					#ZIP_CODE#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ADDRESS1">
+					#ADDRESS1#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ADDRESS2">
+					#ADDRESS2#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="ADDRESS3">
+					#ADDRESS3#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="TEL_NO">
+					#TEL_NO#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="E_MAIL">
+					#E_MAIL#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="FAX_NO">
+					#FAX_NO#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="DEP_NAME">
+					#DEP_NAME#
+				</isNotNull>
+				<isNotNull prepend="," removeFirstPrepend="true" property="POSITION">
+					#POSITION#
+				</isNotNull>
+			</dynamic>
+		)	
+	</statement>
+	<statement id="user.companyinfo.info" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			ct.register_no, cu.tel_no, ct.company_name, ct.company_type, ct.ceo_name, ct.company_item,ct.address1, ct.address2, ct.address3, cu.zip_code,
+			ct.charge_zipcode, ct.charge_add1, ct.charge_add2, ct.charge_add3, ct.charge_name, ct.charge_email, ct.charge_dep, ct.charge_pos, ct.charge_tel, ct.charge_fax,
+			cu.u_type, cu.u_id, cu.u_name, cu.fax_no, cu.e_mail,cu.password, ct.tp_code, cu.approved
+		FROM CM_USER cu, CM_TPCODE ct
+		WHERE cu.u_id like #U_ID#
+		and cu.tp_code like ct.tp_code
+	</statement>
+	<statement id="user.companyinfo_tp.info" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			ct.register_no, cu.tel_no, ct.company_name, ct.company_type, ct.ceo_name, ct.company_item,ct.address1, ct.address2, ct.address3, cu.zip_code,
+			ct.charge_zipcode, ct.charge_add1, ct.charge_add2, ct.charge_add3, ct.charge_name, ct.charge_email, ct.charge_dep, ct.charge_pos, ct.charge_tel, ct.charge_fax,
+			cu.u_type, cu.u_id, cu.u_name, cu.fax_no, cu.e_mail,cu.password, ct.tp_code
+		FROM CM_USER cu, CM_TPCODE ct
+		WHERE ct.tp_code like #TP_CODE#
+	</statement>
+	<statement id="user.zipcode.info" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT
+			zip_code, sido, gugun, dong, bldg, st_bunji, ed_bunji
+		FROM CM_ZIP_CODE
+		WHERE dong like (#DONG# || '%') or ri like (#DONG# || '%')  
+	</statement>
+	<statement id="user.modify" parameterClass="java.util.HashMap">
+		update cm_user 
+		set 
+			u_name = #U_NAME#, u_type= #U_TYPE#, e_mail= #E_MAIL#,
+			fax_no= #FAX_NO#, zip_code= #ZIP_CODE#,position=#POSITION#,dep_name=#DEP_NAME#,
+			tel_no = #TEL_NO#,  address1 = #ADDRESS1#,address2 = #ADDRESS2#,address3 = #ADDRESS3#,AUTH_GROUP_ID = #AUTH_GROUP_ID#
+			<dynamic>
+				<isNotEmpty prepend="," removeFirstPrepend="true" property="PASSWORD">
+						PASSWORD=#PASSWORD#
+				</isNotEmpty>
+				<isNotEmpty prepend="," removeFirstPrepend="true" property="APPROVED">
+						APPROVED=#APPROVED#
+				</isNotEmpty>
+			</dynamic>
+		where u_id=#U_ID#
+	</statement>
+	<statement id="modifiedTP_CODE" parameterClass="java.util.HashMap">
+		update cm_tpcode
+		set 
+			 register_no= #REGISTER_NO#, company_name= #COMPANY_NAME#, company_type= #COMPANY_TYPE#, 
+			 company_item= #COMPANY_ITEM#, ceo_name= #CEO_NAME#, address1= #ADDRESS1#, 
+			 address2= #ADDRESS2#, address3= #ADDRESS3#, charge_add1= #CHARGE_ADD1#, 
+			 charge_add2= #CHARGE_ADD2#, charge_add3= #CHARGE_ADD3#, charge_email= #CHARGE_EMAIL#, 
+			 charge_name= #CHARGE_NAME#, charge_dep= #CHARGE_DEP# , charge_pos= #CHARGE_POS#, 
+			 charge_tel= #CHARGE_TEL#, charge_fax= #CHARGE_FAX#
+		where tp_code like #TP_CODE#
+	</statement>
+	<statement id="user.approved" parameterClass="java.util.HashMap">
+		update cm_user set APPROVED='A', CHANGE_DATE=SYSDATE where tp_code = #TP_CODE#
+	</statement>
+	<statement id="user.approved_pre" parameterClass="java.util.HashMap" resultClass="int">
+		select count(*) from cm_user where tp_code = #TP_CODE# and APPROVED='A'
+	</statement>
+	<statement id="user.suspend_pre" parameterClass="java.util.HashMap" resultClass="int">
+		select count(*) from cm_user where tp_code = #TP_CODE# and APPROVED='S'
+	</statement>
+	<statement id="user.suspend" parameterClass="java.util.HashMap">
+		update cm_user set APPROVED='S', CHANGE_DATE=SYSDATE where tp_code = #TP_CODE#
+	</statement>
+	<statement id="modifiedMyInfo" parameterClass="java.util.HashMap">
+		update cm_user 
+		set 
+			u_name = #U_NAME#, e_mail= #E_MAIL#, fax_no= #FAX_NO#, 
+			zip_code= #ZIP_CODE#, tel_no = #TEL_NO#, dep_name = #DEP_NAME#,
+			position = #POSITION#, address1 = #ADDRESS1#,address2 = #ADDRESS2#, password = #PASSWORD#
+		where u_id=#U_ID#
+	</statement>
+	<statement id="user.checkId" parameterClass="java.util.HashMap" resultClass="int">
+		select count(u_id) from cm_user where u_id like #U_ID#
+	</statement>
+	<statement id="user.getWatingUser" resultClass="int">
+		select count(*) from cm_user where approved like 'W'
+	</statement>
+	<statement id="user.company.delete" parameterClass="java.util.HashMap">
+		delete cm_user where u_id = #U_ID#
+	</statement>
+	<statement id="user.unckecked.memo.count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(1) from t_message_received where rcv_yn='N' and rcv_user_id = #u_id#
+	</statement>
+	<statement id="user.login.log.insert" parameterClass="java.util.HashMap">
+	insert into U_LOGIN_INFO
+		(
+			USER_SEQ_ID, LOGIN_DATETIME, LOGIN_IP
+		) values (
+			#USER_SEQ_ID#, sysdate(), #LOGIN_IP#
+		)	
+	</statement>
+	<statement id="user.visit.today" resultClass="int">
+		select count(1) from U_LOGIN_INFO
+		where DATE_FORMAT(now(), '%Y%m%d') = DATE_FORMAT(LOGIN_DATETIME, '%Y%m%d')
+	</statement>
+	<statement id="user.visit.yesterday" resultClass="int">
+		select count(1) from U_LOGIN_INFO
+		where DATE_FORMAT(DATE_ADD(now(), INTERVAL - 1 day), '%Y%m%d') = DATE_FORMAT(LOGIN_DATETIME, '%Y%m%d')
+	</statement>
+	<statement id="user.visit.total" resultClass="int">
+		select count(1) from U_LOGIN_INFO
+	</statement>
+	
+	<statement id="user.class.info.select" resultClass="com.jekyll.common.framework.entity.UserClassEntity">
+		select
+			SEQ_ID, CLASS_POINT, CLASS_ID, CLASS_TYPE_CODE, CLASS_IMG_PATH
+		from
+			U_CLASS_INFO
+		order by
+			CLASS_POINT
+	</statement>
+	
+	<statement id="user.quick.link.insert" parameterClass="java.util.HashMap">
+	insert into U_QUICK_LINK
+		(
+			USER_SEQ_ID, ORDER_SEQ, QUICK_LINK_NAME, QUICK_LINK_URL, WRITE_DATETIME
+		) values (
+			#USER_SEQ_ID#, #ORDER_SEQ#, #QUICK_LINK_NAME#, #QUICK_LINK_URL#, sysdate()
+		)	
+	</statement>
+	
+	<statement id="user.quick.link.select" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			SEQ_ID, USER_SEQ_ID, ORDER_SEQ, QUICK_LINK_NAME, QUICK_LINK_URL, WRITE_DATETIME
+		from
+			U_QUICK_LINK
+		where
+			USER_SEQ_ID = #USER_SEQ_ID#
+		order by
+			SEQ_ID desc
+	</statement>
+	
+	<statement id="user.quick.link.count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select
+			count(1)
+		from
+			U_QUICK_LINK
+		where
+			USER_SEQ_ID = #USER_SEQ_ID#
+			and QUICK_LINK_URL = #QUICK_LINK_URL#
+		order by
+			SEQ_ID desc
+	</statement>
+</sqlMap>

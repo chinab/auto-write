@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="BOARD">
+	<statement id="board.write" parameterClass="java.util.HashMap">
+		insert into $TABLE_NAME$ (
+			USER_SEQ_ID, USER_ID, TITLE, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, VISIT_TIME, WAITERESS_NAME, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+		) values (
+			#USER_SEQ_ID#, #USER_ID#, #TITLE#, #FACILITY_NAME#, #FACILITY_USER_NAME#, #FACILITY_PHONE#, #FACILITY_ADDRESS#, #FACILITY_HOME_PAGE#, #VISIT_TIME#, #WAITERESS_NAME#, #CONTENT#, #CATEGORY#, #TARGET_CATEGORY#, #REGION#, #HIT#, #RECOMMEND#, #REJECT#, #SECRET_YN#, #BLIND_YN#, #DEL_YN#, #WRITER_IP#, sysdate()
+		)
+	</statement>
+	
+	<statement id="board.blackuser.write" parameterClass="java.util.HashMap">
+		insert into $TABLE_NAME$ (
+			USER_SEQ_ID, USER_ID, TITLE, BLACK_USER_NIC, BLACK_USER_PHONE, BLACK_USER_PHONE1, BLACK_USER_PHONE2, BLACK_USER_PHONE3, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+		) values (
+			#USER_SEQ_ID#, #USER_ID#, #TITLE#, #BLACK_USER_NIC#, #BLACK_USER_PHONE#, #BLACK_USER_PHONE1#, #BLACK_USER_PHONE2#, #BLACK_USER_PHONE3#, #CONTENT#, #CATEGORY#, #TARGET_CATEGORY#, #REGION#, #HIT#, #RECOMMEND#, #REJECT#, #SECRET_YN#, #BLIND_YN#, #DEL_YN#, #WRITER_IP#, sysdate()
+		)
+	</statement>
+	
+	<insert id="board.write.with.file" parameterClass="java.util.HashMap" >
+	    <![CDATA[
+	        insert into $TABLE_NAME$ (
+				USER_SEQ_ID, USER_ID, TITLE, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, VISIT_TIME, WAITERESS_NAME, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+			) values (
+				#USER_SEQ_ID#, #USER_ID#, #TITLE#, #FACILITY_NAME#, #FACILITY_USER_NAME#, #FACILITY_PHONE#, #FACILITY_ADDRESS#, #FACILITY_HOME_PAGE#, #VISIT_TIME#, #WAITERESS_NAME#, #CONTENT#, #CATEGORY#, #TARGET_CATEGORY#, #REGION#, #HIT#, #RECOMMEND#, #REJECT#, #SECRET_YN#, #BLIND_YN#, #DEL_YN#, #WRITER_IP#, sysdate()
+			)
+	    ]]>
+	    <selectKey keyProperty="seqId" resultClass="Long">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+	<statement id="board.read" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select
+			T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.FACILITY_NAME, T.FACILITY_USER_NAME, T.FACILITY_PHONE, T.FACILITY_ADDRESS, T.FACILITY_HOME_PAGE, T.VISIT_TIME, T.WAITERESS_NAME, T.TITLE, T.CONTENT, T.CATEGORY, T.TARGET_CATEGORY, T.REGION, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
+			, U.NIC AS USER_NIC, U.POINT AS WRITER_POINT, U.TYPE_CODE AS WRITER_TYPE_CODE
+		from
+			$TABLE_NAME$ T, U_INFO U
+		where
+			T.USER_SEQ_ID = U.SEQ_ID
+			AND T.SEQ_ID = #SEQ_ID#
+			AND T.DEL_YN != 'Y'
+	</statement>
+	
+	
+	<statement id="board.read.with.deleted.user" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select
+			SEQ_ID, USER_SEQ_ID, USER_ID, TITLE, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, VISIT_TIME, WAITERESS_NAME, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+			, "탈퇴회원" AS USER_NIC
+		from
+			$TABLE_NAME$
+		where
+			SEQ_ID = #SEQ_ID#
+			AND DEL_YN != 'Y'
+	</statement>
+	
+	
+	<statement id="board.blackuser.read" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select
+			T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.TITLE, T.BLACK_USER_NIC, T.BLACK_USER_PHONE, T.BLACK_USER_PHONE1, T.BLACK_USER_PHONE2, T.BLACK_USER_PHONE3, T.CONTENT, T.CATEGORY, T.TARGET_CATEGORY, T.REGION, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
+			, U.NIC AS USER_NIC
+		from
+			T_BOARD_BLACK T, U_INFO U
+		where
+			T.USER_SEQ_ID = U.SEQ_ID
+			AND T.SEQ_ID = #SEQ_ID#
+			AND T.DEL_YN != 'Y'
+	</statement>
+	
+	<statement id="board.update.hit.count" parameterClass="java.util.HashMap">
+		update $TABLE_NAME$
+			set HIT = HIT + 1
+			WHERE SEQ_ID=#SEQ_ID#
+	</statement>
+	
+	
+	<statement id="board.update.recommend.count" parameterClass="java.util.HashMap">
+		update $TABLE_NAME$
+			set RECOMMEND = RECOMMEND + 1
+			WHERE SEQ_ID=#BOARD_SEQ_ID#
+	</statement>
+	
+	
+	<statement id="board.update.reject.count" parameterClass="java.util.HashMap">
+		update $TABLE_NAME$
+			set REJECT = REJECT + 1
+			WHERE SEQ_ID=#BOARD_SEQ_ID#
+	</statement>
+	
+	
+	<statement id="board.payment.master.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.PaymentMasterEntity">
+		select
+			SEQ_ID, USER_SEQ_ID, USER_NAME, USER_ID, USER_NIC, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, FACILITY_INTRODUCE, FACILITY_CATEGORY, TOTAL_PAYMENT_AMOUNT, TOTAL_PAYMENT_NUMBER, PAYMENT_STATUS, BANNER_TYPE_CODE, START_DATETIME, END_DATETIME, MAIN_BANNER_FILE_NAME, MAIN_BANNER_WEB_LINK, CENTER_BANNER_FILE_NAME, CENTER_BANNER_WEB_LINK, P_FILE_NAME, L_FILE_NAME, THUMBNAIL_FILE_NAME
+		from
+			U_PAYMENT_MASTER
+		where
+			PAYMENT_STATUS in ( "Y", "E" )
+			AND BANNER_TYPE_CODE in ( "B", "M", "C" )
+		order by
+			START_DATETIME
+	</statement>
+	
+	
+	<statement id="board.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.TITLE, T.CONTENT, T.CATEGORY, T.TARGET_CATEGORY, T.REGION, T.FACILITY_NAME, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
+					, U.NIC AS USER_NIC, U.POINT AS WRITER_POINT, U.TYPE_CODE AS WRITER_TYPE_CODE, 
+					( select
+						count(1)
+					from
+						T_BOARD_REPLY R
+					where
+						TABLE_NAME = #TABLE_NAME#
+						and ROOT_SEQ_ID = T.SEQ_ID
+						AND DEL_YN != 'Y'
+					) as REPLY_CNT
+				from
+					$TABLE_NAME$ T, U_INFO U
+				where
+					T.USER_SEQ_ID = U.SEQ_ID
+					AND T.DEL_YN != 'Y'
+					<isNotNull prepend="and" removeFirstPrepend="true" property="CATEGORY">
+						T.CATEGORY = #CATEGORY#
+					</isNotNull>
+					<isNotNull prepend="and" removeFirstPrepend="true" property="REGION">
+						T.REGION = #REGION#
+					</isNotNull>
+					<isNotNull prepend="and" removeFirstPrepend="true" property="FACILITY_NAME">
+						T.FACILITY_NAME = #FACILITY_NAME#
+					</isNotNull>
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R limit #START_NUM#, #PAGE_SIZE#
+	</statement>
+	
+	
+	<statement id="board.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.TITLE, T.CONTENT, T.CATEGORY, T.REGION, T.FACILITY_NAME, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
+					, U.NIC AS USER_NIC
+				from
+					$TABLE_NAME$ T, U_INFO U
+				where
+					T.USER_SEQ_ID = U.SEQ_ID
+					AND T.DEL_YN != 'Y'
+					<isNotNull prepend="and" removeFirstPrepend="true" property="CATEGORY">
+						T.CATEGORY = #CATEGORY#
+					</isNotNull>
+					<isNotNull prepend="and" removeFirstPrepend="true" property="REGION">
+						T.REGION = #REGION#
+					</isNotNull>
+					<isNotNull prepend="and" removeFirstPrepend="true" property="FACILITY_NAME">
+						T.FACILITY_NAME = #FACILITY_NAME#
+					</isNotNull>
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="board.list.by.hit.count" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					SEQ_ID, USER_SEQ_ID, USER_ID, TITLE, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+				from
+					$TABLE_NAME$
+				where
+					WRITE_DATETIME > DATE_ADD(now(), INTERVAL - 30 day)
+					AND DEL_YN != 'Y'
+					<isNotNull prepend="and" removeFirstPrepend="true" property="CATEGORY">
+						CATEGORY = #CATEGORY#
+					</isNotNull>
+				order by
+					HIT desc
+			) Q
+		) R limit 0, 6
+	</statement>
+	
+	<statement id="board.list.by.recommend.count" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					SEQ_ID, USER_SEQ_ID, USER_ID, TITLE, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+				from
+					$TABLE_NAME$
+				where
+					WRITE_DATETIME > DATE_ADD(now(), INTERVAL - 30 day)
+					AND DEL_YN != 'Y'
+					<isNotNull prepend="and" removeFirstPrepend="true" property="CATEGORY">
+						CATEGORY = #CATEGORY#
+					</isNotNull>		
+				order by
+					RECOMMEND desc
+			) Q
+		) R limit 0, 7
+	</statement>
+	
+	<statement id="board.list.by.new" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					SEQ_ID, USER_SEQ_ID, USER_ID, TITLE, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+				from
+					$TABLE_NAME$
+				where
+					WRITE_DATETIME > DATE_ADD(now(), INTERVAL - 30 day)
+					AND DEL_YN != 'Y'
+					<isNotNull prepend="and" removeFirstPrepend="true" property="CATEGORY">
+						CATEGORY = #CATEGORY#
+					</isNotNull>		
+				order by
+					WRITE_DATETIME desc
+			) Q
+		) R limit 0, 7
+	</statement>
+	
+	<statement id="board.list.by.user" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select * from (
+			select 'T_BOARD_NOTICE' AS TABLE_NAME, T_BOARD_NOTICE.* from T_BOARD_NOTICE where user_seq_id = #USER_SEQ_ID# AND DEL_YN != 'Y'
+			union
+			select 'T_BOARD_BUSINESS_INFO' AS TABLE_NAME, T_BOARD_BUSINESS_INFO.* from T_BOARD_BUSINESS_INFO where user_seq_id = #USER_SEQ_ID# AND DEL_YN != 'Y'
+			union
+			select 'T_BOARD_LINE_UP' AS TABLE_NAME, T_BOARD_LINE_UP.* from T_BOARD_LINE_UP where user_seq_id = #USER_SEQ_ID# AND DEL_YN != 'Y'
+			union
+			select 'T_BOARD_POSTSCRIPT' AS TABLE_NAME, T_BOARD_POSTSCRIPT.* from T_BOARD_POSTSCRIPT where user_seq_id = #USER_SEQ_ID# AND DEL_YN != 'Y'
+			union
+			select 'T_BOARD_COMMUNITY' AS TABLE_NAME, T_BOARD_COMMUNITY.* from T_BOARD_COMMUNITY where user_seq_id = #USER_SEQ_ID# AND DEL_YN != 'Y'
+			union
+			select 'T_BOARD_CENTER' AS TABLE_NAME, T_BOARD_CENTER.* from T_BOARD_CENTER where user_seq_id = #USER_SEQ_ID# AND DEL_YN != 'Y'
+		) AS USER_BOARD 
+		order by write_datetime desc
+	</statement>
+	
+	<statement id="board.list.all.business.info" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select
+			T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.TITLE, T.FACILITY_NAME, T.FACILITY_USER_NAME, T.FACILITY_PHONE, T.FACILITY_ADDRESS, T.FACILITY_HOME_PAGE, T.VISIT_TIME, T.WAITERESS_NAME, T.CONTENT, T.CATEGORY, T.TARGET_CATEGORY, T.REGION, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
+		from
+			T_BOARD_BUSINESS_INFO T, 
+			(
+				select
+					USER_SEQ_ID
+				from
+					U_PAYMENT_MASTER 
+				where
+					PAYMENT_STATUS IN ('Y', 'E')
+				group by
+					USER_SEQ_ID
+			)P
+		where
+			T.DEL_YN != 'Y'
+			and T.USER_SEQ_ID = P.USER_SEQ_ID
+		order by 
+			T.WRITE_DATETIME desc
+	</statement>
+	
+	<statement id="board.payment.recent.lineup.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					SEQ_ID, USER_SEQ_ID, USER_ID, TITLE, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+				from
+					T_BOARD_LINE_UP
+				where
+					USER_SEQ_ID = #USER_SEQ_ID#
+					AND DEL_YN != 'Y'
+				order by
+					SEQ_ID desc
+			) Q
+		) R limit #START_NUM#, #PAGE_SIZE#
+	</statement>
+	
+	<statement id="board.payment.recent.postscript.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					SEQ_ID, USER_SEQ_ID, USER_ID, TITLE, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+				from
+					T_BOARD_POSTSCRIPT
+				where
+					FACILITY_NAME = #FACILITY_NAME#
+					AND DEL_YN != 'Y'
+				order by
+					SEQ_ID desc
+			) Q
+		) R limit #START_NUM#, #PAGE_SIZE#
+	</statement>
+	
+	<statement id="board.update" parameterClass="java.util.HashMap">
+		update
+			$TABLE_NAME$
+		set
+			TITLE = #TITLE#, 
+			FACILITY_NAME = #FACILITY_NAME#, 
+			FACILITY_USER_NAME = #FACILITY_USER_NAME#, 
+			FACILITY_PHONE = #FACILITY_PHONE#, 
+			FACILITY_ADDRESS = #FACILITY_ADDRESS#, 
+			FACILITY_HOME_PAGE = #FACILITY_HOME_PAGE#, 
+			VISIT_TIME = #VISIT_TIME#, 
+			WAITERESS_NAME = #WAITERESS_NAME#, 
+			CONTENT = #CONTENT#, 
+			CATEGORY = #CATEGORY#, 
+			TARGET_CATEGORY = #TARGET_CATEGORY#, 
+			REGION = #REGION#, 
+			SECRET_YN = #SECRET_YN#, 
+			BLIND_YN = #BLIND_YN#
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	<statement id="board.admin.update" parameterClass="java.util.HashMap">
+		update
+			$TABLE_NAME$
+		set
+			USER_SEQ_ID = #USER_SEQ_ID#, 
+			USER_ID = #USER_ID#, 
+			TITLE = #TITLE#, 
+			FACILITY_NAME = #FACILITY_NAME#, 
+			FACILITY_USER_NAME = #FACILITY_USER_NAME#, 
+			FACILITY_PHONE = #FACILITY_PHONE#, 
+			FACILITY_ADDRESS = #FACILITY_ADDRESS#, 
+			FACILITY_HOME_PAGE = #FACILITY_HOME_PAGE#, 
+			VISIT_TIME = #VISIT_TIME#, 
+			WAITERESS_NAME = #WAITERESS_NAME#, 
+			CONTENT = #CONTENT#, 
+			CATEGORY = #CATEGORY#, 
+			TARGET_CATEGORY = #TARGET_CATEGORY#, 
+			REGION = #REGION#, 
+			SECRET_YN = #SECRET_YN#, 
+			BLIND_YN = #BLIND_YN#
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	<statement id="board.delYn.update" parameterClass="java.util.HashMap">
+		update
+			$TABLE_NAME$
+		set
+			DEL_YN = #DEL_YN#
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	<statement id="board.delYn.update.by.userSeqId" parameterClass="java.util.HashMap">
+		update
+			$TABLE_NAME$
+		set
+			DEL_YN = #DEL_YN#
+		where
+			USER_SEQ_ID = #USER_SEQ_ID#
+	</statement>
+	
+	<statement id="board.delete" parameterClass="java.util.HashMap">
+		delete
+			$TABLE_NAME$
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	<statement id="board.attachment.write" parameterClass="java.util.HashMap">
+		insert into T_BOARD_ATTACHMENT (
+			TABLE_NAME, TABLE_SEQ_ID, P_FILE_NAME, L_FILE_NAME, THUMBNAIL_FILE_NAME, FILE_EXT, FILE_SIZE, DEL_YN
+		) values (
+			#TABLE_NAME#, #TABLE_SEQ_ID#, #P_FILE_NAME#, #L_FILE_NAME#, #THUMBNAIL_FILE_NAME#, #FILE_EXT#, #FILE_SIZE#, #DEL_YN#
+		)
+	</statement>
+	
+	<statement id="board.attachment.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.AttachmentEntity">
+		select
+			SEQ_ID, TABLE_NAME, TABLE_SEQ_ID, P_FILE_NAME, L_FILE_NAME, THUMBNAIL_FILE_NAME, FILE_EXT, FILE_SIZE, DEL_YN
+		from
+			T_BOARD_ATTACHMENT
+		where
+			DEL_YN != 'Y'
+			AND TABLE_NAME=#TABLE_NAME#
+			AND TABLE_SEQ_ID = #TABLE_SEQ_ID#
+	</statement>
+	
+	<statement id="board.reply.write" parameterClass="java.util.HashMap">
+		insert into T_BOARD_REPLY (
+			TABLE_NAME, ROOT_SEQ_ID, REPLY_ORDER_ID, PARENT_SEQ_ID, REPLY_DEPTH, 
+			USER_SEQ_ID, USER_ID, USER_NIC, TITLE, CONTENT, 
+			BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+		) values (
+			#TABLE_NAME#, #ROOT_SEQ_ID#, #REPLY_ORDER_ID#, #PARENT_SEQ_ID#, #REPLY_DEPTH#, 
+			#USER_SEQ_ID#, #USER_ID#, #USER_NIC#, #TITLE#, #CONTENT#, 
+			#BLIND_YN#, #DEL_YN#, #WRITER_IP#, sysdate()
+		)
+	</statement>
+	
+	
+	<statement id="board.reply.count" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			count(1) as CNT
+		from
+			T_BOARD_REPLY
+		where
+			TABLE_NAME = #TABLE_NAME#
+			and ROOT_SEQ_ID = #ROOT_SEQ_ID#
+			AND DEL_YN != 'Y'
+		order by
+			WRITE_DATETIME
+	</statement>
+	
+	
+	<statement id="board.reply.read" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			R.SEQ_ID, R.TABLE_NAME, R.ROOT_SEQ_ID, R.REPLY_ORDER_ID, R.PARENT_SEQ_ID, R.REPLY_DEPTH, 
+			R.USER_SEQ_ID, R.USER_ID, R.USER_NIC, R.TITLE, R.CONTENT, 
+			R.BLIND_YN, R.DEL_YN, R.WRITER_IP, R.WRITE_DATETIME, 
+			U.POINT AS USER_POINT, 
+			U.TYPE_CODE AS USER_TYPE_CODE
+		from
+			T_BOARD_REPLY R, 
+			U_INFO U
+		where
+			R.USER_SEQ_ID = U.SEQ_ID
+			AND R.TABLE_NAME = #TABLE_NAME#
+			and R.ROOT_SEQ_ID = #ROOT_SEQ_ID#
+			AND R.DEL_YN != 'Y'
+		order by
+			REPLY_ORDER_ID
+	</statement>
+	
+	
+	<statement id="board.reply.update" parameterClass="java.util.HashMap">
+		update
+			T_BOARD_REPLY
+		set
+			CONTENT = #CONTENT#,
+			BLIND_YN = #BLIND_YN#
+		where
+			TABLE_NAME = #TABLE_NAME#
+			and ROOT_SEQ_ID = #ROOT_SEQ_ID#
+			and REPLY_ORDER_ID = #REPLY_ORDER_ID#
+	</statement>
+	
+	
+	<statement id="board.reply.delYn.update" parameterClass="java.util.HashMap">
+		update
+			T_BOARD_REPLY
+		set
+			DEL_YN = #DEL_YN#
+		where
+			TABLE_NAME = #TABLE_NAME#
+			and ROOT_SEQ_ID = #ROOT_SEQ_ID#
+			and REPLY_ORDER_ID = #REPLY_ORDER_ID#
+	</statement>
+	
+	
+	<statement id="board.reply.delete" parameterClass="java.util.HashMap">
+		delete from
+			T_BOARD_REPLY
+		where
+			TABLE_NAME = #TABLE_NAME#
+			and ROOT_SEQ_ID = #ROOT_SEQ_ID#
+			and REPLY_ORDER_ID = #REPLY_ORDER_ID#
+	</statement>
+
+
+	<statement id="board.reply.delete.by.UserSeqId" parameterClass="java.util.HashMap">
+		delete from
+			T_BOARD_REPLY
+		where
+			USER_SEQ_ID = #USER_SEQ_ID#
+	</statement>
+		
+	
+	<statement id="board.facility.names.list" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+		select
+			FACILITY_NAME
+		from
+			U_PAYMENT_MASTER
+		where
+			PAYMENT_STATUS IN ('Y', 'E')
+			AND FACILITY_REGION = #REGION#
+			AND FACILITY_CATEGORY = #FACILITY_CATEGORY#
+	</statement>
+	
+	
+	<statement id="board.feedback.log.insert" parameterClass="java.util.HashMap">
+		insert into T_BOARD_FEEDBACK_LOG (
+			USER_SEQ_ID, BOARD_SEQ_ID, CATEGORY, IS_RECOMMEND, IS_REJECT, USER_ID, USER_NIC
+		) values (
+			#USER_SEQ_ID#, #BOARD_SEQ_ID#, #CATEGORY#, #IS_RECOMMEND#, #IS_REJECT#, #USER_ID#, #USER_NIC#
+		)
+	</statement>
+	
+	
+	<statement id="board.feedback.log.count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select
+			count(1)
+		from 
+			T_BOARD_FEEDBACK_LOG
+		where
+			$COUNT_COLUMN_NAME$ = 'Y'
+			and USER_SEQ_ID = #USER_SEQ_ID#
+			and BOARD_SEQ_ID = #BOARD_SEQ_ID#
+			and CATEGORY = #CATEGORY#
+	</statement>
+	
+	
+	<statement id="board.recent.lineup.delete" parameterClass="java.util.HashMap">
+		update
+			 $TABLE_NAME$
+		set
+			DEL_YN = 'Y'
+		where
+			USER_SEQ_ID = #USER_SEQ_ID#
+	</statement>
+	
+	
+	<statement id="board.notice.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select
+			T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.TITLE, T.CONTENT, T.CATEGORY, T.TARGET_CATEGORY, T.REGION, T.FACILITY_NAME, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
+			, U.NIC AS USER_NIC, U.POINT AS WRITER_POINT, U.TYPE_CODE AS WRITER_TYPE_CODE, 
+			( select
+				count(1)
+			from
+				T_BOARD_REPLY R
+			where
+				TABLE_NAME = 'T_BOARD_NOTICE'
+				and ROOT_SEQ_ID = T.SEQ_ID
+				AND DEL_YN != 'Y'
+			) as REPLY_CNT
+		from
+			T_BOARD_NOTICE T, U_INFO U
+		where
+			T.USER_SEQ_ID = U.SEQ_ID
+			AND T.DEL_YN != 'Y'
+			AND (
+					T.TARGET_CATEGORY = '000000'
+					OR T.TARGET_CATEGORY = concat(substring(#CATEGORY#, 1, 2), '0000')
+					OR T.TARGET_CATEGORY = #CATEGORY#
+				)
+		order by
+			SEQ_ID desc
+	</statement>
+	
+	
+	<statement id="board.jump" parameterClass="java.util.HashMap">
+		update
+			$TABLE_NAME$
+		SET
+			WRITE_DATETIME = sysdate()
+		WHERE
+			SEQ_ID = #BOARD_SEQ_ID#
+			and USER_SEQ_ID = #USER_SEQ_ID#
+	</statement>
+	
+</sqlMap>

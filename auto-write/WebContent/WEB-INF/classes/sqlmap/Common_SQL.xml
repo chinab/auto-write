@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="common">
+	<statement id="common.menu.list.for.board.category" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			MENU_ID
+		from
+			T_MENU
+		where
+			PARMENU_ID = #MENU_CODE#
+	</statement>
+	
+	<statement id="common.fieldSelection.all" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select FIELD_NAME, HEAD_TEXT, HEAD_NAME from DC_LIST_HEAD
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="docName">
+				DOC_NAME = #docName#
+			</isNotNull>
+			<isNotNull prepend="and" removeFirstPrepend="true" property="defaultYN">
+				DEFAULT_YN = #defaultYN#
+			</isNotNull>
+		</dynamic>
+		order by FL_ORDER		
+	</statement>
+	<statement id="common.fieldSelection.selected" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select FIELD_NAME, HEAD_TEXT, HEAD_NAME from DC_LIST_HEAD F_TBL, DC_HEAD_SEL S_TBL
+		where F_TBL.HEAD_ID = S_TBL.HEAD_ID and F_TBL.DOC_NAME = S_TBL.DOC_NAME 
+		<isNotNull prepend="and" removeFirstPrepend="true" property="docName">
+			S_TBL.DOC_NAME = #docName#
+		</isNotNull>		
+		<isNotNull prepend="and" removeFirstPrepend="true" property="userID">
+			S_TBL.USER_ID = #userID#
+		</isNotNull>
+		order by S_TBL.FL_ORDER
+	</statement>	
+	<statement id="common.fieldSelection.removeSelected" parameterClass="java.util.HashMap">
+		delete DC_HEAD_SEL where USER_ID = #userID#
+	</statement>
+	<statement id="common.fieldSelection.insertSelected" parameterClass="java.util.HashMap">
+		insert into DC_HEAD_SEL (USER_ID, HEAD_ID, DOC_NAME, FL_ORDER) 
+		values (#userID#, (select HEAD_ID from DC_LIST_HEAD where DOC_NAME = #docName# and FIELD_NAME = #fieldName# and ROWNUM = 1), #docName#, #seqNo#)
+	</statement>
+	<sql id="common.masterCodeList.where">
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="CODE_IDX">
+				CODE_IDX = #CODE_IDX#
+			</isNotEmpty>		
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="CODE">
+				CODE = #CODE#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="CODE_TEXT">
+				CODE_TEXT like '%' || #CODE_TEXT# || '%'
+			</isNotEmpty>
+		</dynamic>  
+	</sql>
+	<statement id="common.masterCodeList" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select * from (
+		select * from (
+		select 
+			ROWNUM RM, $selSmt$ from (		
+		select *
+		from CM_CODE_SET
+		<include refid="common.masterCodeList.where" />
+		<isNotNull property="orderBy">
+			order by $orderBy$
+		</isNotNull>
+		))
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[
+				ROWNUM <= ((#autoLoadingCnt#) * (#page#) )
+			]]>				
+			</isNotNull>
+		</dynamic> 
+		)
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[	
+				RM <= (#autoLoadingCnt# * #page#) and RM > ( #autoLoadingCnt# * (#page# -1))
+			]]>						 
+			</isNotNull>
+		</dynamic>  
+	</statement>
+	<statement id="common.masterCodeListCnt" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(
+			<isEmpty property="keyColumn">*</isEmpty>
+			<isNotEmpty property="keyColumn">$keyColumn$</isNotEmpty>
+			)  
+		from CM_CODE_SET
+		<include refid="common.masterCodeList.where" />
+	</statement>
+</sqlMap>

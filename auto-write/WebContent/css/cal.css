@@ -1,0 +1,6 @@
+.cal {
+	background: buttonface; margin: 5; margin-top: 2; border-top: 1 solid buttonhighlight; border-left: 1 solid buttonhighlight; border-right: 1 solid buttonshadow; border-bottom: 1 solid buttonshadow; width: 155; display: none; position: absolute; z-index: 99;
+}
+#cal_obj tr td {
+	font-size:9px;text-align:center;
+}

@@ -1,0 +1,5 @@
+<Properties>
+
+	<Property name="components" value="{home}Repository/Configs/CF_Components.xml" />
+	<Property name="ESBConfig" value="{home}Repository\Configs\" />
+</Properties>

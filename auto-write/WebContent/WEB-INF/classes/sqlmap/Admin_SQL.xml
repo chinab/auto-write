@@ -1,0 +1,1245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AMDIN">
+	
+	<statement id="admin.user.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					U_INFO
+				where
+					1=1
+					<isNotNull prepend="and" removeFirstPrepend="true" property="U_ID">
+						( ID like concat('%', #U_ID#, '%') or NIC like concat('%', #U_ID#, '%') )
+					</isNotNull>
+				order by
+					SEQ_ID desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="TYPE_CODE">
+						TYPE_CODE= #TYPE_CODE#
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="STATUS_CODE">
+						STATUS_CODE= #STATUS_CODE#
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SERVICE_CODE">
+						SERVICE_CODE= #SERVICE_CODE#
+				</isNotNull>
+		) R
+	</statement>
+	
+	<statement id="admin.user.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.UserEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					U_INFO
+				where
+					1=1
+					<isNotNull prepend="and" removeFirstPrepend="true" property="U_ID">
+						( ID like concat('%', #U_ID#, '%') or NIC like concat('%', #U_ID#, '%') )
+					</isNotNull>
+				order by
+					SEQ_ID desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="TYPE_CODE">
+						TYPE_CODE= #TYPE_CODE#
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="STATUS_CODE">
+						STATUS_CODE= #STATUS_CODE#
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SERVICE_CODE">
+						SERVICE_CODE= #SERVICE_CODE#
+				</isNotNull>
+		) R limit #START_NUM#, #PAGE_SIZE#
+	</statement>
+	
+	
+	<statement id="admin.user.search.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.UserEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					U_INFO
+				where
+					1=1
+					<isNotNull prepend="and" removeFirstPrepend="true" property="USER_SEARCH_KEY">
+						( ID like concat('%', #USER_SEARCH_KEY#, '%') or NIC like concat('%', #USER_SEARCH_KEY#, '%') )
+					</isNotNull>
+				order by
+					SEQ_ID desc
+			) Q
+		) R limit #START_NUM#, #PAGE_SIZE#
+	</statement>
+	
+	
+	<statement id="admin.user.board.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+		select * from (
+			select 'T_BOARD_NOTICE' AS TABLE_NAME, T_BOARD_NOTICE.* from T_BOARD_NOTICE where user_seq_id = #USER_SEQ_ID#
+			union
+			select 'T_BOARD_BUSINESS_INFO' AS TABLE_NAME, T_BOARD_BUSINESS_INFO.* from T_BOARD_BUSINESS_INFO where user_seq_id = #USER_SEQ_ID#
+			union
+			select 'T_BOARD_LINE_UP' AS TABLE_NAME, T_BOARD_LINE_UP.* from T_BOARD_LINE_UP where user_seq_id = #USER_SEQ_ID#
+			union
+			select 'T_BOARD_POSTSCRIPT' AS TABLE_NAME, T_BOARD_POSTSCRIPT.* from T_BOARD_POSTSCRIPT where user_seq_id = #USER_SEQ_ID#
+			union
+			select 'T_BOARD_COMMUNITY' AS TABLE_NAME, T_BOARD_COMMUNITY.* from T_BOARD_COMMUNITY where user_seq_id = #USER_SEQ_ID#
+			union
+			select 'T_BOARD_CENTER' AS TABLE_NAME, T_BOARD_CENTER.* from T_BOARD_CENTER where user_seq_id = #USER_SEQ_ID#
+		) AS USER_BOARD 
+		order by write_datetime desc
+	</statement>
+	
+	
+	<statement id="admin.user.register" parameterClass="java.util.HashMap">
+		INSERT INTO
+			U_INFO
+			(
+				NAME, ID, NIC, PASSWORD, EMAIL, POINT, TYPE_CODE,
+				STATUS_CODE, SERVICE_CODE, REG_DATETIME, APPROVE_DATETIME, APPROVAL_USER_SEQ_ID
+			) VALUES (
+				#NAME#, #ID#, #NIC#, #PASSWORD#, #EMAIL#, #POINT#, #TYPE_CODE#,
+	    		#STATUS_CODE#, #SERVICE_CODE#, SYSDATE(), #APPROVE_DATETIME#, #APPROVAL_USER_SEQ_ID#
+	    	)
+	</statement>
+	
+	
+	<statement id="admin.menuSelection.selected" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+		select
+			 MENU_ID as menuid, 
+			 MENU_NM as menunm,
+			 PARMENU_ID as parmenuid,
+			 MENU_LVL as menulvl,
+			 WEB_LINK as menupageurl,
+			 FSTIMGPATH as fstimgpath, 
+			 MENU_TYPE as menutype
+		from
+			T_MENU
+		where
+			 MENU_ID in (
+			 	select 
+			 		MENU_ID 
+			 	from 
+			 		t_menu_alloc ma, U_INFO u 
+			 	where 
+			 		ma.USER_SEQ_ID = u.SEQ_ID
+			 		and u.SEQ_ID = #U_SEQ_ID#
+			 	) 
+			 AND MENU_LVL = #menulvl# AND USEYN='Y'
+		<dynamic prepend="and">
+			<isNotEmpty property="parmenuid">
+				PARMENU_ID = #parmenuid#					 
+			</isNotEmpty>
+		</dynamic>
+		order by DISPLAYSEQ
+	</statement>
+	
+<sql id="admin.userMgnt.list.where">
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="EXCEPT_U_TYPE">
+				U_TYPE &lt;&gt; #EXCEPT_U_TYPE#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="INFO_U_ID">
+				U_ID = #INFO_U_ID#
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="INFO_U_NAME">
+				U_NAME = #INFO_U_NAME#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="INFO_APPROVED">
+				APPROVED = #INFO_APPROVED#
+			</isNotEmpty>
+		</dynamic>  
+</sql>
+
+<sql id="admin.accountMgnt.list.where">
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="COMPANY_TYPE">
+				COMPANY_TYPE = #COMPANY_TYPE#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="CHOOSE">
+				$CHOOSE$ = #TAG#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="TP_CODE">
+				TP_CODE = #TP_CODE#
+			</isNotEmpty>
+		</dynamic>  
+</sql>
+
+	
+	<statement id="admin.userMgnt.list" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select * from (
+		select * from (
+		select 
+			ROWNUM RM, 
+			rownum ROW_ID, $selSmt$ from (		
+		select $selSmt$
+		from CM_USER
+		<include refid="admin.userMgnt.list.where" />
+		<isNotNull property="orderBy">
+			order by $orderBy$
+		</isNotNull>
+		))
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[
+				ROWNUM <= ((#autoLoadingCnt#) * (#page#) )
+			]]>				
+			</isNotNull>
+		</dynamic> 
+		)
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[	
+				RM <= (#autoLoadingCnt# * #page#) and RM > ( #autoLoadingCnt# * (#page# -1))
+			]]>						 
+			</isNotNull>
+		</dynamic>  
+	</statement>
+	<statement id="admin.userMgnt.listCnt" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(
+			<isEmpty property="keyColumn">*</isEmpty>
+			<isNotEmpty property="keyColumn">$keyColumn$</isNotEmpty>
+			)  
+		from CM_USER
+		<include refid="admin.userMgnt.list.where" />
+	</statement>
+	<statement id="admin.userMgnt.listDel" parameterClass="java.util.HashMap">
+		delete CM_USER
+		<dynamic prepend="where">
+		<iterate property="keys" open="(" close=")" conjunction="OR">
+				U_ID=#keys[]#
+			</iterate>
+		</dynamic>
+	</statement>	
+	<statement id="admin.userMgnt.test" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select * from CM_USER
+	</statement>
+	<statement id="admin.quickMenuSelection.all" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select MENU_ID, TOP_ITEM, MID_ITEM, DETAIL_ITEM, ITEM_NAME from t_menu
+		<dynamic prepend="where">
+			<isNotNull property="subType">
+				TOP_ITEM = #subType#					 
+			</isNotNull>
+		</dynamic>
+		order by MENU_ID
+	</statement>
+	<sql id="admin.menu.list.where">
+		<dynamic prepend="where">
+			
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="MENU_ID">
+				MENU_ID = #MENU_ID#
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="MENU_NM">
+				MENU_NM = #MENU_NM#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="PARMENU_ID">
+				PARMENU_ID = #PARMENU_ID#
+			</isNotEmpty>
+		</dynamic>  
+	</sql>
+	<statement id="admin.menu.list" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select * from (
+		select * from (
+		select 
+			ROWNUM RM, 
+			rownum ROW_ID, $selSmt$ from (		
+		select $selSmt$
+		from t_menu
+		<include refid="admin.menu.list.where" />
+		<isNotNull property="orderBy">
+			order by $orderBy$
+		</isNotNull>
+		))
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[
+				ROWNUM <= ((#autoLoadingCnt#) * (#page#) )
+			]]>				
+			</isNotNull>
+		</dynamic> 
+		)
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[	
+				RM <= (#autoLoadingCnt# * #page#) and RM > ( #autoLoadingCnt# * (#page# -1))
+			]]>						 
+			</isNotNull>
+		</dynamic>  
+	</statement>
+	<statement id="admin.menu.listCnt" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(
+			<isEmpty property="keyColumn">*</isEmpty>
+			<isNotEmpty property="keyColumn">$keyColumn$</isNotEmpty>
+			)  
+		from t_menu
+		<include refid="admin.menu.list.where" />
+	</statement>
+	
+	<statement id="admin.authGroupMenu.selected" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+		select MENU_ID as menuid, MENU_NM as menunm,PARMENU_ID as parmenuid,MENU_LVL as menulvl,WEB_LINK as menupageurl,FSTIMGPATH as fstimgpath, MENU_TYPE as menutype from t_menu
+		where MENU_ID in (select MENU_ID from t_menu_alloc  where USER_ID=#AUTH_GROUP_ID#) AND MENU_LVL=#menulvl# AND USEYN='Y'
+		<dynamic prepend="and">
+			
+			<isNotEmpty property="parmenuid">
+				PARMENU_ID = #parmenuid#					 
+			</isNotEmpty>
+		</dynamic>
+		order by DISPLAYSEQ
+	</statement>
+	<statement id="admin.allMenu.selected" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+		select MENU_ID as menuid, MENU_NM as menunm,PARMENU_ID as parmenuid,MENU_LVL as menulvl,WEB_LINK as menupageurl ,FSTIMGPATH as fstimgpath, MENU_TYPE as menutype from t_menu
+		WHERE MENU_LVL=#menulvl# AND USEYN='Y'
+		<dynamic prepend="and">
+			<isNotEmpty property="utype">
+				ALLOWED_UTYPE = #utype#					 
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="and">	
+			<isNotEmpty property="parmenuid">
+				PARMENU_ID = #parmenuid#					 
+			</isNotEmpty>
+		</dynamic>
+		order by DISPLAYSEQ
+	</statement>
+	<statement id="admin.getMenu" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select * from t_menu
+		WHERE  USEYN='Y'
+		<dynamic prepend="and">
+			<isNotEmpty property="MENU_ID">
+				MENU_ID = #MENU_ID#					 
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="and">	
+			<isNotEmpty property="PARMENU_ID">
+				PARMENU_ID = #PARMENU_ID#					 
+			</isNotEmpty>
+		</dynamic>
+		<dynamic prepend="and">	
+			<isNotEmpty property="MENU_LVL">
+				MENU_LVL = #MENU_LVL#					 
+			</isNotEmpty>
+		</dynamic>
+	</statement>
+	
+	<statement id="admin.menu.list.new" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+		select
+			MENU_ID as menuid, MENU_NM as menunm, PARMENU_ID as parmenuid, MENU_LVL as menulvl,
+			WEB_LINK as menupageurl, FSTIMGPATH as fstimgpath, MENU_TYPE as menutype, useyn
+		from
+			T_MENU
+		WHERE
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="MENU_ID">
+				MENU_ID = #MENU_ID#
+			</isNotNull>
+			<isNotNull prepend="and" removeFirstPrepend="true" property="MENU_NM">
+				MENU_NM = #MENU_NM#
+			</isNotNull>
+			<isNotNull prepend="and" removeFirstPrepend="true" property="MENU_LVL">
+				MENU_LVL = #MENU_LVL#
+			</isNotNull>
+		order by MENUID
+	</statement>
+	
+	<statement id="admin.menu.info" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+		select
+			MENU_ID as menuid, MENU_NM as menunm, PARMENU_ID as parmenuid, MENU_LVL as menulvl,
+			WEB_LINK as menupageurl, FSTIMGPATH as fstimgpath, MENU_TYPE as menutype, useyn, 
+			PARMENU_ID as parmenuid
+		from
+			T_MENU
+		WHERE
+			MENU_ID = #MENU_ID#
+	</statement>
+	
+	<statement id="admin.deleteMenu" parameterClass="java.util.HashMap" >
+		delete from t_menu
+		WHERE MENU_ID=#MENU_ID#
+	</statement>
+	<statement id="admin.createMenu" parameterClass="java.util.HashMap">
+		insert into t_menu
+		(
+			MENU_ID,
+			MENU_LVL,
+			MENU_NM, 
+			PARMENU_ID,
+			FSTIMGPATH, 
+			WEB_LINK,
+			DISPLAYSEQ,
+			LEFT_POS,
+			DOC_NM,
+			USEYN,
+			ALLOWED_UTYPE,
+			MENU_TYPE
+		)
+		values
+		(
+			#MENU_ID#,
+			#MENU_LVL#,
+			#MENU_NM#, 
+			#PARMENU_ID#,
+			#FSTIMGPATH#, 
+			#WEB_LINK#,
+			#DISPLAYSEQ#,
+			#LEFT_POS#,
+			#DOC_NM#,
+			#USEYN#,
+			#ALLOWED_UTYPE#,
+			#MENU_TYPE#
+		)
+	</statement>
+	<statement id="admin.quickMenuSelection.selected.list" parameterClass="java.util.HashMap" resultClass="java.util.List">
+		select MENU_ID, TOP_ITEM, MID_ITEM, DETAIL_ITEM, ITEM_NAME from t_menu
+		where MENU_ID in (select MENU_ID from t_menu_alloc where USER_ID=#U_ID#)
+		order by MENU_ID
+	</statement>
+	<statement id="admin.quickMenuSelection.removeSelected" parameterClass="java.util.HashMap">
+		delete t_menu_alloc
+		where USER_ID = #U_ID#
+	</statement>
+	<statement id="admin.quickMenuSelection.insertSelected" parameterClass="java.util.HashMap">
+		insert into t_menu_alloc (USER_ID, MENU_ID) 
+		values (#U_ID#, #MENU_ID#)
+	</statement>
+	
+	<statement id="support.setVocCharger.updateSelected" parameterClass="java.util.HashMap">
+		update CM_VOC
+		set
+			CHARGE_USER = #U_ID#
+			<isNotEmpty prepend="," removeFirstPrepend="true" property="REMARK">
+				REMARK = #REMARK#
+			</isNotEmpty>
+		where SUBMIT_ID = #SUBMIT_ID#
+	</statement>
+	<statement id="admin.accountMgnt.list" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select * from (
+		select * from (
+		select 
+			ROWNUM RM, 
+			rownum ROW_ID, $selSmt$ from (		
+		select $selSmt$
+		from CM_TPCODE
+		<include refid="admin.accountMgnt.list.where" />
+		<isNotNull property="orderBy">
+			order by $orderBy$
+		</isNotNull>
+		))
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[
+				ROWNUM <= ((#autoLoadingCnt#) * (#page#) )
+			]]>				
+			</isNotNull>
+		</dynamic> 
+		)
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[	
+				RM <= (#autoLoadingCnt# * #page#) and RM > ( #autoLoadingCnt# * (#page# -1))
+			]]>						 
+			</isNotNull>
+		</dynamic>  
+	</statement>
+	<statement id="admin.accountMgnt.listCnt" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(
+			<isEmpty property="keyColumn">*</isEmpty>
+			<isNotEmpty property="keyColumn">$keyColumn$</isNotEmpty>
+			)  
+		from CM_TPCODE
+		<include refid="admin.accountMgnt.list.where" />
+	</statement>
+	<statement id="admin.accountMgnt.listDel" parameterClass="java.util.HashMap">
+		delete CM_TPCODE
+		<dynamic prepend="where">
+		<iterate property="keys" open="(" close=")" conjunction="OR">
+				AC_NO=#keys[]#
+			</iterate>
+		</dynamic>
+	</statement>
+	<statement id="admin.createPartner" parameterClass="java.util.HashMap">
+		insert into CM_TPCODE
+		(
+			TP_CODE,
+			COMPANY_TYPE,
+			COMPANY_NAME, 
+			COMPANY_EN_NM,
+			CEO_NAME, 
+			REGISTER_NO,
+			ADDRESS1,
+			ADDRESS2,
+			ADDRESS3,
+			ADDRESS4,
+			TEL_NO,
+			FAX_NO,
+			ZIP_CODE,
+			OWN_COMPANY,
+			COMPANY_CODE, 
+			ACTIVE_YN,
+			COMPANY_IDT, 
+			COMPANY_IDT_QU, 
+			COMPANY_SUB_IDT,	
+			COMPANY_SUB_IDT_QU, 
+			COMPANY_FWD_CODE,	
+			COMPANY_BNK_CODE, 
+			CERT_KEY, 
+			CHARGE_PER_NM, 
+			CHARGE_PER_TEL,
+			CHARGE_PER_DEP, 
+			CHARGE_PER_EMAIL,
+			ADD_INFO1,
+			ADD_INFO2,
+			ADD_INFO3,
+			ADD_INFO4,
+			ADD_INFO5,
+			ADD_INFO6,
+			ADD_INFO7
+		)
+		values
+		(
+			#TP_CODE#,
+			#COMPANY_TYPE#,
+			#COMPANY_NAME#, 
+			#COMPANY_EN_NM#,
+			#CEO_NAME#, 
+			#REGISTER_NO#,
+			#ADDRESS1#,
+			#ADDRESS2#,
+			#ADDRESS3#,
+			#ADDRESS4#,
+			#TEL_NO#,
+			#FAX_NO#,
+			#ZIP_CODE#,
+			#OWN_COMPANY#,
+			#COMPANY_CODE#, 
+			#ACTIVE_YN#,
+			#COMPANY_IDT#, 
+			#COMPANY_IDT_QU#, 
+			#COMPANY_SUB_IDT#,	
+			#COMPANY_SUB_IDT_QU#, 
+			#COMPANY_FWD_CODE#,	
+			#COMPANY_BNK_CODE#, 
+			#CERT_KEY#, 
+			#CHARGE_PER_NM#, 
+			#CHARGE_PER_TEL#,
+			#CHARGE_PER_DEP#, 
+			#CHARGE_PER_EMAIL#,
+			#ADD_INFO1#,#ADD_INFO2#,#ADD_INFO3#,#ADD_INFO4#,#ADD_INFO5#,#ADD_INFO6#,#ADD_INFO7#
+			
+		)
+	</statement>
+	<statement id="admin.getAccount" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 	*
+		from CM_TPCODE 
+		where TP_CODE = #TP_CODE#
+	</statement>
+	<statement id="admin.getAccountByIdt" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		select 	*
+		from CM_TPCODE 
+		where TP_CODE = #TP_CODE#
+	</statement>
+	<statement id="changePartner" parameterClass="java.util.HashMap">
+		update CM_TPCODE set
+			         	
+			COMPANY_TYPE       =#COMPANY_TYPE#,         
+			COMPANY_NAME       =#COMPANY_NAME#,         
+			COMPANY_EN_NM      =#COMPANY_EN_NM#,        
+			CEO_NAME           =#CEO_NAME#,             
+			REGISTER_NO        =#REGISTER_NO#,          
+			ADDRESS1           =#ADDRESS1#,             
+			ADDRESS2           =#ADDRESS2#,             
+			ADDRESS3           =#ADDRESS3#,             
+			ADDRESS4           =#ADDRESS4#,             
+			TEL_NO             =#TEL_NO#,               
+			FAX_NO             =#FAX_NO#,               
+			ZIP_CODE           =#ZIP_CODE#,             
+			OWN_COMPANY        =#OWN_COMPANY#,          
+			COMPANY_CODE      =#COMPANY_CODE#,         
+			ACTIVE_YN          =#ACTIVE_YN#,            
+			COMPANY_IDT        =#COMPANY_IDT#,          
+			COMPANY_IDT_QU     =#COMPANY_IDT_QU#,       
+			COMPANY_SUB_IDT    =#COMPANY_SUB_IDT#,	
+			COMPANY_SUB_IDT_QU =#COMPANY_SUB_IDT_QU#,   
+			CERT_KEY           =#CERT_KEY#,             
+			CHARGE_PER_NM      =#CHARGE_PER_NM#,        
+			CHARGE_PER_TEL     =#CHARGE_PER_TEL#,       
+			CHARGE_PER_DEP     =#CHARGE_PER_DEP#,       
+			CHARGE_PER_EMAIL    =#CHARGE_PER_EMAIL# ,
+			COMPANY_FWD_CODE     =#COMPANY_FWD_CODE#,       
+			COMPANY_BNK_CODE    =#COMPANY_BNK_CODE# ,
+			ADD_INFO1           =#ADD_INFO1#,             
+			ADD_INFO2      =#ADD_INFO2#,        
+			ADD_INFO3     =#ADD_INFO3#,       
+			ADD_INFO4     =#ADD_INFO4#,       
+			ADD_INFO5    =#ADD_INFO5# ,
+			ADD_INFO6     =#ADD_INFO6#,       
+			ADD_INFO7    =#ADD_INFO7#
+		where TP_CODE	    =#TP_CODE#     
+	</statement>
+	<sql id="admin.code.list.where">
+		<![CDATA[			
+		where 1=1 
+		]]>	
+		<dynamic>
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="searchVal">
+				upper($searchCondi$) like upper('%' || #searchVal# || '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="userSearchVal">
+				$userSearchItem$ $userOperator$ $userSearchVal$
+			</isNotEmpty>
+			<isNotEmpty prepend="and" removeFirstPrepend="true" property="searchVal2">
+				upper($searchCondi2$) like upper('%' || #searchVal2# || '%')
+			</isNotEmpty>
+																	
+			
+		</dynamic>  
+	</sql>
+	<statement id="admin.code.list" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select * from (
+		select * from (
+		select 
+			ROWNUM RM, $selSmt$ from (		
+		select $selSmtIn$ 
+		from $tableName$
+		<include refid="admin.code.list.where" />
+		<isNotNull property="orderBy">
+			order by $orderBy$
+		</isNotNull>
+		))
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[
+				ROWNUM <= ((#autoLoadingCnt#) * (#page#) )
+			]]>				
+			</isNotNull>
+		</dynamic> 
+		)
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[	
+				RM <= (#autoLoadingCnt# * #page#) and RM > ( #autoLoadingCnt# * (#page# -1))
+			]]>						 
+			</isNotNull>
+		</dynamic>  
+	</statement>
+	<statement id="admin.code.listCnt" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(
+			<isEmpty property="keyColumn">*</isEmpty>
+			<isNotEmpty property="keyColumn">$keyColumn$</isNotEmpty>
+			)  
+		from $tableName$
+		<include refid="admin.code.list.where" />
+	</statement>
+	<statement id="admin.code.listDel" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		<!--
+		delete
+		from $tableName$
+		where $keyColumn$ = #keys[]#
+		-->
+		delete
+		from $tableName$
+		where $keyColumn$
+		<dynamic prepend="in">
+			<iterate property="keys" open="(" close=")" conjunction=",">
+						#keys[]#
+			</iterate>	
+		</dynamic>
+	</statement>
+	<statement id="admin.getCode" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 	*
+		from $tableName$
+		where $KeyColumn$ = #KeyValue#
+	</statement>
+	<statement id="admin.deleteUserAuth" remapResults="true" parameterClass="java.util.HashMap" >
+		delete from CM_UAUTH
+		WHERE AUTH_GROUP_ID=#AUTH_GROUP_ID#
+	</statement>
+	<statement id="admin.insertUserAuth" remapResults="true" parameterClass="java.util.HashMap">
+		insert into CM_UAUTH
+		(
+			AUTH_GROUP_ID,
+			AUTH_GROUP_NAME,
+			REMARK, 
+			STATUS
+		)
+		values
+		(
+			#AUTH_GROUP_ID#,
+			#AUTH_GROUP_NAME#,
+			#REMARK#, 
+			#STATUS#
+		)
+	</statement>
+	<statement id="admin.userAuthSelection.delete" remapResults="true" parameterClass="java.util.HashMap" >
+		delete from t_menu_alloc
+		WHERE USER_ID=#AUTH_GROUP_ID#
+	</statement>
+	<statement id="admin.userAuthSelection.insert" remapResults="true" parameterClass="java.util.HashMap">
+		insert into t_menu_alloc
+		(
+			USER_ID,
+			MENU_ID
+		)
+		values
+		(
+			#AUTH_GROUP_ID#,
+			#MENU_ID#
+		)
+	</statement>
+	
+	
+	<statement id="admin.menu.default.delete" parameterClass="java.util.HashMap" >
+		delete from
+			T_MENU_ALLOC
+		WHERE
+			USER_SEQ_ID = #USER_SEQ_ID#
+	</statement>
+	
+	
+	<statement id="admin.menu.default.insert" remapResults="true" parameterClass="java.util.HashMap">
+		insert into T_MENU_ALLOC
+		(
+			USER_SEQ_ID,
+			MENU_ID
+		)
+			select
+				#USER_SEQ_ID# USER_SEQ_ID, MENU_ID 
+			from
+				t_menu_alloc_type
+			where
+				AUTH_TYPE = 'R'
+				and TYPE_CODE = #TYPE_CODE#
+	</statement>
+	<statement id="admin.getEdiDocList"  remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 	*
+		from CM_EDIDOC
+		
+	</statement>
+	<statement id="admin.deleteEdiDoc"  remapResults="true" parameterClass="java.util.HashMap" >
+		delete from CM_EDIDOC
+		WHERE EDI_ID=#EDI_ID#
+	</statement>
+	<statement id="admin.insertEdiDoc" remapResults="true" parameterClass="java.util.HashMap">
+		insert into CM_EDIDOC
+		(
+			EDI_ID,
+			EDI_NAME,
+			REMARK, 
+			BIZ_AREA,STATUS
+		)
+		values
+		(
+			#EDI_ID#,
+			#EDI_NAME#,
+			#REMARK#, 
+			#BIZ_AREA#,#STATUS#
+		)
+	</statement>
+	<statement id="admin.updateEdiDoc" parameterClass="java.util.HashMap">
+		update CM_EDIDOC SET
+			EDI_NAME=#EDI_NAME#,
+			REMARK =#REMARK#, 
+			BIZ_AREA=#BIZ_AREA#,
+			STATUS=#STATUS#
+			WHERE EDI_ID=#EDI_ID#
+			
+		
+	</statement>
+	<statement id="admin.getMailAlertList" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select 	*
+		from CM_MAIL_ALERT
+		where USER_ID = #USER_ID#
+	</statement>
+	<statement id="admin.deleteMailAlert" parameterClass="java.util.HashMap" >
+		delete from CM_MAIL_ALERT
+		WHERE USER_ID=#USER_ID#
+	</statement>
+	<statement id="admin.insertMailAlert" parameterClass="java.util.HashMap">
+		insert into CM_MAIL_ALERT
+		(
+			EDI_ID,
+			USER_ID,
+			A_TYPE
+		)
+		values
+		(
+			#EDI_ID#,
+			#USER_ID#,
+			#A_TYPE#
+		)
+	</statement>
+	<statement id="admin.getBankAccount" parameterClass="java.util.HashMap" >
+		Select * from BANK_ACCOUNT
+		Where ACCOUNT_NO||BKCODE =#KeyValue#
+		
+	</statement>
+	<statement id="admin.deleteBankAccount" parameterClass="java.util.HashMap" >
+		delete from BANK_ACCOUNT
+		WHERE BKCODE=#BKCODE# AND ACCOUNT_NO=#ACCOUNT_NO#
+	</statement>
+	<statement id="admin.insertBankAccount" parameterClass="java.util.HashMap">
+		insert into BANK_ACCOUNT
+		(
+			BKCODE,
+			ACCOUNT_NO,
+			ACCOUNT_OWNER,
+			CURRANCY_CODE,
+			STATUS
+		)
+		values
+		(
+			#BKCODE#,
+			#ACCOUNT_NO#,
+			#ACCOUNT_OWNER#,
+			#CURRANCY_CODE#,
+			#STATUS#
+		)
+	</statement>
+	<statement id="admin.updateBankAccount" parameterClass="java.util.HashMap">
+		UPDATE BANK_ACCOUNT SET
+			ACCOUNT_OWNER=#ACCOUNT_OWNER#,
+			CURRANCY_CODE=#CURRANCY_CODE#,
+			STATUS=#STATUS#
+		WHERE BKCODE=#BKCODE# AND ACCOUNT_NO=#ACCOUNT_NO#
+	</statement>
+	
+	<statement id="admin.account.list" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select * from (
+		select * from (
+		select 
+			$selSmt$ ROWNUM RM from (		
+				SELECT	* FROM (
+				SELECT  AK.STATUS,
+				        AK.ACCOUNT_KIND_CODE,
+				        AK.ACCOUNT_KIND_NAME,
+				        A.ACCOUNT_CODE,
+				        A.ACCOUNT_NAME,
+				        AD.ACCOUNT_DETAIL_CODE,
+				        AD.ACCOUNT_DETAIL_NAME
+				FROM    ACCOUNT_KIND AK,
+				        ACCOUNT A,
+				        ACCOUNT_DETAIL AD
+				WHERE   AK.ACCOUNT_KIND_CODE = A.ACCOUNT_KIND_CODE(+)
+				AND     A.ACCOUNT_CODE = AD.ACCOUNT_CODE(+) 
+			)      
+		<include refid="admin.code.list.where" />
+		<isNotNull property="orderBy">
+			order by $orderBy$
+		</isNotNull>
+		))
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[
+				ROWNUM <= ((#autoLoadingCnt#) * (#page#) )
+			]]>				
+			</isNotNull>
+		</dynamic> 
+		)
+		<dynamic prepend="where">
+			<isNotNull prepend="and" removeFirstPrepend="true" property="page">
+			<![CDATA[	
+				RM <= (#autoLoadingCnt# * #page#) and RM > ( #autoLoadingCnt# * (#page# -1))
+			]]>						 
+			</isNotNull>
+		</dynamic>  
+	</statement>
+	<statement id="admin.account.listCnt" remapResults="true" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select COUNT(*) from(
+				SELECT  AK.STATUS,
+				        AK.ACCOUNT_KIND_CODE,
+				        AK.ACCOUNT_KIND_NAME,
+				        A.ACCOUNT_CODE,
+				        A.ACCOUNT_NAME,
+				        AD.ACCOUNT_DETAIL_CODE,
+				        AD.ACCOUNT_DETAIL_NAME
+				FROM    ACCOUNT_KIND AK,
+				        ACCOUNT A,
+				        ACCOUNT_DETAIL AD
+				WHERE   AK.ACCOUNT_KIND_CODE = A.ACCOUNT_KIND_CODE(+)
+				AND     A.ACCOUNT_CODE = AD.ACCOUNT_CODE(+)    
+		)  
+	  	<include refid="admin.code.list.where" />
+	</statement>
+	<select id="admin.user.view" resultClass="com.jekyll.common.framework.entity.UserEntity">
+		SELECT
+			* 
+		FROM
+		 	U_INFO
+		WHERE
+			SEQ_ID = #SEQ_ID#
+	</select>
+	<update id="admin.user.modify">
+		update
+			U_INFO
+		set
+			NAME = #NAME#, 
+			ID = #ID#, 
+			NIC = #NIC#, 
+			PASSWORD = #PASSWORD#, 
+			EMAIL = #EMAIL#, 
+			POINT = #POINT#, 
+			TYPE_CODE = #TYPE_CODE#, 
+			STATUS_CODE = #STATUS_CODE#, 
+			SERVICE_CODE = #SERVICE_CODE#
+		<isNotNull prepend="," removeFirstPrepend="true" property="APPROVAL_USER_SEQ_ID">
+			APPROVE_DATETIME = sysdate(), 
+			APPROVAL_USER_SEQ_ID = #APPROVAL_USER_SEQ_ID#
+		</isNotNull>
+		where
+			SEQ_ID = #SEQ_ID#
+	</update>
+	
+	<statement id="admin.point.master.select" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			SEQ_ID, CATEGORY, ACTION_TYPE, USER_TYPE, POINT
+		from
+			T_POINT_MASTER
+		where
+			1 = 1
+<!-- 		<isNotNull prepend="and" removeFirstPrepend="true" property="CATEGORY"> -->
+<!-- 			CATEGORY = #CATEGORY# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull prepend="and" removeFirstPrepend="true" property="ACTION_TYPE"> -->
+<!-- 			ACTION_TYPE = #ACTION_TYPE# -->
+<!-- 		</isNotNull> -->
+		<isNotNull prepend="and" removeFirstPrepend="true" property="USER_TYPE">
+			USER_TYPE = #USER_TYPE#
+		</isNotNull>
+		order by
+			SEQ_ID desc
+	</statement>
+	
+	
+	<statement id="admin.user.action.insert" parameterClass="java.util.HashMap">
+		insert into U_ACTION_INFO
+		(
+			USER_SEQ_ID, USER_ID, USER_NIC, REQ_URI, CATEGORY, 
+			ACTION_TYPE, ACTION_SEQ_ID, ACTION_POINT, ACTION_DATETIME, ACTION_IP
+		)
+		values
+		(
+			#USER_SEQ_ID#, #USER_ID#, #USER_NIC#, #REQ_URI#, #CATEGORY#, 
+			#ACTION_TYPE#, #ACTION_SEQ_ID#, #ACTION_POINT#, sysdate(), #ACTION_IP# 
+		)
+	</statement>
+	
+	
+	<statement id="admin.other.user.action.insert" parameterClass="java.util.HashMap">
+		insert into U_ACTION_INFO
+		(
+			USER_SEQ_ID, USER_ID, USER_NIC, REQ_URI, CATEGORY, 
+			ACTION_TYPE, ACTION_SEQ_ID, ACTION_POINT, ACTION_DATETIME, ACTION_IP
+		)
+		values
+		(
+			#ROOT_USER_SEQ_ID#, #USER_ID#, #USER_NIC#, #REQ_URI#, #CATEGORY#, 
+			#ACTION_TYPE#, #ACTION_SEQ_ID#, #ACTION_POINT#, sysdate(), #ACTION_IP# 
+		)
+	</statement>
+	
+	
+	<statement id="admin.user.point.update" parameterClass="java.util.HashMap">
+		update
+			U_INFO
+		set
+			POINT = #POINT#
+		where
+			SEQ_ID = #USER_SEQ_ID#
+	</statement>
+	
+	
+	<statement id="admin.user.point.add" parameterClass="java.util.HashMap">
+		update
+			U_INFO
+		set
+			POINT = cast(POINT as signed) + cast(#ACTION_POINT# as signed)
+		where
+			SEQ_ID = #ROOT_USER_SEQ_ID#
+	</statement>
+	
+	
+	<statement id="admin.default.menu.select" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			TYPE_CODE, MENU_ID, AUTH_TYPE
+		from
+			T_MENU_ALLOC_TYPE
+		where
+			1 = 1
+		<isNotNull prepend="and" removeFirstPrepend="true" property="TYPE_CODE">
+			TYPE_CODE = #TYPE_CODE#
+		</isNotNull>
+		order by
+			MENU_ID desc
+	</statement>
+	
+	
+	
+	
+	<statement id="admin.point.master.list" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select
+			SEQ_ID, CATEGORY, ACTION_TYPE, USER_TYPE, POINT
+		from
+			T_POINT_MASTER
+		where
+			1 = 1
+		<isNotNull prepend="and" removeFirstPrepend="true" property="TYPE_CODE">
+			TYPE_CODE = #TYPE_CODE#
+		</isNotNull>
+		order by
+			CATEGORY desc
+	</statement>
+	
+	
+	<statement id="admin.user.login.count" parameterClass="java.util.HashMap" resultClass="int">
+		select count(1) from U_LOGIN_INFO
+		where
+			DATE_FORMAT(now(), '%Y%m%d') = DATE_FORMAT(LOGIN_DATETIME, '%Y%m%d')
+			and USER_SEQ_ID = #USER_SEQ_ID#
+	</statement>
+	
+	
+	<statement id="admin.user.today.board.count" parameterClass="java.util.HashMap" resultClass="int">
+		select count(1) from $TABLE_NAME$
+		where
+			DATE_FORMAT(now(), '%Y%m%d') = DATE_FORMAT(WRITE_DATETIME, '%Y%m%d')
+			and USER_SEQ_ID = #USER_SEQ_ID#
+	</statement>
+	
+	
+	<statement id="admin.user.menu.auth.count" parameterClass="java.util.HashMap" resultClass="int">
+		select count(1) from T_MENU_ALLOC_TYPE
+		where
+			TYPE_CODE = #TYPE_CODE#
+			AND MENU_ID = #MENU_ID#
+			AND AUTH_TYPE = #AUTH_TYPE#
+	</statement>
+	
+	<statement id="admin.payment.master.list.count" parameterClass="java.util.HashMap" resultClass="int">
+		select
+			count(1)
+		from
+			U_PAYMENT_MASTER
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+				$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+			<isNotNull prepend="and" removeFirstPrepend="true" property="STATUS_CODE">
+				PAYMENT_STATUS= #STATUS_CODE#
+			</isNotNull>
+			<isNotNull prepend="and" removeFirstPrepend="true" property="BANNER_TYPE_CODE">
+				BANNER_TYPE_CODE= #BANNER_TYPE_CODE#
+			</isNotNull>
+	</statement>
+	
+	
+	<statement id="admin.payment.master.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.PaymentMasterEntity">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					SEQ_ID, USER_SEQ_ID, USER_NAME, USER_ID, USER_NIC, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, FACILITY_INTRODUCE, FACILITY_CATEGORY, FACILITY_REGION, TOTAL_PAYMENT_AMOUNT, TOTAL_PAYMENT_NUMBER, PAYMENT_STATUS, BANNER_TYPE_CODE, START_DATETIME, END_DATETIME, MAIN_BANNER_FILE_NAME, MAIN_BANNER_WEB_LINK, CENTER_BANNER_FILE_NAME, CENTER_BANNER_WEB_LINK, P_FILE_NAME, L_FILE_NAME, THUMBNAIL_FILE_NAME
+				from
+					U_PAYMENT_MASTER
+				where
+					1 = 1
+				order by
+					SEQ_ID desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="STATUS_CODE">
+						PAYMENT_STATUS = #STATUS_CODE#
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="BANNER_TYPE_CODE">
+					BANNER_TYPE_CODE= #BANNER_TYPE_CODE#
+				</isNotNull>
+		) R limit #START_NUM#, #PAGE_SIZE#
+	</statement>
+	
+	
+	<statement id="admin.payment.master.list.for.banner" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.PaymentMasterEntity">
+		select
+			SEQ_ID, USER_SEQ_ID, USER_NAME, USER_ID, USER_NIC, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, FACILITY_INTRODUCE, FACILITY_CATEGORY, FACILITY_REGION, TOTAL_PAYMENT_AMOUNT, TOTAL_PAYMENT_NUMBER, PAYMENT_STATUS, BANNER_TYPE_CODE, START_DATETIME, END_DATETIME, MAIN_BANNER_FILE_NAME, MAIN_BANNER_WEB_LINK, CENTER_BANNER_FILE_NAME, CENTER_BANNER_WEB_LINK, P_FILE_NAME, L_FILE_NAME, THUMBNAIL_FILE_NAME
+		from
+			U_PAYMENT_MASTER
+		order by
+			SEQ_ID desc
+	</statement>
+	
+	
+	<insert id="admin.payment.master.insert" parameterClass="java.util.HashMap" >
+		insert into U_PAYMENT_MASTER (
+			USER_SEQ_ID, USER_NAME, USER_ID, USER_NIC, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, FACILITY_INTRODUCE, FACILITY_CATEGORY, FACILITY_REGION, TOTAL_PAYMENT_AMOUNT, TOTAL_PAYMENT_NUMBER, PAYMENT_STATUS, BANNER_TYPE_CODE, START_DATETIME, END_DATETIME, MAIN_BANNER_FILE_NAME, MAIN_BANNER_WEB_LINK, CENTER_BANNER_FILE_NAME, CENTER_BANNER_WEB_LINK, P_FILE_NAME, L_FILE_NAME, THUMBNAIL_FILE_NAME
+		) values (
+			#USER_SEQ_ID#, #USER_NAME#, #USER_ID#, #USER_NIC#, #FACILITY_NAME#, #FACILITY_USER_NAME#, #FACILITY_PHONE#, #FACILITY_ADDRESS#, #FACILITY_HOME_PAGE#, #FACILITY_INTRODUCE#, #FACILITY_CATEGORY#, #FACILITY_REGION#, #TOTAL_PAYMENT_AMOUNT#, #TOTAL_PAYMENT_NUMBER#, #PAYMENT_STATUS#, #BANNER_TYPE_CODE#, #START_DATETIME#, #END_DATETIME#, #MAIN_BANNER_FILE_NAME#, #MAIN_BANNER_WEB_LINK#, #CENTER_BANNER_FILE_NAME#, #CENTER_BANNER_WEB_LINK#, #P_FILE_NAME#, #L_FILE_NAME#, #THUMBNAIL_FILE_NAME#
+		)
+	</insert>
+	
+	
+	<statement id="admin.user.payment.select" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.PaymentMasterEntity">
+		select
+			*
+		from
+			U_PAYMENT_MASTER 
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="admin.user.payment.update" parameterClass="java.util.HashMap">
+		update
+			U_PAYMENT_MASTER
+		set
+			USER_SEQ_ID = #USER_SEQ_ID#,
+			USER_NAME = #USER_NAME#,
+			USER_ID = #USER_ID#,
+			USER_NIC = #USER_NIC#,
+			FACILITY_NAME = #FACILITY_NAME#,
+			FACILITY_USER_NAME = #FACILITY_USER_NAME#,
+			FACILITY_PHONE = #FACILITY_PHONE#,
+			FACILITY_ADDRESS = #FACILITY_ADDRESS#,
+			FACILITY_HOME_PAGE = #FACILITY_HOME_PAGE#,
+			FACILITY_INTRODUCE = #FACILITY_INTRODUCE#,
+			FACILITY_CATEGORY = #FACILITY_CATEGORY#,
+			FACILITY_REGION = #FACILITY_REGION#,
+			TOTAL_PAYMENT_AMOUNT = #TOTAL_PAYMENT_AMOUNT#,
+			TOTAL_PAYMENT_NUMBER = #TOTAL_PAYMENT_NUMBER#,
+			PAYMENT_STATUS = #PAYMENT_STATUS#,
+			BANNER_TYPE_CODE = #BANNER_TYPE_CODE#,
+			START_DATETIME = #START_DATETIME#,
+			END_DATETIME = #END_DATETIME#,
+			MAIN_BANNER_FILE_NAME = #MAIN_BANNER_FILE_NAME#,
+			MAIN_BANNER_WEB_LINK = #MAIN_BANNER_WEB_LINK#,
+			CENTER_BANNER_FILE_NAME = #CENTER_BANNER_FILE_NAME#,
+			CENTER_BANNER_WEB_LINK = #CENTER_BANNER_WEB_LINK#,
+			P_FILE_NAME = #P_FILE_NAME#,
+			L_FILE_NAME = #L_FILE_NAME#,
+			THUMBNAIL_FILE_NAME = #THUMBNAIL_FILE_NAME#
+		WHERE
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="admin.user.payment.delete" parameterClass="java.util.HashMap" >
+		delete from
+			U_PAYMENT_MASTER
+		WHERE
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="admin.point.log.count" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					U_ACTION_INFO
+				where
+					USER_SEQ_ID = #USER_SEQ_ID#
+				order by
+					SEQ_ID desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="STATUS_CODE">
+						STATUS_CODE= #STATUS_CODE#
+				</isNotNull>
+		) R
+	</statement>
+	
+	<statement id="admin.point.log.list" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					U_ACTION_INFO
+				where
+					USER_SEQ_ID = #USER_SEQ_ID#
+				order by
+					SEQ_ID desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="STATUS_CODE">
+						STATUS_CODE= #STATUS_CODE#
+				</isNotNull>
+		) R limit #START_NUM#, #PAGE_SIZE#
+	</statement>
+	
+	
+	<statement id="admin.user.login.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					L.SEQ_ID, L.USER_SEQ_ID, L.LOGIN_DATETIME, L.LOGIN_IP, 
+					U.NIC as USER_NIC, U.ID as USER_ID, U.NAME as USER_NAME, 
+					U.TYPE_CODE as TYPE_CODE
+				from
+					U_LOGIN_INFO L, U_INFO U
+				where
+					L.USER_SEQ_ID = U.SEQ_ID
+				order by
+					L.SEQ_ID desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="STATUS_CODE">
+						STATUS_CODE= #STATUS_CODE#
+				</isNotNull>
+		) R
+	</statement>
+	
+	<statement id="admin.user.login.list" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
+			select @RNUM:=0, Q.* from (
+				select
+					L.SEQ_ID, L.USER_SEQ_ID, L.LOGIN_DATETIME, L.LOGIN_IP, 
+					U.NIC as USER_NIC, U.ID as USER_ID, U.NAME as USER_NAME, 
+					U.TYPE_CODE as TYPE_CODE
+				from
+					U_LOGIN_INFO L, U_INFO U
+				where
+					L.USER_SEQ_ID = U.SEQ_ID
+				order by
+					L.SEQ_ID desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+				<isNotNull prepend="and" removeFirstPrepend="true" property="STATUS_CODE">
+						STATUS_CODE= #STATUS_CODE#
+				</isNotNull>
+		) R limit #START_NUM#, #PAGE_SIZE#
+	</statement>
+</sqlMap>

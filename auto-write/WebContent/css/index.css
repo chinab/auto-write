@@ -1,0 +1,27 @@
+
+.longdesc {position:absolute; left:-9999px; top:-9999px;}
+
+/* 메인 비주얼 영역 */
+#mainVisual {min-width:980px; height:365px; border-top:1px solid #e3e3e3; zoom:1;position:relative;}
+#mainVisual .control_wrap 	{position:relative; width:980px; height:365px; margin:0 auto; zoom:1; z-index: 1;}
+#mainVisual ol.visual 		{list-style:none;}
+#mainVisual ol.visual li 	{position:absolute; left:0; /* top:1px; */ width:100%; height:365px; zoom:1;z-index:1}
+#mainVisual ol.visual li a 	{display:block;width:980px;height:365px;position:absolute; left:50%; top:0; margin-left:-490px; z-index:50;}
+#mainVisual ol.visual li img{vertical-align:top}
+#mainVisual .visualControl 	{position:absolute; right:120px; bottom:10px; width:120px; height:25px; z-index:100; overflow:hidden;}
+#mainVisual .visualControl .btnStart,
+#mainVisual .visualControl .btnStop {display:block; float:left; width:25px; height:25px; overflow:hidden; zoom:1; cursor:pointer; border:0 none;}
+#mainVisual .visualControl .btnStart em,
+#mainVisual .visualControl .btnStop em {visibility:hidden;}
+#mainVisual .visualControl .btnStart {background:url(http://www.prudential.co.kr//img/main/btn_start.png) no-repeat 50% 50%;}
+#mainVisual .visualControl .btnStop {background:url(http://www.prudential.co.kr//img/main/btn_stop.png) no-repeat 50% 50%;}
+#mainVisual .visualControl ol {list-style:none; margin-top:0;}
+#mainVisual .visualControl ol li {float:left; width:9px; height:25px; margin-left:4px; background:url(http://www.prudential.co.kr//img/main/icon_num.png) no-repeat 50% 50%; overflow:hidden; zoom:1; cursor:pointer;}
+#mainVisual .visualControl ol li.selected {width:39px; height:25px; background:url(http://www.prudential.co.kr//img/main/icon_selected.png) no-repeat 50% 50%;}
+#mainVisual .visualControl ol li button {display:block; width:100%; height:25px;}
+
+
+
+
+
+

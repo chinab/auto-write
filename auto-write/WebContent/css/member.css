@@ -1,0 +1,107 @@
+@charset "utf-8";
+body {background:#f4f7fa;}
+
+
+div.agree {width:700px;margin:0 auto;margin-top:100px;}
+div.agreeBox {margin-top:5px;padding:15px;background:#fff;border:5px solid #8aa3bd;height:300px;}
+div.scrollBox {overflow-y:scroll;overflow-x:hidden;scrollbar-face-color: #ffffff;scrollbar-shadow-color: #dcdcdc;scrollbar-highlight-color: #ffffff;scrollbar-3dlight-color: #dcdcdc;scrollbar-darkshadow-color: #ffffff;scrollbar-track-color: #f4f4f4;scrollbar-arrow-color: #adadad;}
+
+div.register {width:800px;margin:0 auto;margin-top:30px;}
+div.register .star {color:#ed760c;}
+
+div.approval {width:700px;margin:0 auto;margin-top:50px;}
+
+div.memberTB table{border-top:2px solid #649dd6;width:100%;border:1px solid #c3d2e1;line-height:20px;}
+div.memberTB th {background:#deecf8;padding:4px 0 2px 8px;text-align:left;border-bottom:1px solid #c3d2e1;border-right:1px solid #c3d2e1;height:20px;}
+div.memberTB td {padding:3px 0 4px 8px;border-bottom:1px solid #c3d2e1;border-right:1px solid #c3d2e1;background:#fff;height:20px;}
+div.memberTB span {color:#ed760c;}
+div.memberTB .note1 {background:#ebebeb;}
+
+div.memberTB01 table{border-top:2px solid #649dd6;width:100%;border:1px solid #c3d2e1;line-height:20px;}
+div.memberTB01 th {background:#deecf8;padding:4px 0 2px 8px;border-bottom:1px solid #c3d2e1;border-right:1px solid #c3d2e1;height:20px;}
+div.memberTB01 td {padding:3px 0 4px 8px;text-align:center;border-bottom:1px solid #c3d2e1;border-right:1px solid #c3d2e1;background:#fff;height:20px;}
+div.memberTB01 .notice {text-align:left;}
+
+/*board-list*/
+div.boardStyle {clear:both;}
+div.boardStyle table {}
+div.boardStyle thead th {padding:6px 5px 2px 5px;background:url("./../images/contents/header_bg.gif") 0 0 repeat-x;height:20px;border-top:solid 2px #54a0e5;border-bottom:solid 1px #c2c2c2;text-align:center;}
+div.boardStyle thead th span {display:inline-block;width:100%;background:url("./../images/contents/header_bar.gif") right 0 no-repeat;}
+div.boardStyle tbody td {padding:5px 0 2px 5px;border-bottom:solid 1px #e3e3e3;text-align:center;height:20px;background:#fff;}
+div.boardStyle tbody .tit {text-align:left;}
+div.boardStyle tbody .tit a {color:#ef6b00;}
+div.boardStyle tbody .tit a:hover{text-decoration:underline;color:#ef6b00;}
+div.boardStyle .checkbox {border:0;}
+div.boardStyle .select {background:#f4f4f4;}
+
+/* board-write*/
+div.editStyle01 .tit {height:23px;padding-top:7px;background:url("./../images/contents/header_bg.gif") 0 0 repeat-x;border-top:solid 2px #90c2eb;border-bottom:solid 1px #c2c2c2;text-align:center;font-size:1em;letter-spacing:-1px;font-weight:bold;}
+div.editStyle01 .bx {margin:15px 0 0 0;border-bottom:solid 1px #dadada;}
+div.editStyle01 .lineO {border-bottom:solid 1px #90c2eb;}
+div.editStyle01 .bx dt {float:left;width:78px;color:#898989;text-align:center;font-weight:bold;}
+div.editStyle01 .bx dd {float:left;margin-bottom:15px;}
+div.editStyle01 .t5 {padding-top:5px;}
+div.editStyle01 .t15 {padding-top:15px;}
+div.editStyle01 .t150 {padding-top:150px;}
+div.editStyle01 textarea {display:block;border:solid 1px #d1d1d1;}
+
+
+/* board-view*/
+div.viewStyle01 {border-bottom:solid 1px #90c2eb;}
+div.viewStyle01 .tit {height:21px;padding-top:8px;background:url("./../images/contents/header_bg.gif") 0 0 repeat-x;border-top:solid 2px #90c2eb;border-bottom:solid 1px #c2c2c2;text-align:center;font-size:1em;letter-spacing:-1px;font-weight:bold;}
+div.viewStyle01 .detail {border-bottom:solid 1px #dadada;}
+div.viewStyle01 .detail .rg {text-align:right;margin-top:10px;}
+div.viewStyle01 .detail .rg .label {font-size:0.9em;color:#a7a7a7;font-weight:bold;}
+div.viewStyle01 .detail .rg .txt {display:inline-block;padding-right:20px;font-size:0.9em;color:#727272;}
+div.viewStyle01 .detail .file {margin-top:10px;margin-bottom:7px;padding-left:10px;}
+div.viewStyle01 .detail .file .label {font-size:0.9em;color:#898989;font-weight:bold;}
+div.viewStyle01 .detail .file .txt a {font-size:0.9em;color:#e47e3f;}
+div.viewStyle01 .viewCon {line-height:20px;margin:30px 10px 30px 10px;}
+
+
+div.naviStyle li {float:left;}
+div.naviStyle .navi .sel {padding:0 2px 0 2px;font-size:11px;font-family:verdana;color:#54a0e5;font-weight:bold;}
+div.naviStyle .navi .nsel {padding:0 2px 0 2px;font-size:11px;font-family:verdana;color:#7e7e7e;}
+div.naviStyle .navi a:hover {text-decoration:underline;}
+div.naviStyle .l {float:left;padding-top:3px;}
+div.naviStyle .r {float:right;padding-bottom:1px;}
+
+/*myinfo*/
+div.myinfo {margin:20px 20px 0 20px;}
+div.mainCont {margin:20px 20px 0 20px;}
+
+/*main*/
+div.mainCon {margin:30px auto 20px;width:960px;}
+div.mainWrap {height:467px;}
+div.mainWrap .l{float:left;width:695px;}
+div.mainWrap .r{float:left;background:url("./../images/contents/con_bg.gif") 0 0 no-repeat;padding:23px 27px 22px 11px;height:420px;width:226px;}
+div.login {background:url("./../images/contents/log_bg.gif") 0 0 no-repeat;padding:37px 12px 0 37px;height:88px;}
+div.login .checkbox {border:0;}
+div.noticeM {margin-top:0px;height:84px;}
+div.noticeM li {background:url("./../images/contents/dot.gif") 4px 7px no-repeat;height:14px;padding:3px 0 3px 12px;}
+div.noticeM li a:hover{color:#3187d6;}
+
+/*�α�����main*/
+div.mainCon2 {margin:30px auto 20px;width:960px;}
+div.mainWrap2 {height:465px;}
+div.mainWrap2 .l {float:left;width:581px;}
+div.mainWrap2 .r {float:left;background:url("./../images/contents/con2_bg.gif") 0 0 no-repeat;padding:25px 29px 17px 10px;height:423px;width:340px;}
+div.boardM {margin-top:0px;height:70px;width:340px;}
+div.boardM li {background:url("./../images/contents/dot.gif") 4px 7px no-repeat;height:14px;padding:3px 0 3px 12px;}
+div.boardM li a:hover{color:#3187d6;}
+div.noticeM2 {height:134px;width:340px;}
+div.noticeM2 li {background:url("./../images/contents/dot.gif") 4px 7px no-repeat;height:14px;padding:3px 0 3px 12px;}
+div.noticeM2 li a:hover{color:#3187d6;}
+div.noticeM2 b {color:#cf3232;}
+div.noticeM2 table {border:1px solid #ccc;}
+div.noticeM2 th {background:#efefef;padding:3px 2px 2px 2px;border:1px solid #ccc;}
+div.noticeM2 td {padding:3px 5px 2px 5px;border:1px solid #ccc;}
+
+div.tab {height:25px;width:340px;margin-bottom:5px;}
+div.tab .lt {float:left;width:114px;}
+div.tab .ct {float:left;width:116px;}
+div.tab .rt {float:left;width:110px;}
+
+div.tab2 {height:25px;width:340px;margin-bottom:1px;}
+div.tab2 .lt {float:left;width:114px;}
+div.tab2 .rt {float:left;}
