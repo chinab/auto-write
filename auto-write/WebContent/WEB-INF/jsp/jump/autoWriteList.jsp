@@ -27,10 +27,10 @@
 		<td width="800" valign="top">
 			<div style="margin-left: 30px; width: 750px;">
 
-				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">대분류 > 중분류 > 소분류</div>
+				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">대분류 > 자동등록목록</div>
 				<div style="width: 100%; margin-top: 30px;">
 					<img src="images/title_dot.gif"/>
-					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">JUMP</span>
+					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">자동등록 목록</span>
 				</div>
 
 				<div style="margin-top: 5px;">
@@ -39,46 +39,66 @@
 					<table class="list01">
 						<colgroup>
 							<col width="70" />
+							<col width="70" />
 							<col width="/" />
 							<col width="100" />
-							<col width="150" />
-							<col width="150" />
+							<col width="100" />
+							<col width="100" />
 						</colgroup>
 						<tbody>
 
 							<tr>
+								<th>선택</th>
 								<th>순번</th>
-								<th>사이트명</th>
-								<th>JUMP 일시</th>
-								<th>JUMP 회수</th>
-								<th></th>
+								<th>본문이름</th>
+								<th>실행일시</th>
+								<th>성공</th>
+								<th>실패</th>
 							</tr>
 
 							<tr>
+								<td><input type=checkbox value=''></td>
+								<td>5</td>
+								<td>8월 5일 출근부</td>
+								<td>2013.08.05</td>
+								<td>123</td>
+								<td>123</td>
+							</tr>
+
+							<tr>
+								<td><input type=checkbox value=''></td>
+								<td>4</td>
+								<td>8월 5일 출근부</td>
+								<td>2013.08.05</td>
+								<td>123</td>
+								<td>123</td>
+							</tr>
+
+							<tr>
+								<td><input type=checkbox value=''></td>
 								<td>3</td>
-								<td>소라넷</td>
-								<td>13:50:11</td>
-								<td>112</td>
-								<td><input class="in_btnc1" type="button" value="실행"
-									OnClick="history.back();" class="input_gr"></td>
+								<td>8월 5일 출근부</td>
+								<td>2013.08.05</td>
+								<td>123</td>
+								<td>123</td>
 							</tr>
 
 							<tr>
+								<td><input type=checkbox value=''></td>
 								<td>2</td>
-								<td>소라넷</td>
-								<td>13:50:11</td>
-								<td>200</td>
-								<td><input class="in_btnc1" type="button" value="실행"
-									OnClick="history.back();" class="input_gr"></td>
+								<td>8월 3일 출근부</td>
+								<td>2013.08.05</td>
+								<td>345</td>
+								<td>1213</td>
 							</tr>
 
 							<tr>
+								<td><input type=checkbox value=''></td>
 								<td>1</td>
-								<td>소라넷</td>
-								<td>13:50:11</td>
-								<td>200</td>
-								<td><input class="in_btnc1" type="button" value="실행"
-									OnClick="history.back();" class="input_gr"></td>
+								<td>8월 2일 출근부</td>
+								<td>2013.08.05</td>
+								<td>567</td>
+								<td>123</td>
 							</tr>
 
 						</tbody>
@@ -107,6 +127,7 @@
 <!--푸터-->
 <jsp:include page="../include/footer.jsp" flush="false" />
 <!--푸터 끝-->
+
 
 </body>
 </html>
