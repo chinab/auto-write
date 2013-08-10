@@ -6,7 +6,7 @@
 <tr>
 <td>
 <div class="t_Menus">
-<span class="TopMenus"><a href="/index.asp">HOME</a>&nbsp; | &nbsp;<a href="/sitemap/sitemap.asp">회원가입</a></span>
+<span class="TopMenus"><a href="./index.jsp">HOME</a>&nbsp; | &nbsp;<a href="/sitemap/sitemap.asp">회원가입</a></span>
 </div>
 </td>
 </tr>
@@ -22,7 +22,7 @@
 <div class="Top_Logo"><a href="/" onfocus="blur()"><img src="images/top_logo.gif"></a></div>
 
 <div class="Top_Main_menus">
-<div class="Menus_tl"><a href="jump/jump_write.asp" onfocus="blur()" >JUMP</a></div>
+<div class="Menus_tl"><a href="jspView.do?jsp=jump/jumpList" onfocus="blur()" >JUMP</a></div>
 <div class="Menus_t"><a href="contents/con_list.asp" onfocus="blur()" >본문설정</a></div>
 <div class="Menus_t"><a href="site/site_list.asp" onfocus="blur()" >사이트설정</a></div>
 <div class="Menus_t"><a href="#" onfocus="blur()" >개인설정</a></div>

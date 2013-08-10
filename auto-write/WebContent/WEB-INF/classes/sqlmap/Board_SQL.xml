@@ -31,7 +31,7 @@
 	    </selectKey>
 	</insert>
 	
-	<statement id="board.read" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select
 			T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.FACILITY_NAME, T.FACILITY_USER_NAME, T.FACILITY_PHONE, T.FACILITY_ADDRESS, T.FACILITY_HOME_PAGE, T.VISIT_TIME, T.WAITERESS_NAME, T.TITLE, T.CONTENT, T.CATEGORY, T.TARGET_CATEGORY, T.REGION, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
 			, U.NIC AS USER_NIC, U.POINT AS WRITER_POINT, U.TYPE_CODE AS WRITER_TYPE_CODE
@@ -44,7 +44,7 @@
 	</statement>
 	
 	
-	<statement id="board.read.with.deleted.user" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.read.with.deleted.user" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select
 			SEQ_ID, USER_SEQ_ID, USER_ID, TITLE, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, VISIT_TIME, WAITERESS_NAME, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
 			, "탈퇴회원" AS USER_NIC
@@ -56,7 +56,7 @@
 	</statement>
 	
 	
-	<statement id="board.blackuser.read" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.blackuser.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select
 			T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.TITLE, T.BLACK_USER_NIC, T.BLACK_USER_PHONE, T.BLACK_USER_PHONE1, T.BLACK_USER_PHONE2, T.BLACK_USER_PHONE3, T.CONTENT, T.CATEGORY, T.TARGET_CATEGORY, T.REGION, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
 			, U.NIC AS USER_NIC
@@ -89,7 +89,7 @@
 	</statement>
 	
 	
-	<statement id="board.payment.master.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.PaymentMasterEntity">
+	<statement id="board.payment.master.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.PaymentMasterEntity">
 		select
 			SEQ_ID, USER_SEQ_ID, USER_NAME, USER_ID, USER_NIC, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, FACILITY_INTRODUCE, FACILITY_CATEGORY, TOTAL_PAYMENT_AMOUNT, TOTAL_PAYMENT_NUMBER, PAYMENT_STATUS, BANNER_TYPE_CODE, START_DATETIME, END_DATETIME, MAIN_BANNER_FILE_NAME, MAIN_BANNER_WEB_LINK, CENTER_BANNER_FILE_NAME, CENTER_BANNER_WEB_LINK, P_FILE_NAME, L_FILE_NAME, THUMBNAIL_FILE_NAME
 		from
@@ -102,7 +102,7 @@
 	</statement>
 	
 	
-	<statement id="board.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select
@@ -175,7 +175,7 @@
 	</statement>
 	
 	
-	<statement id="board.list.by.hit.count" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.list.by.hit.count" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select
@@ -194,7 +194,7 @@
 		) R limit 0, 6
 	</statement>
 	
-	<statement id="board.list.by.recommend.count" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.list.by.recommend.count" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select
@@ -213,7 +213,7 @@
 		) R limit 0, 7
 	</statement>
 	
-	<statement id="board.list.by.new" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.list.by.new" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select
@@ -232,7 +232,7 @@
 		) R limit 0, 7
 	</statement>
 	
-	<statement id="board.list.by.user" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.list.by.user" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select * from (
 			select 'T_BOARD_NOTICE' AS TABLE_NAME, T_BOARD_NOTICE.* from T_BOARD_NOTICE where user_seq_id = #USER_SEQ_ID# AND DEL_YN != 'Y'
 			union
@@ -249,7 +249,7 @@
 		order by write_datetime desc
 	</statement>
 	
-	<statement id="board.list.all.business.info" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.list.all.business.info" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select
 			T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.TITLE, T.FACILITY_NAME, T.FACILITY_USER_NAME, T.FACILITY_PHONE, T.FACILITY_ADDRESS, T.FACILITY_HOME_PAGE, T.VISIT_TIME, T.WAITERESS_NAME, T.CONTENT, T.CATEGORY, T.TARGET_CATEGORY, T.REGION, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
 		from
@@ -271,7 +271,7 @@
 			T.WRITE_DATETIME desc
 	</statement>
 	
-	<statement id="board.payment.recent.lineup.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.payment.recent.lineup.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select
@@ -287,7 +287,7 @@
 		) R limit #START_NUM#, #PAGE_SIZE#
 	</statement>
 	
-	<statement id="board.payment.recent.postscript.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.payment.recent.postscript.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select
@@ -382,7 +382,7 @@
 		)
 	</statement>
 	
-	<statement id="board.attachment.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.AttachmentEntity">
+	<statement id="board.attachment.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AttachmentEntity">
 		select
 			SEQ_ID, TABLE_NAME, TABLE_SEQ_ID, P_FILE_NAME, L_FILE_NAME, THUMBNAIL_FILE_NAME, FILE_EXT, FILE_SIZE, DEL_YN
 		from
@@ -527,7 +527,7 @@
 	</statement>
 	
 	
-	<statement id="board.notice.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="board.notice.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select
 			T.SEQ_ID, T.USER_SEQ_ID, T.USER_ID, T.TITLE, T.CONTENT, T.CATEGORY, T.TARGET_CATEGORY, T.REGION, T.FACILITY_NAME, T.HIT, T.RECOMMEND, T.REJECT, T.SECRET_YN, T.BLIND_YN, T.DEL_YN, T.WRITER_IP, T.WRITE_DATETIME
 			, U.NIC AS USER_NIC, U.POINT AS WRITER_POINT, U.TYPE_CODE AS WRITER_TYPE_CODE, 

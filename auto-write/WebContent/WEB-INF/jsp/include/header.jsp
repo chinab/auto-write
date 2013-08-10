@@ -14,7 +14,8 @@
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 
-<link href="css/style.css" rel="stylesheet" type="text/css" />/>
+<link href='http://api.mobilis.co.kr/webfonts/css/?fontface=NanumGothickWeb' rel='stylesheet' type='text/css'/>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
 
-<script language="javascript" src="js/ajax.js"></script>
-<script language="javascript" src="js/json2.js"></script>
+<script src="js/ajax.js"></script>
+<script src="js/json2.js"></script>

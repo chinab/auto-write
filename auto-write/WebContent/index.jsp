@@ -89,7 +89,7 @@ response.setHeader("Cache-Control", "no-cache");
 				if(data["Code"]!="S")
 					alert(data["Text"]);
 				else {
-					location.href = "mainView.do?jsp=main/main";
+					location.href = "jspView.do?jsp=main/main";
 				}
 			}else alert('err');
 		}

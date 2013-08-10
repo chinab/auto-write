@@ -41,10 +41,9 @@ public class LoginUserService {
 			// login log
 			userDao.insertLoginLog(param);
 			
-			Integer userPoint = new Integer(userEntity.getPoint());
-			String userTypeCode = userEntity.getType_code();
-				
-			userEntity.setClassInfo(userPoint, userTypeCode);
+//			Integer userPoint = new Integer(userEntity.getPoint());
+//			String userTypeCode = userEntity.getType_code();
+//			userEntity.setClassInfo(userPoint, userTypeCode);
 			
 			// get visit count
 			int visitCountToday = userDao.getVisitCountToday(param);

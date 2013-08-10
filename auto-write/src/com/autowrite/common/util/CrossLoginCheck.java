@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.jekyll.bizmodel.share.UserSessionBean;
-import com.jekyll.common.config.ReadConfig;
+import com.autowrite.bizmodel.share.UserSessionBean;
+import com.autowrite.common.config.ReadConfig;
 
 @SuppressWarnings("rawtypes")
 public class CrossLoginCheck extends Hashtable {

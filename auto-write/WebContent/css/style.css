@@ -1,8 +1,8 @@
-@import url('./css/board.css');
-@font-face{font-family:NanumGothic; color: #cccccc; src:url('./NanumGothic.eot')}
-@font-face{font-family:NanumGothic; color: #cccccc; src:url('./MalgunGothic.eot')}
-@font-face { font-family:'NanumGothic'; font-style:normal; font-weight:400; src: url('./NanumGothicCompact.woff') format('woff');}
-@font-face { font-family:'NanumGothic'; font-style:normal; font-weight:400; src: url('./NanumGothicCompact.ttf') format('truetype');}
+@import url('board.css');
+@font-face{font-family:NanumGothic; color: #cccccc; src:url('NanumGothic.eot')}
+@font-face{font-family:NanumGothic; color: #cccccc; src:url('MalgunGothic.eot')}
+@font-face { font-family:'NanumGothic'; font-style:normal; font-weight:400; src: url('NanumGothicCompact.woff') format('woff');}
+@font-face { font-family:'NanumGothic'; font-style:normal; font-weight:400; src: url('NanumGothicCompact.ttf') format('truetype');}
 
 html { overflow-y:scroll; }
 html, body {margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:0px; width:100%; height:100%;}
@@ -108,7 +108,7 @@ img {border:0}
 .Sub_Allpages .cont {margin-top:50px;}
 .Sub_Allpages .cont_text {margin-top:30px;}
 
-.Sub_Allpages .Search_Bar {width:800px; height:120px; margin-bottom:20px; background:url('../images/community/faq_topimg.gif')}
+.Sub_Allpages .Search_Bar {width:800px; height:120px; margin-bottom:20px; background:url('images/community/faq_topimg.gif')}
 .Sub_Allpages .Search_Bar .Sea_input {position:relative; top:76px; left:20px; width:500px;}
 
 .Sub_Allpages .text_01 {margin-left:2px;  font-family:Malgun Gothic; margin-top:20px; color:#666666; font-size:12px; line-height:180%;}
@@ -121,10 +121,10 @@ img {border:0}
 .Sub_Allpages .S_stitle {margin-top:50px;}
 .Sub_Allpages .S_board {margin-top:50px; min-height:400px;}
 .Sub_Allpages .S_table {margin-top:10px;}
-.Sub_Allpages .Login_Bg {height:190px; width:685px; margin-top:55px; background:url('../images/members/bg_login.gif')}
-.Sub_Allpages .Loginok_Bg {height:185px; width:685px; margin-top:55px; background:url('../images/members/join_okbg.gif')}
+.Sub_Allpages .Login_Bg {height:190px; width:685px; margin-top:55px; background:url('images/members/bg_login.gif')}
+.Sub_Allpages .Loginok_Bg {height:185px; width:685px; margin-top:55px; background:url('images/members/join_okbg.gif')}
 .Sub_Allpages .Loginok_Bg .bold {font-weight:bold; color:#3f6dac;}
-.Sub_Allpages .idpass_serbg {height:235px; width:685px; margin-top:15px; background:url('../images/members/idpass_serbg.gif')}
+.Sub_Allpages .idpass_serbg {height:235px; width:685px; margin-top:15px; background:url('images/members/idpass_serbg.gif')}
 .Sub_Allpages .idpass_serbg .bold {font-weight:bold; font-family:Malgun Gothic; width:70px; display:inline-block; font-size:13px; color:#333333;}
 
 .Sub_Allpages .Agree_tab {height:53px; width:685px; margin-top:25px;}
@@ -132,7 +132,7 @@ img {border:0}
 .Sub_Allpages .edu_s_title {height:27px; width:685px; margin-top:25px;}
 .Sub_Allpages .Agree_s_title1 {height:27px; width:685px; margin-top:35px;}
 .Sub_Allpages .Agree_Box {min-height:27px; width:685px; margin-top:5px;}
-.Sub_Allpages .idpass_Bg {height:185px; width:685px; margin-top:55px; background:url('../images/members/idpass_okbg.gif')}
+.Sub_Allpages .idpass_Bg {height:185px; width:685px; margin-top:55px; background:url('images/members/idpass_okbg.gif')}
 .Sub_Allpages .idpass_Bg .bold {font-weight:bold; color:#3f6dac;}
 
 

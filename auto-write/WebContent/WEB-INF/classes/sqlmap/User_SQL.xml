@@ -2,7 +2,7 @@
 <!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
 
 <sqlMap namespace="USER">
-    <typeAlias alias="UserEntity.class" type="com.jekyll.common.framework.entity.UserEntity"/>
+    <typeAlias alias="UserEntity.class" type="com.autowrite.common.framework.entity.UserEntity"/>
     
     <statement id="user.info.certificate" parameterClass="java.util.HashMap" resultClass="UserEntity.class">
 		select
@@ -557,7 +557,7 @@
 		select count(1) from U_LOGIN_INFO
 	</statement>
 	
-	<statement id="user.class.info.select" resultClass="com.jekyll.common.framework.entity.UserClassEntity">
+	<statement id="user.class.info.select" resultClass="com.autowrite.common.framework.entity.UserClassEntity">
 		select
 			SEQ_ID, CLASS_POINT, CLASS_ID, CLASS_TYPE_CODE, CLASS_IMG_PATH
 		from

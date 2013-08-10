@@ -566,7 +566,7 @@ public class AdminService {
 				point = Constant.REPLY_WRITE_POINT;
 			}
 
-			if (!"0".equals(point) && point.trim().length() > 0) {
+			if (point != null && !"0".equals(point) && point.trim().length() > 0) {
 				param.put("ACTION_POINT", point);
 				adminDao.writeUserAction(param);
 

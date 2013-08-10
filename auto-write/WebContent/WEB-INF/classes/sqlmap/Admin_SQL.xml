@@ -35,7 +35,7 @@
 		) R
 	</statement>
 	
-	<statement id="admin.user.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.UserEntity">
+	<statement id="admin.user.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.UserEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select
@@ -68,7 +68,7 @@
 	</statement>
 	
 	
-	<statement id="admin.user.search.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.UserEntity">
+	<statement id="admin.user.search.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.UserEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select
@@ -87,7 +87,7 @@
 	</statement>
 	
 	
-	<statement id="admin.user.board.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.BoardEntity">
+	<statement id="admin.user.board.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
 		select * from (
 			select 'T_BOARD_NOTICE' AS TABLE_NAME, T_BOARD_NOTICE.* from T_BOARD_NOTICE where user_seq_id = #USER_SEQ_ID#
 			union
@@ -118,7 +118,7 @@
 	</statement>
 	
 	
-	<statement id="admin.menuSelection.selected" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+	<statement id="admin.menuSelection.selected" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.MenuDto">
 		select
 			 MENU_ID as menuid, 
 			 MENU_NM as menunm,
@@ -291,7 +291,7 @@
 		<include refid="admin.menu.list.where" />
 	</statement>
 	
-	<statement id="admin.authGroupMenu.selected" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+	<statement id="admin.authGroupMenu.selected" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.MenuDto">
 		select MENU_ID as menuid, MENU_NM as menunm,PARMENU_ID as parmenuid,MENU_LVL as menulvl,WEB_LINK as menupageurl,FSTIMGPATH as fstimgpath, MENU_TYPE as menutype from t_menu
 		where MENU_ID in (select MENU_ID from t_menu_alloc  where USER_ID=#AUTH_GROUP_ID#) AND MENU_LVL=#menulvl# AND USEYN='Y'
 		<dynamic prepend="and">
@@ -302,7 +302,7 @@
 		</dynamic>
 		order by DISPLAYSEQ
 	</statement>
-	<statement id="admin.allMenu.selected" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+	<statement id="admin.allMenu.selected" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.MenuDto">
 		select MENU_ID as menuid, MENU_NM as menunm,PARMENU_ID as parmenuid,MENU_LVL as menulvl,WEB_LINK as menupageurl ,FSTIMGPATH as fstimgpath, MENU_TYPE as menutype from t_menu
 		WHERE MENU_LVL=#menulvl# AND USEYN='Y'
 		<dynamic prepend="and">
@@ -337,7 +337,7 @@
 		</dynamic>
 	</statement>
 	
-	<statement id="admin.menu.list.new" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+	<statement id="admin.menu.list.new" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.MenuDto">
 		select
 			MENU_ID as menuid, MENU_NM as menunm, PARMENU_ID as parmenuid, MENU_LVL as menulvl,
 			WEB_LINK as menupageurl, FSTIMGPATH as fstimgpath, MENU_TYPE as menutype, useyn
@@ -357,7 +357,7 @@
 		order by MENUID
 	</statement>
 	
-	<statement id="admin.menu.info" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MenuDto">
+	<statement id="admin.menu.info" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.MenuDto">
 		select
 			MENU_ID as menuid, MENU_NM as menunm, PARMENU_ID as parmenuid, MENU_LVL as menulvl,
 			WEB_LINK as menupageurl, FSTIMGPATH as fstimgpath, MENU_TYPE as menutype, useyn, 
@@ -875,7 +875,7 @@
 		)  
 	  	<include refid="admin.code.list.where" />
 	</statement>
-	<select id="admin.user.view" resultClass="com.jekyll.common.framework.entity.UserEntity">
+	<select id="admin.user.view" resultClass="com.autowrite.common.framework.entity.UserEntity">
 		SELECT
 			* 
 		FROM
@@ -1048,7 +1048,7 @@
 	</statement>
 	
 	
-	<statement id="admin.payment.master.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.PaymentMasterEntity">
+	<statement id="admin.payment.master.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.PaymentMasterEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select
@@ -1075,7 +1075,7 @@
 	</statement>
 	
 	
-	<statement id="admin.payment.master.list.for.banner" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.PaymentMasterEntity">
+	<statement id="admin.payment.master.list.for.banner" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.PaymentMasterEntity">
 		select
 			SEQ_ID, USER_SEQ_ID, USER_NAME, USER_ID, USER_NIC, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, FACILITY_INTRODUCE, FACILITY_CATEGORY, FACILITY_REGION, TOTAL_PAYMENT_AMOUNT, TOTAL_PAYMENT_NUMBER, PAYMENT_STATUS, BANNER_TYPE_CODE, START_DATETIME, END_DATETIME, MAIN_BANNER_FILE_NAME, MAIN_BANNER_WEB_LINK, CENTER_BANNER_FILE_NAME, CENTER_BANNER_WEB_LINK, P_FILE_NAME, L_FILE_NAME, THUMBNAIL_FILE_NAME
 		from
@@ -1094,7 +1094,7 @@
 	</insert>
 	
 	
-	<statement id="admin.user.payment.select" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.PaymentMasterEntity">
+	<statement id="admin.user.payment.select" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.PaymentMasterEntity">
 		select
 			*
 		from

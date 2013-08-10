@@ -70,7 +70,9 @@ public class LoginUserController implements Controller {
 		String nic = req.getParameter("nic");
 		String password = req.getParameter("password");
 		String email = req.getParameter("email");
-		String type_code = req.getParameter("type_code");
+		String tel1 = req.getParameter("tel1");
+		String tel2 = req.getParameter("tel2");
+		String tel3 = req.getParameter("tel3");
 		
 		String point = "500";
 		String status_code = "A";
@@ -90,19 +92,16 @@ public class LoginUserController implements Controller {
 			name = (String) bean.get("name");
 			nic = (String) bean.get("nic");
 			email = (String) bean.get("email");
-			type_code = (String) bean.get("type_code");
-			service_code = (String) bean.get("service_code");
+			tel1 = (String) bean.get("tel1");
+			tel2 = (String) bean.get("tel2");
+			tel3 = (String) bean.get("tel3");
 			
-			// System.out.println("name:" + name);
-			// System.out.println("id:" + id);
-			// System.out.println("nic:" + nic);
-			// System.out.println("password:" + password);
-			// System.out.println("email:" + email);
-			// System.out.println("type_code:" + type_code);
+			System.out.println("name:" + name);
+			System.out.println("id:" + id);
+			System.out.println("nic:" + nic);
+			System.out.println("password:" + password);
+			System.out.println("email:" + email);
 			
-			if ( !"P".equals(type_code) && !"B".equals(type_code) && !"W".equals(type_code) ) {
-				throw new Exception(type_code + " is not supported user type code.");
-			}
 			
 			// 업소회원
 //			if ( "B".equals(type_code) ){
@@ -116,9 +115,10 @@ public class LoginUserController implements Controller {
 			map.put("PASSWORD", password);
 			map.put("EMAIL", email);
 			map.put("POINT", point);
-			map.put("TYPE_CODE", type_code);
 			map.put("STATUS_CODE", status_code);
-			map.put("SERVICE_CODE", service_code);
+			map.put("TEL1", tel1);
+			map.put("TEL2", tel2);
+			map.put("TEL3", tel3);
 			
 			adminService.userRegister(map);
 			

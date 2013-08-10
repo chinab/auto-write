@@ -15,7 +15,7 @@
 	    </selectKey>
 	</insert>
 	
-	<statement id="memo.read" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MemoEntity">
+	<statement id="memo.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.MemoEntity">
 		select
 			SEND_MESSAGE_SEQ_ID, 
 			SND_USER_SEQ_ID, SND_USER_ID, SND_USER_NIC, 
@@ -28,7 +28,7 @@
 			and $CONDITION_USER$ = #USER_SEQ_ID#
 	</statement>
 	
-	<statement id="memo.list" parameterClass="java.util.HashMap" resultClass="com.jekyll.common.framework.entity.MemoEntity">
+	<statement id="memo.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.MemoEntity">
 		select @RNUM:=@RNUM+1 AS ROWNUM, R.*  from (
 			select @RNUM:=0, Q.* from (
 				select

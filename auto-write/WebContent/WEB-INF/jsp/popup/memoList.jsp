@@ -3,9 +3,9 @@
 
 <%@ page import="java.util.List, java.net.URLEncoder"%>
 <%@ page import="java.util.Map, java.util.Iterator, java.util.HashMap"%>
-<%@ page import="com.jekyll.common.framework.entity.UserEntity"%>
-<%@ page import="com.jekyll.common.framework.entity.MemoEntity"%>
-<%@ page import="com.jekyll.common.framework.entity.MenuDto"%>
+<%@ page import="com.autowrite.common.framework.entity.UserEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.MemoEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.MenuDto"%>
 <%
 	UserEntity userEntity = (UserEntity) session.getAttribute(UserEntity.UserSessionKey);
 	List menus = userEntity.getMenuList();

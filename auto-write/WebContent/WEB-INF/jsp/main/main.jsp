@@ -35,7 +35,7 @@
 				
 				<div style="margin-top:5px;">
 				
-				<!--게시판 시작-->
+					<!--게시판 시작-->
 					<table class="list01">
 					   <colgroup>
 					     <col width="70" />
@@ -100,7 +100,7 @@
 
 
 <!--푸터-->
-<jsp:include page="/WEB-INF/jsp/include/footer.jsp" flush="false"/>
+<jsp:include page="../include/footer.jsp" flush="false"/>
 <!--푸터 끝-->
 
 
