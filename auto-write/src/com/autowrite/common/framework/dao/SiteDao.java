@@ -7,7 +7,7 @@ import com.autowrite.common.framework.entity.AttachmentEntity;
 import com.autowrite.common.framework.entity.BoardEntity;
 import com.autowrite.common.framework.entity.PaymentMasterEntity;
 
-public interface BoardDao {
+public interface SiteDao {
 
 	public abstract void writeBoard(Map param);
 	
