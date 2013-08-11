@@ -27,7 +27,7 @@
 		<td width="800" valign="top">
 			<div style="margin-left: 30px; width: 750px;">
 
-				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">대분류 > 자동등록목록</div>
+				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">JUMP > 자동등록목록</div>
 				<div style="width: 100%; margin-top: 30px;">
 					<img src="images/title_dot.gif"/>
 					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">자동등록 목록</span>
