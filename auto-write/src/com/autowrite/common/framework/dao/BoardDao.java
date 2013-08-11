@@ -51,7 +51,7 @@ public interface BoardDao {
 
 	public abstract List<AttachmentEntity> readAttachment(Map param);
 
-	public abstract Long countListPrivateSite(Map param);
+	public abstract Long countListBoard(Map param);
 
 	public abstract BoardEntity blackUserView(Map param);
 

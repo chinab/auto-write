@@ -18,6 +18,15 @@ public class BoardEntity {
 	private String table_name;
 	
 	private String seq_id;
+	private String master_seq_id;
+	private String domain;
+	private String site_name;
+	private String write_url;
+	private String modify_url;
+	private String delete_url;
+	private String writer_seq_id;
+	private String writer_id;
+	
 	private String user_seq_id;
 	private String user_id;
 	private String user_nic;
@@ -90,6 +99,54 @@ public class BoardEntity {
 	}
 	public void setSeq_id(String seq_id) {
 		this.seq_id = seq_id;
+	}
+	public String getMaster_seq_id() {
+		return master_seq_id;
+	}
+	public void setMaster_seq_id(String master_seq_id) {
+		this.master_seq_id = master_seq_id;
+	}
+	public String getDomain() {
+		return domain;
+	}
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+	public String getSite_name() {
+		return site_name;
+	}
+	public void setSite_name(String site_name) {
+		this.site_name = site_name;
+	}
+	public String getWrite_url() {
+		return write_url;
+	}
+	public void setWrite_url(String write_url) {
+		this.write_url = write_url;
+	}
+	public String getModify_url() {
+		return modify_url;
+	}
+	public void setModify_url(String modify_url) {
+		this.modify_url = modify_url;
+	}
+	public String getDelete_url() {
+		return delete_url;
+	}
+	public void setDelete_url(String delete_url) {
+		this.delete_url = delete_url;
+	}
+	public String getWriter_seq_id() {
+		return writer_seq_id;
+	}
+	public void setWriter_seq_id(String writer_seq_id) {
+		this.writer_seq_id = writer_seq_id;
+	}
+	public String getWriter_id() {
+		return writer_id;
+	}
+	public void setWriter_id(String writer_id) {
+		this.writer_id = writer_id;
 	}
 	public String getUser_seq_id() {
 		return user_seq_id;

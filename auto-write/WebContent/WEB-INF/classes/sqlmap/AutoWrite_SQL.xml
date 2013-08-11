@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MEMO">
+	<statement id="site.private.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+				from
+					SITE_PRIVATE
+				where
+					WRITER_SEQ_ID = #USER_SEQ_ID#
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="site.private.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+			from
+				SITE_PRIVATE
+			where
+				WRITER_SEQ_ID = #USER_SEQ_ID#
+			order by
+				WRITE_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+	
+	<statement id="site.master.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					SEQ_ID, DOMAIN, SITE_NAME, WRITE_URL, MODIFY_URL, DELETE_URL, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+				from
+					SITE_MASTER
+				where
+					WRITER_SEQ_ID = #USER_SEQ_ID#
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="site.master.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, DOMAIN, SITE_NAME, WRITE_URL, MODIFY_URL, DELETE_URL, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+			from
+				SITE_MASTER
+			where
+				WRITER_SEQ_ID = #USER_SEQ_ID#
+			order by
+				WRITE_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+</sqlMap>
