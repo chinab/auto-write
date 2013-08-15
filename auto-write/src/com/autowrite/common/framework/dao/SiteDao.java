@@ -9,7 +9,7 @@ import com.autowrite.common.framework.entity.PaymentMasterEntity;
 
 public interface SiteDao {
 
-	public abstract void writeBoard(Map param);
+	public abstract void writePrivateSite(Map param);
 	
 	public abstract List<BoardEntity> listBoard(Map param);
 	
@@ -19,7 +19,9 @@ public interface SiteDao {
 
 	public abstract List<BoardEntity> listMasterSite(Map param);
 
-	Long countListPrivateSite(Map param);
+	public abstract Long countListPrivateSite(Map param);
 
-	Long countListMasterSite(Map param);
+	public abstract Long countListMasterSite(Map param);
+
+	
 }

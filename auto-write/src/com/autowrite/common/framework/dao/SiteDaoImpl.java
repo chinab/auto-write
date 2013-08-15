@@ -40,9 +40,9 @@ public class SiteDaoImpl implements SiteDao {
 	}
 	
 	@Override
-	public void writeBoard(Map param) {
+	public void writePrivateSite(Map param) {
 		try {
-			sqlHelper.insert("board.write", param);
+			sqlHelper.insert("site.private.write", param);
 		} catch ( Exception e ){
 			System.out.println(e.getMessage());
 			e.printStackTrace();

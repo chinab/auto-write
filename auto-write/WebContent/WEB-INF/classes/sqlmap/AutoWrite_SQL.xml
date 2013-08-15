@@ -81,4 +81,12 @@
 			</isNotNull>
 	</statement>
 	
+	<statement id="site.private.write" parameterClass="java.util.HashMap">
+		insert into SITE_PRIVATE (
+			MASTER_SEQ_ID, DOMAIN, SITE_NAME, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
+		) values (
+			#MASTER_SEQ_ID#, #DOMAIN#, #SITE_NAME#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
+		)
+	</statement>
+	
 </sqlMap>

@@ -134,12 +134,12 @@ response.setHeader("Cache-Control", "no-cache");
 		<div class="login_bg01" style="">
 			<form name="myForm" method="post" target="_self" action="dologin.do" style="margin: 0" autocomplete=off>
 				<div style="margin-left:22; margin-top:48;">
-					<input type="text" class="s_id" value="" name="u_id" id="u_id" onKeyPress="if (event.keyCode == 13) doLogin();" style="width:85;ime-mode:disabled;">
+					<input type="text" class="s_id" value="kshrabbit" name="u_id" id="u_id" onKeyPress="if (event.keyCode == 13) doLogin();" style="width:85;ime-mode:disabled;">
 					<input style="margin-left:3;" type="checkbox" id="idsave" onclick="javascript:saveID(this);" tabindex="3"./>
 					<span class="save_id">아이디 저장</span>
 				</div>
 				<div style="margin-left:22; margin-top:4;">
-					<input type="password" class="s_id" value="" name="password" id="password" onKeyPress="if (event.keyCode == 13) doLogin();" style="width:85;">
+					<input type="password" class="s_id" value="!lim0301" name="password" id="password" onKeyPress="if (event.keyCode == 13) doLogin();" style="width:85;">
 					<span class="save_id">
 					<a href="#"><img style="margin-left:7;" src="./images/bt_login.gif" onClick="doLogin();"></a></span>
 				</div>

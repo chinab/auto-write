@@ -572,7 +572,7 @@ public class AdminService {
 
 				String newUserPoint = calculatePoint(userInfo, point);
 				userInfo.setPoint(newUserPoint);
-				userInfo.setClassInfo(new Integer(newUserPoint), userInfo.getType_code());
+//				userInfo.setClassInfo(new Integer(newUserPoint), userInfo.getType_code());
 				httpSession.setAttribute("userSessionKey", userInfo);
 				param.put("POINT", newUserPoint);
 				adminDao.updateUserPoint(param);

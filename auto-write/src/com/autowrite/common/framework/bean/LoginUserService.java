@@ -98,7 +98,7 @@ public class LoginUserService {
 			Integer userPoint = new Integer(userEntity.getPoint());
 			String userTypeCode = userEntity.getType_code();
 				
-			userEntity.setClassInfo(userPoint, userTypeCode);
+//			userEntity.setClassInfo(userPoint, userTypeCode);
 			
 			// get memo count
 			int uncheckedMemoCount = userDao.getUncheckedMemoCount(param);

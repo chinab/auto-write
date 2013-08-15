@@ -73,35 +73,26 @@ public class SiteService extends CommonService{
 		
 		return listEntity;
 	}
+
+
+	public BoardListEntity writePrivateSite(HttpServletRequest req, Map param) throws Exception {
+		setCondition(param);
+		
+		siteDao.writePrivateSite(param);
+		
+		return listPrivateSite(param);
+	}
 	
 	
-//	public BoardListEntity writeBoard(HttpServletRequest req, Map param) throws Exception {
-//		String menuCode = param.get("category").toString();
-//		
-//		String tableName = getTableNameAsMenuCode(menuCode);
-//		
-//		param.put("TABLE_NAME", tableName);
-//		
-//		setCondition(param);
-//		
-//		// 업소정보, 라인업 - 이전 글 지움.
-//		if ( menuCode.startsWith("02") || menuCode.startsWith("03") ){
-//			siteDao.deleteRecentLineUp(param);
-//		}
-//		
-//		long seqId = siteDao.writeBoardWithFile(param);
-//		param.put("SEQ_ID", seqId);
-//		this.fileUpload(req, param);
-//		
-//		// 라인업 - 배너 컨텍스트 업데이트
-//		if ( menuCode.startsWith("03") ){
-//			adminService.updateBannerContext();
-//		}
-//		
-//		return listBoard(param);
-//	}
-//	
-//	
+	
+	public BoardListEntity modifySite(HttpServletRequest req, Map param) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
+	
 //	public BoardListEntity modifyBoard(HttpServletRequest req, Map param) throws Exception {
 //		String menuCode = param.get("category").toString();
 //		
