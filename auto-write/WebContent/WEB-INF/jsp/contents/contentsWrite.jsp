@@ -1,5 +1,29 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+
+<%
+response.setDateHeader("Expires",0);
+response.setHeader("Pragma", "no-cache");
+response.setHeader("Cache-Control", "no-cache");
+%>
+
+<%
+	// System.out.println("Login jsp2");
+	String error = (String)request.getAttribute("result");
+    if(error!=null){
+        String msg = "No user information found." ; 
+%>
+<script language="javascript">
+	alert("<%=msg%>");
+</script>
+<%
+    }
+%>
+
+
+<html>
+<head>
+<title>Auto Write</title>
+</head>
 
 <!-- 헤더 스크립트 -->
 <jsp:include page="../include/header.jsp" flush="false" />
@@ -8,10 +32,43 @@
 <!--탑메뉴-->
 <jsp:include page="../include/topMenu.jsp" flush="false" />
 
+
+<script>
+	function contentsWrite(){
+		var frm = document.writeForm;
+		
+		if(frm.contentsName.value.length == 0) {
+			alert("본문 이름을 입력하세요.");
+			frm.contentsName.focus();
+			
+			return false;
+		}
+		if(frm.title.value.length == 0) {
+			alert("제목을 입력하세요.");
+			frm.title.focus();
+			
+			return false;
+		}
+		if(frm.content.value.length == 0) {
+			alert("내용을 입력하세요.");
+			frm.content.focus();
+			
+			return false;
+		}
+		
+		frm.action = "contentsWrite.do";
+		frm.method = "post";
+		
+		frm.submit();
+	}
+</script>
+
+<body>
+
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
-<table cellpadding="0" cellspacing="0" border="0" width="1000"
-	align="center" style="margin-top: 30px;">
+<form name="writeForm">
+<table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
 		<td width="220" valign="top">
@@ -19,7 +76,7 @@
 			<ul class="L_Menus" style="">
 				<li class="Menu_Title">본문설정
 				<li>
-				<li class="Menu_tex"><a href="jspView.do?jsp=contents/contentsList" onfocus="blur()">본문리스트</a>
+				<li class="Menu_tex"><a href="contentsList.do?jsp=contents/contentsList" onfocus="blur()">본문리스트</a>
 				<li>
 				<li class="Menu_tex"><a href="jspView.do?jsp=contents/contentsWrite" onfocus="blur()">본문등록</a>
 				<li>
@@ -55,40 +112,41 @@
 
 							<tr>
 								<td class="subject5">&nbsp;&nbsp;<b>본문이름</b></td>
-								<td><img src="/images/board_line.gif" width="1"
-									height="22" /></td>
-								<td class="subject"><input name="title" class="s_id"
-									type="text" size="65" style="width: 550px;"></td>
+								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="contentsName" class="s_id" type="text" size="65" style="width: 550px;">
+								</td>
 							</tr>
 							<tr>
 								<td class="subject5">&nbsp;&nbsp;<b>제목</b></td>
-								<td><img src="/images/board_line.gif" width="1"
-									height="22" /></td>
-								<td class="subject"><input name="title" class="s_id"
-									type="text" size="65" style="width: 550px;"></td>
+								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="title" class="s_id" type="text" size="65" style="width: 550px;">
+								</td>
 							</tr>
 
 							<tr>
 								<td class="subject5">&nbsp;&nbsp;<b>기본글 설정</b></td>
 								<td><img src="/images/board_line.gif" width="1"
 									height="22" /></td>
-								<td class="subject"><input type="radio" value=''>Yes&nbsp;&nbsp;&nbsp;&nbsp;<input
-									type="radio" value=''>No</td>
+								<td class="subject">
+									<input type="radio" name="default_yn" value='Y' checked="checked">Yes
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="radio" name="default_yn" value='N'>No
+								</td>
 							</tr>
 
 							<tr>
-								<td colspan="3" align="left" style="padding: 9px;"><textarea
-										style="width: 701px; height: 450px;">ㅇㄹㄴㅇㄹㄴㅇㄹ</textarea></td>
+								<td colspan="3" align="left" style="padding: 9px;">
+									<textarea name="content" style="width: 701px; height: 450px;"></textarea>
 								</td>
 						</tbody>
 					</table>
 
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="등록"
-							OnClick="popup_check();" class="input_gr">&nbsp;&nbsp;<input
-							class="in_btnc" type="button" value="취소"
-							OnClick="history.back();" class="input_gr">
-
+						<input class="in_btn" type="button" value="등록" OnClick="contentsWrite();" class="input_gr">
+						&nbsp;&nbsp;
+						<input class="in_btnc" type="button" value="취소" OnClick="history.back();" class="input_gr">
 					</div>
 				</div>
 
@@ -99,7 +157,7 @@
 
 	</tr>
 </table>
-
+</form>
 
 <!--푸터-->
 <jsp:include page="../include/footer.jsp" flush="false" />

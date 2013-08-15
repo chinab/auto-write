@@ -23,7 +23,7 @@
 
 <div class="Top_Main_menus">
 <div class="Menus_tl"><a href="jspView.do?jsp=jump/autoWriteList" onfocus="blur()" >JUMP</a></div>
-<div class="Menus_t"><a href="jspView.do?jsp=contents/contentsList" onfocus="blur()" >본문설정</a></div>
+<div class="Menus_t"><a href="contentsList.do?jsp=contents/contentsList" onfocus="blur()" >본문설정</a></div>
 <div class="Menus_t"><a href="siteList.do?jsp=site/siteList" onfocus="blur()" >사이트설정</a></div>
 <div class="Menus_t"><a href="javascript:alert('준비중');" onfocus="blur()" >개인설정</a></div>
 <div class="Menus_t"><a href="jspView.do?jsp=community/noticeList" onfocus="blur()" >알림마당</a></div>

@@ -66,6 +66,8 @@ CREATE  TABLE `contents_master` (
 
   `seq_id` BIGINT NOT NULL AUTO_INCREMENT ,
 
+  `contents_name` VARCHAR(4000) NULL ,
+
   `title` VARCHAR(4000) NULL ,
 
   `content` LONGTEXT NULL ,

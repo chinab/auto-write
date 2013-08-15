@@ -89,4 +89,52 @@
 		)
 	</statement>
 	
+	
+	<statement id="contents.private.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					CONTENTS_MASTER
+				where
+					WRITER_SEQ_ID = #USER_SEQ_ID#
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="contents.private.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, CONTENTS_NAME, TITLE, CONTENT, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+			from
+				CONTENTS_MASTER
+			where
+				WRITER_SEQ_ID = #USER_SEQ_ID#
+			order by
+				WRITE_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+	<statement id="contents.private.write" parameterClass="java.util.HashMap">
+		insert into CONTENTS_MASTER (
+			CONTENTS_NAME, TITLE, CONTENT, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
+		) values (
+			#CONTENTS_NAME#, #TITLE#, #CONTENT#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
+		)
+	</statement>
+	
 </sqlMap>

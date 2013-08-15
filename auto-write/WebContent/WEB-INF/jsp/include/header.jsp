@@ -7,15 +7,23 @@
 %>
 
 <META NAME="ROBOTS" CONTENT="ALL">
-
-<meta http-equiv="expires" content="-1" > 
-<meta http-equiv="Pragma" content="No-cache" />
-<meta http-equiv="Cache-Control" content="No-cache" />
-<meta http-equiv="Content-Script-Type" content="text/javascript" />
-<meta http-equiv="Content-Style-Type" content="text/css" />
+<head>
+	<title>자동등록</title>
+	<meta http-equiv="expires" content="-1" > 
+	<meta http-equiv="Pragma" content="No-cache" />
+	<meta http-equiv="Cache-Control" content="No-cache" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+</head>
 
 <link href='http://api.mobilis.co.kr/webfonts/css/?fontface=NanumGothickWeb' rel='stylesheet' type='text/css'/>
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 
 <script src="js/ajax.js"></script>
 <script src="js/json2.js"></script>
+<script src="js/autowrite.js"></script>
+
+
+
+
+

@@ -27,6 +27,9 @@ public class BoardEntity {
 	private String writer_seq_id;
 	private String writer_id;
 	
+	private String contents_name;
+	private String default_yn;
+	
 	private String user_seq_id;
 	private String user_id;
 	private String user_nic;
@@ -147,6 +150,18 @@ public class BoardEntity {
 	}
 	public void setWriter_id(String writer_id) {
 		this.writer_id = writer_id;
+	}
+	public String getContents_name() {
+		return contents_name;
+	}
+	public void setContents_name(String contents_name) {
+		this.contents_name = contents_name;
+	}
+	public String getDefault_yn() {
+		return default_yn;
+	}
+	public void setDefault_yn(String default_yn) {
+		this.default_yn = default_yn;
 	}
 	public String getUser_seq_id() {
 		return user_seq_id;

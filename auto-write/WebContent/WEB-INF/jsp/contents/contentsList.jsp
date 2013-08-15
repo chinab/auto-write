@@ -1,12 +1,39 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.List, java.net.URLEncoder"%>
+<%@ page import="java.util.Map, java.util.Iterator, java.util.HashMap"%>
+<%@ page import="com.autowrite.common.framework.entity.UserEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.BoardEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.BoardListEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.ConditionEntity"%>
+
+<%
+	List<BoardEntity> contentsList = null;
+	ConditionEntity cond = null;
+	
+	if ( request.getAttribute("ContentsList") != null ){
+		contentsList = (List<BoardEntity>) request.getAttribute("ContentsList");
+	}
+	
+	BoardListEntity contentsListEntity = (BoardListEntity) request.getAttribute("ContentsListEntity");
+	
+	if ( contentsList == null ){
+		contentsList = new ArrayList();
+	}
+	
+	String searchKey = contentsListEntity.writeSearchKey();
+	String searchValue = contentsListEntity.writeSearchValue();
+%>
+
+<html>
 <!-- 헤더 스크립트 -->
 <jsp:include page="../include/header.jsp" flush="false" />
 <!-- 헤더 스크립트 끝 -->
 
 <!--탑메뉴-->
 <jsp:include page="../include/topMenu.jsp" flush="false" />
+
 
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
@@ -19,7 +46,7 @@
 			<ul class="L_Menus" style="">
 				<li class="Menu_Title">본문설정
 				<li>
-				<li class="Menu_tex"><a href="jspView.do?jsp=contents/contentsList" onfocus="blur()">본문리스트</a>
+				<li class="Menu_tex"><a href="contentsList.do?jsp=contents/contentsList" onfocus="blur()">본문리스트</a>
 				<li>
 				<li class="Menu_tex"><a href="jspView.do?jsp=contents/contentsWrite" onfocus="blur()">본문등록</a>
 				<li>
@@ -47,7 +74,7 @@
 							<col width="70" />
 							<col width="/" />
 							<col width="100" />
-							<col width="150" />
+							<col width="100" />
 						</colgroup>
 						<tbody>
 
@@ -58,30 +85,32 @@
 								<th>등록일</th>
 								<th>기본글여부</th>
 							</tr>
-
+							
+							<!--글 목록 시작-->
+							<%
+								if ( contentsList.size() == 0 ) {
+									out.println("<tr><td colspan='5'><b>글이 없습니다</b></td></tr>");
+								}
+							%>
+							<%		
+								String regionStr = "";
+								String facilityNameStr = "";
+								
+								long startSequence = contentsListEntity.getStartSequenceNumber();
+								
+								for ( int ii = 0 ; ii < contentsList.size() ; ii ++ ) {
+									BoardEntity contentsEntity = contentsList.get(ii);
+							%>
 							<tr>
 								<td><input type=checkbox value=''></td>
-								<td>3</td>
-								<td>8월 6일 출근부</td>
-								<td>13:50:11</td>
-								<td>Yes</td>
+								<td><%= startSequence-- %></td>
+								<td><%=contentsEntity.getTitle()%></td>
+								<td><%=contentsEntity.getWrite_datetime()%></td>
+								<td><%=contentsEntity.getBlind_yn()%></td>
 							</tr>
-
-							<tr>
-								<td><input type=checkbox value=''></td>
-								<td>2</td>
-								<td>8월 6일 출근부</td>
-								<td>2013.08.05</td>
-								<td>No</td>
-							</tr>
-
-							<tr>
-								<td><input type=checkbox value=''></td>
-								<td>1</td>
-								<td>8월 6일 출근부</td>
-								<td>2013.08.05</td>
-								<td>Yes</td>
-							</tr>
+							<%
+								}
+							%>
 
 						</tbody>
 					</table>
@@ -89,12 +118,11 @@
 
 
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="등록"
-							OnClick="popup_check();" class="input_gr">&nbsp;&nbsp;<input
-							class="in_btnc2" type="button" value="수정"
-							OnClick="history.back();" class="input_gr">&nbsp;&nbsp;<input
-							class="in_btnc" type="button" value="삭제"
-							OnClick="history.back();" class="input_gr">
+						<input class="in_btn" type="button" value="등록" OnClick="location.href='jspView.do?jsp=contents/contentsWrite';" class="input_gr">
+						&nbsp;&nbsp;
+						<input class="in_btnc2" type="button" value="수정" OnClick="history.back();" class="input_gr">
+						&nbsp;&nbsp;
+						<input class="in_btnc" type="button" value="삭제" OnClick="history.back();" class="input_gr">
 
 					</div>
 				</div>
