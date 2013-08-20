@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.autowrite.common.framework.bean.ContentsService;
+import com.autowrite.common.framework.bean.AutowriteService;
 import com.autowrite.common.framework.dao.UserDao;
-import com.autowrite.common.framework.entity.BoardEntity;
-import com.autowrite.common.framework.entity.BoardListEntity;
+import com.autowrite.common.framework.entity.AutowriteEntity;
+import com.autowrite.common.framework.entity.AutowriteListEntity;
 import com.autowrite.common.framework.entity.UserEntity;
 
 @Controller
-public class ContentsController extends CommonController{
+public class AutowriteController extends CommonController{
 	@Autowired
 	SqlMapClientTemplate sqlHelper;
 	
@@ -36,22 +36,22 @@ public class ContentsController extends CommonController{
 	UserDao userDao;
 	
 	@Autowired
-	ContentsService contentsService;
+	AutowriteService autowriteService;
 	
 	@Autowired 
     private ServletContext servletContext;
 	
 	private Logger logger;
 	
-	public ContentsController() {
+	public AutowriteController() {
 		logger = Logger.getLogger(getClass());
 	}
 	
-	@RequestMapping("/contentsList.do")
-	public ModelAndView contentsList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+	@RequestMapping("/autowriteList.do")
+	public ModelAndView autowriteList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
 		ModelAndView model = null;
 		
-		model = setJsp(req, "contents/contentsList");
+		model = setJsp(req, "autowrite/autowriteList");
 		
 		Map param = new HashMap();
 		
@@ -66,21 +66,48 @@ public class ContentsController extends CommonController{
 		
 		setDefaultParameter(req, e, model, param);
 		
-		BoardListEntity boardListEntity = contentsService.listPrivateContents(param);
-		List<BoardEntity> boardList = boardListEntity.getBoardList();
+		AutowriteListEntity boardListEntity = autowriteService.listAutowrite(param);
+		List<AutowriteEntity> boardList = boardListEntity.getAutowriteList();
 		
 		boardListEntity.setSearchKey(searchKey);
 		boardListEntity.setSearchValue(searchValue);
 		
-		model.addObject("ContentsList", boardList);
-		model.addObject("ContentsListEntity", boardListEntity);
+		model.addObject("AutowriteList", boardList);
+		model.addObject("AutowriteListEntity", boardListEntity);
 		
 		return model;
 	}
 	
 	
-	@RequestMapping("/contentsWrite.do")
-	public ModelAndView contentsWrite(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+	@RequestMapping("/autowriteWriteForm.do")
+	public ModelAndView autowriteWriteForm(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		if ( userInfo != null ) {
+			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
+			param.put("WRITER_ID", userInfo.getId());
+			param.put("WRITER_IP", req.getRemoteAddr());
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+		AutowriteEntity autowriteEntity = autowriteService.getDefaultAutowriteEntity(req, param);
+		
+		ModelAndView model = setJsp(req, "autowriteList.do?jsp=autowrite/autowriteList");
+		
+		model.addObject("AutowriteEntity", autowriteEntity);
+		
+		return model;
+	}
+	
+	
+	@RequestMapping("/autowriteWrite.do")
+	public ModelAndView autowriteWrite(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
 		Map param;
 		param = new HashMap();
 		param.put("Code", "S");
@@ -92,7 +119,7 @@ public class ContentsController extends CommonController{
 		setDefaultParameter(req, httpSession, null, param);
 		
 		if ( userInfo != null ) {
-			param.put("CONTENTS_NAME", req.getParameter("contentsName"));
+			param.put("CONTENTS_NAME", req.getParameter("autowriteName"));
 			param.put("TITLE", req.getParameter("title"));
 			param.put("CONTENT", req.getParameter("content").getBytes("UTF-8"));
 			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
@@ -103,19 +130,19 @@ public class ContentsController extends CommonController{
 			throw new Exception("Login please.");
 		}
 		
-		BoardListEntity contentsListEntity = contentsService.writePrivateContents(req, param);
-		List<BoardEntity> boardList = contentsListEntity.getBoardList();
+		AutowriteListEntity autowriteListEntity = autowriteService.writePrivateAutowrite(req, param);
+		List<AutowriteEntity> boardList = autowriteListEntity.getAutowriteList();
 		
 		
-		String redirectUrl = "contentsList.do?jsp=contents/contentsList";
+		String redirectUrl = "autowriteList.do?jsp=autowrite/autowriteList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
 		
 		return model;
 	}
 	
 	
-	@RequestMapping("/contentsUpdate.do")
-	public ModelAndView doContentsModify(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+	@RequestMapping("/autowriteUpdate.do")
+	public ModelAndView doAutowriteModify(String p, HttpServletRequest req, ServletResponse res) throws Exception {
 		Map param;
 		param = new HashMap();
 		param.put("Code", "S");
@@ -153,29 +180,29 @@ public class ContentsController extends CommonController{
 		}
 		
 		
-		BoardListEntity boardListEntity = contentsService.modifyContents(req, param);
-		List<BoardEntity> boardList = boardListEntity.getBoardList();
+		AutowriteListEntity boardListEntity = autowriteService.modifyAutowrite(req, param);
+		List<AutowriteEntity> boardList = boardListEntity.getAutowriteList();
 		
-//		model.addObject("BoardList", boardList);
+//		model.addObject("AutowriteList", boardList);
 //		model.addObject("category", req.getParameter("category"));
-//		model.addObject("BoardListEntity", boardListEntity);
+//		model.addObject("AutowriteListEntity", boardListEntity);
 		
 //		RedirectView rv = new RedirectView("boardListView.do");
 //		rv.setExposeModelAttributes(true);
 //		rv.setAttributesMap(model.getModelMap());
 		
-		String redirectUrl = "boardListView.do?jsp=contents/contentsList";
+		String redirectUrl = "boardListView.do?jsp=autowrite/autowriteList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
 		
 		return model;
 	}
 	
 	
-	@RequestMapping("/contentsView.do")
-	public ModelAndView contentsView(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+	@RequestMapping("/autowriteView.do")
+	public ModelAndView autowriteView(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
 		ModelAndView model = null;
 		
-		model = setJsp(req, "contents/contentsWrite");
+		model = setJsp(req, "autowrite/autowriteWrite");
 		
 		Map param = new HashMap();
 		
@@ -183,16 +210,16 @@ public class ContentsController extends CommonController{
 		
 		param.put("SEQ_ID", req.getParameter("seqId"));
 		
-		BoardEntity contentsEntity = contentsService.contentsView(param);
+		AutowriteEntity autowriteEntity = autowriteService.autowriteView(param);
 		
-		model.addObject("ContentsEntity", contentsEntity);
+		model.addObject("AutowriteEntity", autowriteEntity);
 		
 		return model;
 	}
 	
 	
-	@RequestMapping("/readContents.do")
-	public void readContents(@RequestParam(value = "p") String p, HttpServletRequest req, ServletResponse res) {
+	@RequestMapping("/readAutowrite.do")
+	public void readAutowrite(@RequestParam(value = "p") String p, HttpServletRequest req, ServletResponse res) {
 		Map map;
 		map = new HashMap();
 		map.put("Code", "S");

@@ -50,13 +50,8 @@ public class ContentsDaoImpl implements ContentsDao {
 	}
 
 	@Override
-	public List<BoardEntity> listBoard(Map param) {
-		return sqlHelper.queryForList("board.list", param);
-	}
-
-	@Override
-	public BoardEntity readBoard(Map param) {
-		return (BoardEntity) sqlHelper.queryForObject("board.read", param);
+	public BoardEntity contentsView(Map param) {
+		return (BoardEntity) sqlHelper.queryForObject("contents.private.select", param);
 	}
 	
 }

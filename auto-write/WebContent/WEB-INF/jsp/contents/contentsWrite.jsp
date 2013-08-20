@@ -1,24 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
-<%
-response.setDateHeader("Expires",0);
-response.setHeader("Pragma", "no-cache");
-response.setHeader("Cache-Control", "no-cache");
-%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.List, java.net.URLEncoder"%>
+<%@ page import="java.util.Map, java.util.Iterator, java.util.HashMap"%>
+<%@ page import="com.autowrite.common.framework.entity.UserEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.BoardEntity"%>
 
 <%
-	// System.out.println("Login jsp2");
-	String error = (String)request.getAttribute("result");
-    if(error!=null){
-        String msg = "No user information found." ; 
+	BoardEntity contentsEntity = (BoardEntity) request.getAttribute("ContentsEntity");
+	
+	if ( contentsEntity == null ){
+		contentsEntity = new BoardEntity();
+		
+		contentsEntity.setContent("");
+		contentsEntity.setContents_name("");
+		contentsEntity.setTitle("");
+	}
 %>
-<script language="javascript">
-	alert("<%=msg%>");
-</script>
-<%
-    }
-%>
-
 
 <html>
 <head>
@@ -114,14 +112,14 @@ response.setHeader("Cache-Control", "no-cache");
 								<td class="subject5">&nbsp;&nbsp;<b>본문이름</b></td>
 								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="contentsName" class="s_id" type="text" size="65" style="width: 550px;">
+									<input name="contentsName" class="s_id" type="text" size="65" style="width: 550px;" value="<%=contentsEntity.getContents_name()%>">
 								</td>
 							</tr>
 							<tr>
 								<td class="subject5">&nbsp;&nbsp;<b>제목</b></td>
 								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="title" class="s_id" type="text" size="65" style="width: 550px;">
+									<input name="title" class="s_id" type="text" size="65" style="width: 550px;" value="<%=contentsEntity.getTitle()%>">
 								</td>
 							</tr>
 
@@ -138,7 +136,7 @@ response.setHeader("Cache-Control", "no-cache");
 
 							<tr>
 								<td colspan="3" align="left" style="padding: 9px;">
-									<textarea name="content" style="width: 701px; height: 450px;"></textarea>
+									<textarea name="content" style="width: 701px; height: 450px;"><%=contentsEntity.getContent()%></textarea>
 								</td>
 						</tbody>
 					</table>

@@ -129,12 +129,23 @@
 			</isNotNull>
 	</statement>
 	
+	
 	<statement id="contents.private.write" parameterClass="java.util.HashMap">
 		insert into CONTENTS_MASTER (
 			CONTENTS_NAME, TITLE, CONTENT, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
 		) values (
 			#CONTENTS_NAME#, #TITLE#, #CONTENT#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
 		)
+	</statement>
+	
+	
+	<statement id="contents.private.select" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
+		select
+			SEQ_ID, CONTENTS_NAME, TITLE, CONTENT, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+		from
+			CONTENTS_MASTER
+		where
+			SEQ_ID = #SEQ_ID#
 	</statement>
 	
 </sqlMap>

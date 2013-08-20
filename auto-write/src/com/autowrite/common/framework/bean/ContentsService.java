@@ -75,6 +75,13 @@ public class ContentsService extends CommonService{
 	}
 
 
+	public BoardEntity contentsView(Map param) {
+		BoardEntity boardEntity = contentsDao.contentsView(param);
+		
+		return boardEntity;
+	}
+
+
 	public BoardListEntity writePrivateContents(HttpServletRequest req, Map param) throws Exception {
 		setCondition(param);
 		

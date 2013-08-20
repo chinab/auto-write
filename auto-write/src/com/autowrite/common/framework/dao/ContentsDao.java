@@ -11,10 +11,6 @@ public interface ContentsDao {
 
 	public abstract void writePrivateContents(Map param);
 	
-	public abstract List<BoardEntity> listBoard(Map param);
-	
-	public abstract BoardEntity readBoard(Map param);
-	
 	public abstract List<BoardEntity> listPrivateContents(Map param);
 
 	public abstract List<BoardEntity> listMasterContents(Map param);
@@ -22,6 +18,8 @@ public interface ContentsDao {
 	public abstract Long countListPrivateContents(Map param);
 
 	public abstract Long countListMasterContents(Map param);
+
+	public abstract BoardEntity contentsView(Map param);
 
 	
 }

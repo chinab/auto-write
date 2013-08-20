@@ -35,6 +35,16 @@
 <jsp:include page="../include/topMenu.jsp" flush="false" />
 
 
+<script>
+	function readContents(seqId){
+		var hrefStr = "contentsView.do?jsp=contents/contentsWrite";
+		hrefStr += "&seqId=" + seqId;
+		
+		location.href = hrefStr;
+	}
+</script>
+
+
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
 <table cellpadding="0" cellspacing="0" border="0" width="1000"
@@ -104,8 +114,12 @@
 							<tr>
 								<td><input type=checkbox value=''></td>
 								<td><%= startSequence-- %></td>
-								<td><%=contentsEntity.getTitle()%></td>
-								<td><%=contentsEntity.getWrite_datetime()%></td>
+								<td>
+									<a href="javascript:readContents('<%=contentsEntity.getSeq_id()%>');">
+										<%=contentsEntity.getTitle()%>
+									</a>
+								</td>
+								<td><%=contentsEntity.getWriteBoardDateTime()%></td>
 								<td><%=contentsEntity.getBlind_yn()%></td>
 							</tr>
 							<%

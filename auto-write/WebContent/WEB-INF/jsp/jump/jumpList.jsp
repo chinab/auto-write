@@ -17,7 +17,7 @@
 			<ul class="L_Menus" style="">
 			<li class="Menu_Title">JUMP<li>
 			<li class="Menu_tex"><a href="jspView.do?jsp=jump/autoWriteList" onfocus="blur()" >자동등록 목록</a><li>
-			<li class="Menu_tex"><a href="jspView.do?jsp=jump/jumpWrite" onfocus="blur()" >자동등록</a><li>
+			<li class="Menu_tex"><a href="autowriteWriteForm.do?jsp=autowrite/autowriteWrite" onfocus="blur()" >자동등록</a><li>
 			<li class="Menu_tex"><a href="jspView.do?jsp=jump/jumpList" onfocus="blur()" >JUMP</a><li>
 			</ul>
 		</td>

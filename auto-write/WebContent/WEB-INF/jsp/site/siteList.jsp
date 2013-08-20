@@ -118,7 +118,7 @@
 								<td><%= startSequence-- %></td>
 								<td><%=siteEntity.getSite_name()%></td>
 								<td><%=siteEntity.getDomain()%></td>
-								<td><%=siteEntity.getWrite_datetime()%></td>
+								<td><%=siteEntity.getWriteBoardDateTime()%></td>
 							</tr>
 							<%
 								}
