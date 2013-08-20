@@ -51,6 +51,17 @@ public class AutowriteService extends CommonService{
 		List<BoardEntity> contentsEntityList = contentsDao.listPrivateContents(param);
 		autowriteEntity.setContentsEntityList(contentsEntityList);
 		
+		if ( param.get("CONTENTS_SEQ_ID") != null ) {
+			String selectedContentsKey = param.get("CONTENTS_SEQ_ID").toString();
+			
+			for ( int ii = 0 ; ii < contentsEntityList.size() ; ii ++ ) {
+				BoardEntity contentsEntity = contentsEntityList.get(ii);
+				if ( selectedContentsKey.equals(contentsEntity.getSeq_id()) ){
+					autowriteEntity.setSelectedContentsEntity(contentsEntity);
+				}
+			}
+		}
+		
 		return autowriteEntity;
 	}
 

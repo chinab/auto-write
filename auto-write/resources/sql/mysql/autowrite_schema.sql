@@ -109,10 +109,44 @@ COMMENT = '자동등록';
 CREATE  TABLE `autowrite_site` (
   `seq_id` BIGINT NOT NULL AUTO_INCREMENT ,
   
-  `autowrite_seq_id` BIGINT NULL ,
+  `autowrite_master_seq_id` BIGINT NULL ,
 
   `site_seq_id` BIGINT NULL ,
 
-  PRIMARY KEY (`seq_id`) )
+  `success_yn` VARCHAR(255) NULL ,
+  
+  `response_content` LONGTEXT NULL ,
+  
+  `try_count` BIGINT NULL ,
+
+  `try_datetime` DATETIME NULL ,
+
+  PRIMARY KEY (`seq_id`) , 
+  
+  INDEX `AUTOWRITE_SITE_MASTER_SEQ_ID` (`autowrite_master_seq_id` ASC) )
   
 COMMENT = '자동등록 사이트 목록';
+
+
+
+CREATE  TABLE `autowrite_log` (
+  `seq_id` BIGINT NOT NULL AUTO_INCREMENT ,
+  
+  `autowrite_master_seq_id` BIGINT NULL ,
+
+  `autowrite_site_seq_id` BIGINT NULL ,
+
+  `site_seq_id` BIGINT NULL ,
+
+  `success_yn` VARCHAR(255) NULL ,
+  
+  `response_content` LONGTEXT NULL ,
+
+  `try_datetime` DATETIME NULL ,
+
+  PRIMARY KEY (`seq_id`) , 
+  
+  INDEX `AUTOWRITE_SITE_MASTER_SEQ_ID` (`autowrite_master_seq_id` ASC) )
+  
+COMMENT = '자동등록 사이트 목록';
+

@@ -5,6 +5,7 @@ import java.util.List;
 public class AutowriteEntity {
 	private List<BoardEntity> contentsEntityList;
 	private List<BoardEntity> siteEntityList;
+	private BoardEntity selectedContentsEntity;
 	
 	private String seq_id;
 	private String contents_seq_id;
@@ -27,6 +28,12 @@ public class AutowriteEntity {
 	}
 	public void setSiteEntityList(List<BoardEntity> siteEntityList) {
 		this.siteEntityList = siteEntityList;
+	}
+	public BoardEntity getSelectedContentsEntity() {
+		return selectedContentsEntity;
+	}
+	public void setSelectedContentsEntity(BoardEntity selectedContentsEntity) {
+		this.selectedContentsEntity = selectedContentsEntity;
 	}
 	public String getSeq_id() {
 		return seq_id;

@@ -15,6 +15,16 @@
 		autowriteEntity.setSiteEntityList(new ArrayList<BoardEntity>());
 		autowriteEntity.setContentsEntityList(new ArrayList<BoardEntity>());
 	}
+	
+	String selectedContent = "";
+	String selectedTitle = "";
+	String selectedContentSeqId = "";
+	if ( autowriteEntity.getSelectedContentsEntity() != null ) {
+		selectedContent = autowriteEntity.getSelectedContentsEntity().getContent();
+		selectedTitle = autowriteEntity.getSelectedContentsEntity().getTitle();
+		selectedContentSeqId = autowriteEntity.getSelectedContentsEntity().getSeq_id();
+	}
+	
 %>
 
 <html>
@@ -57,6 +67,14 @@
 		frm.method = "post";
 		
 		frm.submit();
+	}
+	
+	function changeContents(){
+		var frm = document.writeForm;
+		
+		var locStr = "autowriteWriteForm.do?jsp=autowrite/autowriteWrite&contentsSeqId=" + frm.contentsSeqId.value;
+		
+		location.href = locStr;
 	}
 </script>
 
@@ -112,18 +130,25 @@
 									<img src="/images/board_line.gif" width="1" height="22" />
 								</td>
 								<td class="subject">
-									<select name="contentsSeqId" setColor="#000000,#FFFFFF,#000000,#E6E4E4,#C0C0C0,#000000">
+									<select name="contentsSeqId" onChange="javascript:changeContents();" style="width: 250px;">
 									<%
 										List<BoardEntity> contentsEntityList = autowriteEntity.getContentsEntityList();
-									
+										
+										String selectedStr = "";
+										
 										for ( int ii = 0 ; ii < contentsEntityList.size() ;  ii++ ){
 											BoardEntity contentsEntity = contentsEntityList.get(ii);
+											if ( selectedContentSeqId.equals(contentsEntity.getSeq_id()) ) {
+												selectedStr = "selected=\"selected\"";
+											} else {
+												selectedStr = "";
+											}
 									%>
-										<option value="<%=contentsEntity.getSeq_id()%>"><%=contentsEntity.getContents_name()%></option>
+										<option value="<%=contentsEntity.getSeq_id()%>" <%=selectedStr%>><%=contentsEntity.getContents_name()%></option>
 									<%
 										}
 									%>
-								</select>
+									</select>
 								</td>
 							</tr>
 
@@ -141,7 +166,7 @@
 										for ( int ii = 0 ; ii < siteEntityList.size() ;  ii++ ){
 											BoardEntity siteEntity = siteEntityList.get(ii);
 									%>
-										<input type="checkbox" name="siteSeqIdList" value="<%=siteEntity.getSeq_id()%>">
+										<input type="checkbox" name="siteSeqIdList" value="<%=siteEntity.getSeq_id()%>" checked="checked">
 										<%=siteEntity.getSite_name()%>
 										&nbsp;&nbsp;&nbsp;&nbsp;
 									<%
@@ -154,20 +179,20 @@
 								<td class="subject5">&nbsp;&nbsp;<b>제목</b></td>
 								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="title" class="s_id" type="text" size="65" style="width: 550px;">
+									<input name="title" class="s_id" type="text" size="65" style="width: 550px;" value="<%=selectedTitle%>">
 								</td>
 							</tr>
 
 							<tr>
 								<td colspan="3" align="left" style="padding: 9px;">
-									<textarea style="width: 701px; height: 450px;">ㅇㄹㄴㅇㄹㄴㅇㄹ</textarea>
+									<textarea name="content" style="width: 701px; height: 450px;"><%=selectedContent%></textarea>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="등록" OnClick="autowriteWrite();" class="input_gr">
+						<input class="in_btn" type="button" value="자동등록" OnClick="autowriteWrite();" class="input_gr">
 						&nbsp;&nbsp;
 						<input class="in_btnc" type="button" value="취소" OnClick="history.back();" class="input_gr">
 					</div>

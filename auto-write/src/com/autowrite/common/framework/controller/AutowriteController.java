@@ -88,6 +88,12 @@ public class AutowriteController extends CommonController{
 		
 		setDefaultParameter(req, httpSession, null, param);
 		
+		String selectedContentsKey = req.getParameter("contentsSeqId");
+		
+		if ( selectedContentsKey != null && selectedContentsKey.length() > 0 ) {
+			  param.put("CONTENTS_SEQ_ID", selectedContentsKey);
+		}
+		
 		if ( userInfo != null ) {
 			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
 			param.put("WRITER_ID", userInfo.getId());
