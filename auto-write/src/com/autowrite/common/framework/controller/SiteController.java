@@ -92,6 +92,8 @@ public class SiteController extends CommonController{
 			param.put("MASTER_SEQ_ID", req.getParameter("master_seq_id"));
 			param.put("DOMAIN", req.getParameter("siteDomain"));
 			param.put("SITE_NAME", req.getParameter("siteName"));
+			param.put("SITE_ID", req.getParameter("siteId"));
+			param.put("SITE_PASSWD", req.getParameter("sitePasswd"));
 			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
 			param.put("WRITER_ID", userInfo.getId());
 			param.put("WRITER_IP", req.getRemoteAddr());
@@ -152,14 +154,6 @@ public class SiteController extends CommonController{
 		
 		BoardListEntity boardListEntity = siteService.modifySite(req, param);
 		List<BoardEntity> boardList = boardListEntity.getBoardList();
-		
-//		model.addObject("BoardList", boardList);
-//		model.addObject("category", req.getParameter("category"));
-//		model.addObject("BoardListEntity", boardListEntity);
-		
-//		RedirectView rv = new RedirectView("boardListView.do");
-//		rv.setExposeModelAttributes(true);
-//		rv.setAttributesMap(model.getModelMap());
 		
 		String redirectUrl = "boardListView.do?jsp=site/siteList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));

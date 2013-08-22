@@ -14,13 +14,11 @@ import com.autowrite.common.framework.dao.SiteDao;
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.AutowriteListEntity;
 import com.autowrite.common.framework.entity.BoardEntity;
+import com.autowrite.service.Autowriter;
 
 @Component
 public class AutowriteService extends CommonService{
 
-	@Autowired 
-    AdminService adminService;
-	
 	@Autowired
 	AutowriteDao autowriteDao;
 
@@ -59,6 +57,10 @@ public class AutowriteService extends CommonService{
 				if ( selectedContentsKey.equals(contentsEntity.getSeq_id()) ){
 					autowriteEntity.setSelectedContentsEntity(contentsEntity);
 				}
+			}
+		} else {
+			if ( contentsEntityList.size() > 0 ) {
+				autowriteEntity.setSelectedContentsEntity(contentsEntityList.get(0));
 			}
 		}
 		
@@ -107,13 +109,50 @@ public class AutowriteService extends CommonService{
 	public AutowriteListEntity writePrivateAutowrite(HttpServletRequest req, Map param) throws Exception {
 		setCondition(param);
 		
-		autowriteDao.writeAutowrite(param);
+		String[] siteSeqidArray = req.getParameterValues("siteSeqIdList");
+		
+		Long masterSeqId = autowriteDao.writeAutowriteMaster(param);
+		param.put("AUTOWRITE_MASTER_SEQ_ID", masterSeqId);
+		
+		for ( int ii = 0 ; ii < siteSeqidArray.length ; ii ++ ) {
+			param.put("SITE_SEQ_ID", siteSeqidArray[ii]);
+			
+			executeHttpConnection(param);
+			
+			param.put("TRY_COUNT", 1);
+			
+			autowriteDao.writeAutowriteSite(param);
+		}
 		
 		return listAutowrite(param);
 	}
 	
 	
 	
+	private Object executeHttpConnection(Map param) {
+		// TODO : 사이트 정보 가져오기.
+		BoardEntity siteInfo = null;
+//		siteInfo = (BoardEntity) siteDao.listMasterSite(param);
+		
+		String successYn = "Y";
+		String responseContent = "";
+		
+		Autowriter autowriter = new Autowriter();
+		try {
+			autowriter.executeHttpConnection(siteInfo);
+		} catch (Exception e) {
+			successYn = "N";
+			responseContent = e.getMessage();
+			e.printStackTrace();
+		}
+		
+		param.put("SUCCESS_YN", successYn);
+		param.put("RESPONSE_CONTENT", responseContent);
+		
+		return null;
+	}
+
+
 	public AutowriteListEntity modifyAutowrite(HttpServletRequest req, Map param) {
 		// TODO Auto-generated method stub
 		return null;

@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartRequest;
 
 import com.autowrite.common.config.Constant;
 import com.autowrite.common.framework.dao.BoardDao;
-import com.autowrite.common.framework.dao.BoardDaoImpl;
 import com.autowrite.common.framework.dao.UserDao;
 import com.autowrite.common.framework.entity.AttachmentEntity;
 import com.autowrite.common.framework.entity.BoardEntity;

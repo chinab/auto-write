@@ -27,18 +27,28 @@ public class AutowriteDaoImpl implements AutowriteDao {
 	}
 	
 	@Override
-	public void writeAutowrite(Map param) {
+	public Long writeAutowriteMaster(Map param) {
+		long seqId = 0;
+		
 		try {
-			sqlHelper.insert("autowrite.private.write", param);
+			seqId = (Long) sqlHelper.insert("autowrite.master.write", param);
 		} catch ( Exception e ){
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		
+		return seqId;
 	}
 
 	@Override
 	public AutowriteEntity autowriteView(Map param) {
 		return (AutowriteEntity) sqlHelper.queryForObject("autowrite.private.select", param);
+	}
+
+
+	@Override
+	public void writeAutowriteSite(Map param) {
+		sqlHelper.insert("autowrite.site.write", param);
 	}
 	
 }

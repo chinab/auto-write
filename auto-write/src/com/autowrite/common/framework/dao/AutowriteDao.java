@@ -7,7 +7,9 @@ import com.autowrite.common.framework.entity.AutowriteEntity;
 
 public interface AutowriteDao {
 
-	public abstract void writeAutowrite(Map param);
+	public abstract Long writeAutowriteMaster(Map param);
+	
+	public abstract void writeAutowriteSite(Map param);
 	
 	public abstract List<AutowriteEntity> listAutowrite(Map param);
 

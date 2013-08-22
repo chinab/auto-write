@@ -1,24 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
-<%
-response.setDateHeader("Expires",0);
-response.setHeader("Pragma", "no-cache");
-response.setHeader("Cache-Control", "no-cache");
-%>
-
-<%
-	// System.out.println("Login jsp2");
-	String error = (String)request.getAttribute("result");
-    if(error!=null){
-        String msg = "No user information found." ; 
-%>
-<script language="javascript">
-	alert("<%=msg%>");
-</script>
-<%
-    }
-%>
-
 
 <html>
 <head>
@@ -126,6 +107,30 @@ response.setHeader("Cache-Control", "no-cache");
 								</td>
 								<td class="subject">
 									<b> ex) www.naver.com</b>
+								</td>
+							</tr>
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>ID</b></td>
+								<td><img src="images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="siteId" class="s_id" type="text" size="65" style="width: 150px;">
+									&nbsp;
+									<b>해당 사이트의 사용자 ID를 입력하세요.</b>
+								</td>
+								<td class="subject">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>Password</b></td>
+								<td><img src="images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="sitePasswd" class="s_id" type="text" size="65" style="width: 150px;">
+									&nbsp;
+									<b>해당 사이트의 패스워드를 입력하세요.</b>
+								</td>
+								<td class="subject">
+									
 								</td>
 							</tr>
 

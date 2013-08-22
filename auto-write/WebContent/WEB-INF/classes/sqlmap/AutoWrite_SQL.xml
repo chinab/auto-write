@@ -83,7 +83,7 @@
 	
 	<statement id="site.private.write" parameterClass="java.util.HashMap">
 		insert into SITE_PRIVATE (
-			MASTER_SEQ_ID, DOMAIN, SITE_NAME, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
+			MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
 		) values (
 			#MASTER_SEQ_ID#, #DOMAIN#, #SITE_NAME#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
 		)
@@ -147,5 +147,19 @@
 		where
 			SEQ_ID = #SEQ_ID#
 	</statement>
+	
+	
+	<insert id="autowrite.master.write" parameterClass="java.util.HashMap" >
+	    <![CDATA[
+	        insert into $TABLE_NAME$ (
+				USER_SEQ_ID, USER_ID, TITLE, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, VISIT_TIME, WAITERESS_NAME, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+			) values (
+				#USER_SEQ_ID#, #USER_ID#, #TITLE#, #FACILITY_NAME#, #FACILITY_USER_NAME#, #FACILITY_PHONE#, #FACILITY_ADDRESS#, #FACILITY_HOME_PAGE#, #VISIT_TIME#, #WAITERESS_NAME#, #CONTENT#, #CATEGORY#, #TARGET_CATEGORY#, #REGION#, #HIT#, #RECOMMEND#, #REJECT#, #SECRET_YN#, #BLIND_YN#, #DEL_YN#, #WRITER_IP#, sysdate()
+			)
+	    ]]>
+	    <selectKey keyProperty="seqId" resultClass="Long">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
 	
 </sqlMap>

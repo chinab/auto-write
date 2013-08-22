@@ -42,14 +42,10 @@
 
 <script>
 	function autowriteWrite(){
+		alert("autowriteWrite");
+		
 		var frm = document.writeForm;
 		
-		if(frm.autowriteName.value.length == 0) {
-			alert("본문 이름을 입력하세요.");
-			frm.autowriteName.focus();
-			
-			return false;
-		}
 		if(frm.title.value.length == 0) {
 			alert("제목을 입력하세요.");
 			frm.title.focus();

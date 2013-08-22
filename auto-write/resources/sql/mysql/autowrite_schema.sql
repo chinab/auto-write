@@ -49,7 +49,11 @@ CREATE  TABLE `site_private` (
   `domain` VARCHAR(255) NULL ,
 
   `site_name` VARCHAR(255) NULL ,
-
+  
+  `site_private` VARCHAR(255) NULL ,
+  
+  `site_passwd` VARCHAR(255) NULL ,
+  
   `writer_seq_id` BIGINT NULL ,
 
   `writer_id` VARCHAR(45) NULL ,

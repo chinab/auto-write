@@ -147,63 +147,6 @@ public class AutowriteController extends CommonController{
 	}
 	
 	
-	@RequestMapping("/autowriteUpdate.do")
-	public ModelAndView doAutowriteModify(String p, HttpServletRequest req, ServletResponse res) throws Exception {
-		Map param;
-		param = new HashMap();
-		param.put("Code", "S");
-		param.put("Text", "Success");
-		
-		HttpSession httpSession = req.getSession(true);
-		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
-		
-		String secretYn = "N";
-		if ( req.getParameter("secret_yn") != null ){
-			secretYn = req.getParameter("secret_yn").toString();
-		}
-		
-		setDefaultParameter(req, httpSession, null, param);
-		
-		if ( userInfo != null ) {
-			param.put("SEQ_ID", req.getParameter("seqId"));
-			param.put("TITLE", req.getParameter("title"));
-			param.put("FACILITY_NAME", req.getParameter("facility_name"));
-			param.put("FACILITY_USER_NAME", req.getParameter("facility_user_name"));
-			param.put("FACILITY_PHONE", req.getParameter("facility_phone"));
-			param.put("FACILITY_ADDRESS", req.getParameter("facility_address"));
-			param.put("FACILITY_HOME_PAGE", req.getParameter("facility_home_page"));
-			param.put("VISIT_TIME", req.getParameter("visit_time"));
-			param.put("WAITERESS_NAME", req.getParameter("waiteress_name"));
-			param.put("CONTENT", req.getParameter("content").getBytes("UTF-8"));
-			param.put("TARGET_CATEGORY", req.getParameter("target_category"));
-			if ( req.getParameter("region") != null && req.getParameter("region").toString().length() > 0 ){
-				param.put("REGION", req.getParameter("region"));
-			}
-			param.put("SECRET_YN", req.getParameter("secretYn"));
-			param.put("BLIND_YN", req.getParameter("blindYn"));
-		} else {
-			throw new Exception("Login please.");
-		}
-		
-		
-		AutowriteListEntity boardListEntity = autowriteService.modifyAutowrite(req, param);
-		List<AutowriteEntity> boardList = boardListEntity.getAutowriteList();
-		
-//		model.addObject("AutowriteList", boardList);
-//		model.addObject("category", req.getParameter("category"));
-//		model.addObject("AutowriteListEntity", boardListEntity);
-		
-//		RedirectView rv = new RedirectView("boardListView.do");
-//		rv.setExposeModelAttributes(true);
-//		rv.setAttributesMap(model.getModelMap());
-		
-		String redirectUrl = "boardListView.do?jsp=autowrite/autowriteList";
-		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
-		
-		return model;
-	}
-	
-	
 	@RequestMapping("/autowriteView.do")
 	public ModelAndView autowriteView(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
 		ModelAndView model = null;
