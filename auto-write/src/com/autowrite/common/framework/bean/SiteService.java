@@ -72,10 +72,10 @@ public class SiteService extends CommonService{
 			e.printStackTrace();
 		}
 		
-		Long boardCount = siteDao.countListPrivateSite(param);
+		Long boardCount = siteDao.countListMasterSite(param);
 		listEntity.setTotalListCount(boardCount);
 		
-		List<SiteEntity> siteList = siteDao.listPrivateSite(param);
+		List<SiteEntity> siteList = siteDao.listMasterSite(param);
 		
 		listEntity.setSiteList(siteList);
 		

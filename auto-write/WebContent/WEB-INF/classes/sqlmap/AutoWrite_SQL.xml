@@ -66,11 +66,12 @@
 	<statement id="site.master.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
 		select @RNUM:=0, Q.* from (
 			select
-				SEQ_ID, DOMAIN, SITE_NAME, WRITE_URL, MODIFY_URL, DELETE_URL, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+				SEQ_ID, DOMAIN, SITE_NAME, SITE_ID_KEY, SITE_PASSWD_KEY, 
+				LOGIN_URL, WRITE_URL, MODIFY_URL, DELETE_URL, 
+				LOGIN_TYPE, WRITE_TYPE, MODIFY_TYPE, DELETE_TYPE, 
+				WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
 			from
 				SITE_MASTER
-			where
-				WRITER_SEQ_ID = #USER_SEQ_ID#
 			order by
 				WRITE_DATETIME desc
 		) Q
@@ -81,11 +82,27 @@
 			</isNotNull>
 	</statement>
 	
+	
 	<statement id="site.private.write" parameterClass="java.util.HashMap">
 		insert into SITE_PRIVATE (
 			MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
 		) values (
 			#MASTER_SEQ_ID#, #DOMAIN#, #SITE_NAME#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
+		)
+	</statement>
+	
+	
+	<statement id="site.master.write" parameterClass="java.util.HashMap">
+		insert into SITE_MASTER (
+			DOMAIN, SITE_NAME, SITE_ID_KEY, SITE_PASSWD_KEY, 
+			LOGIN_URL, WRITE_URL, MODIFY_URL, DELETE_URL, 
+			LOGIN_TYPE, WRITE_TYPE, MODIFY_TYPE, DELETE_TYPE, 
+			WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+		) values (
+			#DOMAIN#, #SITE_NAME#, #SITE_ID_KEY#, #SITE_PASSWD_KEY#,
+			#LOGIN_URL#, #WRITE_URL#, #MODIFY_URL#, #DELETE_URL#,
+			#LOGIN_TYPE#, #WRITE_TYPE#, #MODIFY_TYPE#, #DELETE_TYPE#,
+			#WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
 		)
 	</statement>
 	

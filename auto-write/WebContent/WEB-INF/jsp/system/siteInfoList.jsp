@@ -36,8 +36,7 @@
 		
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
-<table cellpadding="0" cellspacing="0" border="0" width="1000"
-	align="center" style="margin-top: 30px;">
+<table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
 		<jsp:include page="../include/leftSystem.jsp" flush="false" />
@@ -106,12 +105,11 @@
 
 
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="등록"
-							OnClick="javascript:location.href='jspView.do?jsp=site/siteWrite';" class="input_gr">&nbsp;&nbsp;<input
-							class="in_btnc2" type="button" value="수정"
-							OnClick="history.back();" class="input_gr">&nbsp;&nbsp;<input
-							class="in_btnc" type="button" value="삭제"
-							OnClick="history.back();" class="input_gr">
+						<input class="in_btn" type="button" value="등록" OnClick="javascript:location.href='jspView.do?jsp=system/siteInfoWrite';" class="input_gr">
+						&nbsp;&nbsp;
+						<input class="in_btnc2" type="button" value="수정" OnClick="alert('working');" class="input_gr">
+						&nbsp;&nbsp;
+						<input class="in_btnc" type="button" value="삭제" OnClick="alert('working');" class="input_gr">
 					</div>
 					
 					<!--페이지링크-->
