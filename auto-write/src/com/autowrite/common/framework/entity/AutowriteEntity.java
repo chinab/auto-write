@@ -3,9 +3,9 @@ package com.autowrite.common.framework.entity;
 import java.util.Calendar;
 import java.util.List;
 
-public class AutowriteEntity {
+public class AutowriteEntity extends CommonEntity {
 	private List<BoardEntity> contentsEntityList;
-	private List<BoardEntity> siteEntityList;
+	private List<SiteEntity> siteEntityList;
 	private BoardEntity selectedContentsEntity;
 	
 	private String seq_id;
@@ -34,16 +34,20 @@ public class AutowriteEntity {
 	// for log
 	private String autowrite_site_seq_id;
 	
+	// for http autowrite
+	private SiteEntity siteEntity;
+	
+	
 	public List<BoardEntity> getContentsEntityList() {
 		return contentsEntityList;
 	}
 	public void setContentsEntityList(List<BoardEntity> contentsEntityList) {
 		this.contentsEntityList = contentsEntityList;
 	}
-	public List<BoardEntity> getSiteEntityList() {
+	public List<SiteEntity> getSiteEntityList() {
 		return siteEntityList;
 	}
-	public void setSiteEntityList(List<BoardEntity> siteEntityList) {
+	public void setSiteEntityList(List<SiteEntity> siteEntityList) {
 		this.siteEntityList = siteEntityList;
 	}
 	public BoardEntity getSelectedContentsEntity() {
@@ -102,39 +106,6 @@ public class AutowriteEntity {
 	}
 	public String getWrite_datetime() {
 		return write_datetime;
-	}
-	public String getWriteBoardDateTime() {
-		Calendar calendar = Calendar.getInstance();
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH) + 1;
-		int day = calendar.get(Calendar.DATE);
-		String monthStr = null;
-		String dayStr = null;
-		
-		if ( month < 10 ) {
-			monthStr = "0" + month;
-		} else {
-			monthStr = "" + month;
-		}
-		
-		if ( day < 10 ) {
-			dayStr = "0" + day;
-		} else {
-			dayStr = "" + day;
-		}
-		
-		String dbDate = write_datetime.substring(0, 10);
-		String sysDate = year + "-" + monthStr + "-" + dayStr;
-		
-		if ( dbDate.equals(sysDate) ) {
-			return write_datetime.substring(11, 16);
-		} else {
-			if ( new Integer(write_datetime.substring(0, 4)) == year ) {
-				return write_datetime.substring(5, 10);
-			} else {
-				return dbDate;
-			}
-		}
 	}
 	public void setWrite_datetime(String write_datetime) {
 		this.write_datetime = write_datetime;
@@ -198,5 +169,11 @@ public class AutowriteEntity {
 	}
 	public void setAutowrite_site_seq_id(String autowrite_site_seq_id) {
 		this.autowrite_site_seq_id = autowrite_site_seq_id;
+	}
+	public SiteEntity getSiteEntity() {
+		return siteEntity;
+	}
+	public void setSiteEntity(SiteEntity siteEntity) {
+		this.siteEntity = siteEntity;
 	}
 }

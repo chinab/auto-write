@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ibatis.SqlMapClientTemplate;
 import org.springframework.stereotype.Component;
 
-import com.autowrite.common.framework.entity.AutowriteEntity;;
+import com.autowrite.common.framework.entity.AutowriteEntity;
 
 @Component
 public class AutowriteDaoImpl implements AutowriteDao {
@@ -80,5 +80,11 @@ public class AutowriteDaoImpl implements AutowriteDao {
 	@Override
 	public List<AutowriteEntity> listAutowriteLog(Map param) {
 		return (List<AutowriteEntity>)sqlHelper.queryForList("autowrite.log.list", param);
+	}
+
+
+	@Override
+	public AutowriteEntity getAutowriteInfo(Map param) {
+		return (AutowriteEntity) sqlHelper.queryForObject("autowrite.info.read", param);
 	}
 }

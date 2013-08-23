@@ -82,19 +82,7 @@
 <table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
-		<td width="220" valign="top">
-			<ul class="L_Menus" style="">
-			<li class="Menu_Title">자동등록<li>
-			<li class="Menu_tex"><a href="autowriteMasterList.do?jsp=autowrite/autowriteMasterList" onfocus="blur()" >자동등록 목록</a><li>
-			<li class="Menu_tex"><a href="autowriteWriteForm.do?jsp=autowrite/autowriteWrite" onfocus="blur()" >자동등록</a><li>
-			<li class="Menu_tex"><a href="jspView.do?jsp=jump/jumpList" onfocus="blur()" >JUMP</a><li>
-			</ul>
-		</td>
-
-
-			</div>
-		</td>
-
+		<jsp:include page="../include/leftAutowrite.jsp" flush="false" />
 
 		<!--우측컨-->
 		<td width="800" valign="top">

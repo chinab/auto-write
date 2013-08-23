@@ -14,6 +14,7 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -27,207 +28,133 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.RequestUserAgent;
 import org.apache.http.util.EntityUtils;
 
-import com.autowrite.common.framework.entity.BoardEntity;
+import com.autowrite.common.framework.entity.AutowriteEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
 
 public class Autowriter {
+	private DefaultHttpClient httpclient;
+	
+	private String domainUrl;
+	private List<Cookie> cookies;
+	
+	/**
+	 * 생성자
+	 */
+	public Autowriter(){
+		httpclient = new DefaultHttpClient();
 
-    public static void main(String[] args) throws Exception {
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        
 		httpclient.setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy() {
 			@Override
 			public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
 				long keepAlive = super.getKeepAliveDuration(response, context);
 				if (keepAlive == -1) {
-					// Keep connections alive 5 seconds if a keep-alive value
-					// has not be explicitly set by the server
 					keepAlive = 5000;
 				}
 				return keepAlive;
 			}
 		});
-		
+
 		httpclient.removeRequestInterceptorByClass(RequestUserAgent.class);
 		httpclient.addRequestInterceptor(new HttpRequestInterceptor() {
 			public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
 				request.setHeader(HTTP.USER_AGENT, "My-own-client");
 			}
 		});
-
-        try {
-        	String domainUrl = "http://www.hwaru1.net";
-        	HttpGet httpget = new HttpGet(domainUrl);
-        	
-            HttpResponse response = httpclient.execute(httpget);
-            HttpEntity entity = response.getEntity();
-
-            System.out.println("Login form get: " + response.getStatusLine());
-            EntityUtils.consume(entity);
-
-            System.out.println("Initial set of cookies:");
-            List<Cookie> cookies = httpclient.getCookieStore().getCookies();
-            if (cookies.isEmpty()) {
-                System.out.println("None");
-            } else {
-                for (int i = 0; i < cookies.size(); i++) {
-                    System.out.println("- " + cookies.get(i).toString());
-                }
-            }
-            
-            String loginUrl = "http://www.hwaru1.net/jekyll/dologin.do";
-            HttpPost httpost = new HttpPost(loginUrl);
-            
-            List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-	        nvps.add(new BasicNameValuePair("u_id", "kshrabbit"));
-	        nvps.add(new BasicNameValuePair("password", "!lim0301"));
-	    	
-	        String jsonStr = "{'resultCode':'success', 'errorMsg': '','header':{'userNm':'ddakker'},'resultList':[{'dlvrAddr1': '서울~'},{'dlvrAddr1': '충남~'}]}";
-	        JSONObject json = new JSONObject();
-	        json.put("u_id", "hwaru");
-	        json.put("password", "!lim0301");
-	        
-	    	nvps.add(new BasicNameValuePair("p", json.toString()));
-            
-	        
-            httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
-
-            response = httpclient.execute(httpost);
-            
-            entity = response.getEntity();
-            
-            printResponseBody(entity);
-            
-            System.out.println("Login form get: " + response.getStatusLine());
-            EntityUtils.consume(entity);
-
-            System.out.println("Post logon cookies:");
-            cookies = httpclient.getCookieStore().getCookies();
-            if (cookies.isEmpty()) {
-                System.out.println("None");
-            } else {
-                for (int i = 0; i < cookies.size(); i++) {
-                    System.out.println("- " + cookies.get(i).toString());
-                }
-            }
-            
-            String writeUrl = "http://www.hwaru1.net/jekyll/writeBoard.do";
-            
-            httpost = new HttpPost(writeUrl);
-            List <NameValuePair> nvps2 = setNvpsParams();
-            httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
-            
-            response = httpclient.execute(httpost);
-            entity = response.getEntity();
-            
-            printResponseBody(entity);
-        	
-//        	for ( int ii = 0 ; ii < conLen ; ii ++ ){
-//        		int data = content.read();
-//        		System.out.print((char)data);
-//        	}
-        	
-            System.out.println("Post logon cookies:");
-        } finally {
-            // When HttpClient instance is no longer needed,
-            // shut down the connection manager to ensure
-            // immediate deallocation of all system resources
-            httpclient.getConnectionManager().shutdown();
-        }
-    }
-    
-	public void executeHttpConnection(BoardEntity siteInfo) throws Exception {
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-
-		httpclient.setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy() {
-			@Override
-			public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
-				long keepAlive = super.getKeepAliveDuration(response, context);
-				if (keepAlive == -1) {
-					keepAlive = 5000;
-				}
-				return keepAlive;
-			}
-		});
-
-		httpclient.removeRequestInterceptorByClass(RequestUserAgent.class);
-		httpclient.addRequestInterceptor(new HttpRequestInterceptor() {
-			public void process(HttpRequest request, HttpContext context)
-					throws HttpException, IOException {
-				request.setHeader(HTTP.USER_AGENT, "My-own-client");
-			}
-		});
-
+	}
+	
+    public void executeHttpConnection(AutowriteEntity autowriteInfo) throws Exception {
 		try {
-			String domainUrl = "http://www.hwaru1.net";
-			HttpGet httpget = new HttpGet(domainUrl);
+			setCookie(autowriteInfo);
+			
+			loginJson(autowriteInfo);
 
-			HttpResponse response = httpclient.execute(httpget);
-			HttpEntity entity = response.getEntity();
-
-			System.out.println("Login form get: " + response.getStatusLine());
-			EntityUtils.consume(entity);
-
-			System.out.println("Initial set of cookies:");
-			List<Cookie> cookies = httpclient.getCookieStore().getCookies();
-			if (cookies.isEmpty()) {
-				System.out.println("None");
-			} else {
-				for (int i = 0; i < cookies.size(); i++) {
-					System.out.println("- " + cookies.get(i).toString());
-				}
-			}
-
-			String loginUrl = "http://www.hwaru1.net/jekyll/dologin.do";
-			HttpPost httpost = new HttpPost(loginUrl);
-
-			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-			nvps.add(new BasicNameValuePair("u_id", "kshrabbit"));
-			nvps.add(new BasicNameValuePair("password", "!lim0301"));
-
-			JSONObject json = new JSONObject();
-			json.put("u_id", "hwaru");
-			json.put("password", "!lim0301");
-
-			nvps.add(new BasicNameValuePair("p", json.toString()));
-
-			httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
-
-			response = httpclient.execute(httpost);
-
-			entity = response.getEntity();
-
-			printResponseBody(entity);
-
-			System.out.println("Login form get: " + response.getStatusLine());
-			EntityUtils.consume(entity);
-
-			System.out.println("Post logon cookies:");
-			cookies = httpclient.getCookieStore().getCookies();
-			if (cookies.isEmpty()) {
-				System.out.println("None");
-			} else {
-				for (int i = 0; i < cookies.size(); i++) {
-					System.out.println("- " + cookies.get(i).toString());
-				}
-			}
-
-			String writeUrl = "http://www.hwaru1.net/jekyll/writeBoard.do";
-
-			httpost = new HttpPost(writeUrl);
-			List<NameValuePair> nvps2 = setNvpsParams();
-			httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
-
-			response = httpclient.execute(httpost);
-			entity = response.getEntity();
-
-			printResponseBody(entity);
-
-			System.out.println("Post logon cookies:");
+			writeBoard(autowriteInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		} finally {
 			httpclient.getConnectionManager().shutdown();
+		}
+	}
+
+	private void writeBoard(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
+		String writeUrl = "http://www.hwaru1.net/jekyll/writeBoard.do";
+
+		HttpPost httpost = new HttpPost(writeUrl);
+		List<NameValuePair> nvps2 = setNvpsParams();
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
+
+		HttpResponse response = httpclient.execute(httpost);
+		HttpEntity entity = response.getEntity();
+
+		printResponseBody(entity);
+
+		System.out.println("Post logon cookies:");
+	}
+
+	private void setCookie(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, Exception {
+		domainUrl = autowriteInfo.getSiteEntity().getDomain();
+		
+		HttpGet httpget = new HttpGet(domainUrl);
+
+		HttpResponse response = httpclient.execute(httpget);
+		HttpEntity entity = response.getEntity();
+
+		System.out.println("Login form get: " + response.getStatusLine());
+		EntityUtils.consume(entity);
+
+		System.out.println("Initial set of cookies:");
+		cookies = httpclient.getCookieStore().getCookies();
+		if (cookies.isEmpty()) {
+			System.out.println("Login Failed. Cookie does not exist.");
+			throw new Exception("Login Failed. Cookie does not exist.");
+		} else {
+			for (int i = 0; i < cookies.size(); i++) {
+				System.out.println("- " + cookies.get(i).toString());
+			}
+		}
+	}
+
+	private void loginJson(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
+		SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+//		String loginUrl = "http://www.hwaru1.net/jekyll/dologin.do";
+		String loginUrl = siteInfo.getLogin_url();
+		HttpPost httpost = new HttpPost(loginUrl);
+
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+//			nvps.add(new BasicNameValuePair("u_id", "kshrabbit"));
+//			nvps.add(new BasicNameValuePair("password", "!lim0301"));
+		nvps.add(new BasicNameValuePair("u_id", siteInfo.getSite_id()));
+		nvps.add(new BasicNameValuePair("password", siteInfo.getSite_passwd()));
+		
+		
+		JSONObject json = new JSONObject();
+		json.put("u_id", "hwaru");
+		json.put("password", "!lim0301");
+
+		nvps.add(new BasicNameValuePair("p", json.toString()));
+
+		httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
+		
+		HttpResponse response = httpclient.execute(httpost);
+		HttpEntity entity = response.getEntity();
+		
+		response = httpclient.execute(httpost);
+		entity = response.getEntity();
+
+		printResponseBody(entity);
+
+		System.out.println("Login form get: " + response.getStatusLine());
+		EntityUtils.consume(entity);
+
+		System.out.println("Post logon cookies:");
+		cookies = httpclient.getCookieStore().getCookies();
+		if (cookies.isEmpty()) {
+			System.out.println("None");
+		} else {
+			for (int i = 0; i < cookies.size(); i++) {
+				System.out.println("- " + cookies.get(i).toString());
+			}
 		}
 	}
 

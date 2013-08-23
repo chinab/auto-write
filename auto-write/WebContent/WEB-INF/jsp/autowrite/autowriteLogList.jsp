@@ -9,12 +9,12 @@
 <%@ page import="com.autowrite.common.framework.entity.ConditionEntity"%>
 
 <%
-	AutowriteListEntity autowriteMasterListEntity = (AutowriteListEntity) request.getAttribute("AutowriteListEntity");
+	AutowriteListEntity autowriteLogListEntity = (AutowriteListEntity) request.getAttribute("AutowriteListEntity");
 	
-	List<AutowriteEntity> autowriteMasterList = autowriteMasterListEntity.getAutowriteList();
+	List<AutowriteEntity> autowriteLogList = autowriteLogListEntity.getAutowriteList();
 	
-	String searchKey = autowriteMasterListEntity.writeSearchKey();
-	String searchValue = autowriteMasterListEntity.writeSearchValue();
+	String searchKey = autowriteLogListEntity.writeSearchKey();
+	String searchValue = autowriteLogListEntity.writeSearchValue();
 %>
 
 <!-- 헤더 스크립트 -->
@@ -30,15 +30,15 @@
 	<tr>
 		<!--좌측메뉴-->
 		<jsp:include page="../include/leftAutowrite.jsp" flush="false" />
-
+		
 		<!--우측컨-->
 		<td width="800" valign="top">
 			<div style="margin-left: 30px; width: 750px;">
 
-				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">자동등록 > 자동등록목록</div>
+				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">자동등록 > 자동등록목록 > 자동등록현황 > 자동등록로그</div>
 				<div style="width: 100%; margin-top: 30px;">
 					<img src="images/title_dot.gif"/>
-					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">자동등록목록</span>
+					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">자동등록로그</span>
 				</div>
 
 				<div style="margin-top: 5px;">
@@ -48,37 +48,33 @@
 						<colgroup>
 							<col width="70" />
 							<col width="70" />
+							<col width="100" />
+							<col width="100" />
+							<col width="100" />
 							<col width="/" />
-							<col width="100" />
-							<col width="100" />
-							<col width="100" />
 						</colgroup>
 						<tbody>
 
 							<tr>
 								<th>선택</th>
 								<th>순번</th>
-								<th>제목</th>
+								<th>사이트명</th>
 								<th>실행일시</th>
-								<th>성공</th>
-								<th>실패</th>
+								<th>성공여부</th>
+								<th>응답내용</th>
 							</tr>
 							
 							<%
-								for ( int ii = 0 ; ii < autowriteMasterList.size() ; ii ++ ) {
-									AutowriteEntity autowriteEntity = autowriteMasterList.get(ii);
+								for ( int ii = 0 ; ii < autowriteLogList.size() ; ii ++ ) {
+									AutowriteEntity autowriteEntity = autowriteLogList.get(ii);
 							%>
 							<tr>
 								<td><input type=checkbox value=''></td>
-								<td><%=autowriteEntity.getSeq_id()%></td>
-								<td>
-									<a href="autowriteSiteList.do?jsp=autowrite/autowriteSiteList&autowriteMasterSeqid=<%=autowriteEntity.getSeq_id()%>">
-										<%=autowriteEntity.getTitle()%>
-									</a>
-								</td>
-								<td><%=autowriteEntity.getWriteBoardDateTime(autowriteEntity.getWrite_datetime())%></td>
-								<td><%=autowriteEntity.getSuccess_count()%></td>
-								<td><%=autowriteEntity.getFail_count()%></td>
+								<td><%=autowriteLogList.size() - ii%></td>
+								<td><%=autowriteEntity.getSite_name()%></td>
+								<td><%=autowriteEntity.getTry_datetime()%></td>
+								<td><%=autowriteEntity.getSuccess_yn()%></td>
+								<td><%=autowriteEntity.getResponse_content()%></td>
 							</tr>
 							<%
 								}
@@ -91,8 +87,6 @@
 
 
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="재실행" OnClick="popup_check();" class="input_gr">
-						&nbsp;&nbsp;
 						<input class="in_btnc" type="button" value="뒤로가기" OnClick="history.back();" class="input_gr">
 					</div>
 				</div>

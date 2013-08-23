@@ -14,6 +14,8 @@ import com.autowrite.common.framework.dao.SiteDao;
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.AutowriteListEntity;
 import com.autowrite.common.framework.entity.BoardEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
+import com.autowrite.common.framework.entity.SiteParameterEntity;
 import com.autowrite.service.Autowriter;
 
 @Component
@@ -43,7 +45,7 @@ public class AutowriteService extends CommonService{
 		
 		AutowriteEntity autowriteEntity = new AutowriteEntity();
 		
-		List<BoardEntity> siteEntityList = siteDao.listPrivateSite(param);
+		List<SiteEntity> siteEntityList = siteDao.listPrivateSite(param);
 		autowriteEntity.setSiteEntityList(siteEntityList);
 		
 		List<BoardEntity> contentsEntityList = contentsDao.listPrivateContents(param);
@@ -176,27 +178,65 @@ public class AutowriteService extends CommonService{
 	
 	
 	
-	private Object executeHttpConnection(Map param) {
-		// TODO : 사이트 정보 가져오기.
-		BoardEntity siteInfo = null;
-//		siteInfo = (BoardEntity) siteDao.listMasterSite(param);
-		
+	private void executeHttpConnection(Map param) {
 		String successYn = "Y";
 		String responseContent = "";
 		
-		Autowriter autowriter = new Autowriter();
-		try {
-//			autowriter.executeHttpConnection(siteInfo);
-		} catch (Exception e) {
+		AutowriteEntity autowriteInfo = new AutowriteEntity();
+		
+		autowriteInfo.setTitle(param.get("TITLE").toString());
+		autowriteInfo.setContent(param.get("CONTENT").toString());
+//		autowriteDao.getAutowriteInfo(param);
+		
+		SiteEntity siteInfo = siteDao.getAutowriteSiteInfo(param);
+		
+		if ( siteInfo == null ){
 			successYn = "N";
-			responseContent = e.getMessage();
-			e.printStackTrace();
+			responseContent = "사이트 마스터 정보 가져오기 실패.";
+		} else if ( siteInfo.getMaster_seq_id() == null ){
+			successYn = "N";
+			responseContent = "사이트 마스터 연결이 필요합니다.";
+		} else {
+			param.put("SITE_MASTER_SEQ_ID", siteInfo.getMaster_seq_id());
+			List<SiteParameterEntity> siteParamList = siteDao.listSiteParameter(param);
+			
+			for ( int ii = 0 ; ii < siteParamList.size() ; ii ++ ) {
+				SiteParameterEntity siteParam = siteParamList.get(ii);
+				String mode = siteParam.getMode();
+				String pKey = siteParam.getP_key();
+				String pValue = siteParam.getP_value();
+				
+				if ( "LOGIN".equals(mode) ) {
+					siteInfo.getLoginParam().put(pKey, pValue);
+				} else if ( "WRITE".equals(mode) ) {
+					siteInfo.getWriteParam().put(pKey, pValue);
+				} else if ( "MODIFY".equals(mode) ) {
+					siteInfo.getModifyParam().put(pKey, pValue);
+				} else if ( "DELETE".equals(mode) ) {
+					siteInfo.getDeleteParam().put(pKey, pValue);
+				} else {
+					successYn = "N";
+					responseContent = "[" + mode + "] 모드는 설정되어 있지 않습니다.";
+				}
+				
+			}
+			
+			autowriteInfo.setSiteEntity(siteInfo);
+		}
+		
+		if ( "Y".equals(successYn) ) {
+			Autowriter autowriter = new Autowriter();
+			try {
+				autowriter.executeHttpConnection(autowriteInfo);
+			} catch (Exception e) {
+				successYn = "N";
+				responseContent = e.getMessage();
+				e.printStackTrace();
+			}
 		}
 		
 		param.put("SUCCESS_YN", successYn);
 		param.put("RESPONSE_CONTENT", responseContent);
-		
-		return null;
 	}
 
 

@@ -86,10 +86,11 @@ response.setHeader("Cache-Control", "no-cache");
 				//alert(httpRequest.responseText);
 	
 				var data = eval('(' + httpRequest.responseText + ')');
-				if(data["Code"]!="S")
+				if(data["Code"]!="S") {
 					alert(data["Text"]);
-				else {
-					location.href = "jspView.do?jsp=main/main";
+				} else {
+					location.href = "autowriteMasterList.do?jsp=autowrite/autowriteMasterList";
+					// location.href = "jspView.do?jsp=main/main";
 				}
 			}else alert('err');
 		}

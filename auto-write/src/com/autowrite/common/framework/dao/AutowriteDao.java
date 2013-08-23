@@ -24,4 +24,6 @@ public interface AutowriteDao {
 	public abstract Long countListAutowriteLog(Map param);
 
 	public abstract List<AutowriteEntity> listAutowriteLog(Map param);
+
+	public abstract AutowriteEntity getAutowriteInfo(Map param);
 }

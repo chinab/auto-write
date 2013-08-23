@@ -20,8 +20,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.autowrite.common.framework.bean.SiteService;
 import com.autowrite.common.framework.dao.UserDao;
-import com.autowrite.common.framework.entity.BoardEntity;
-import com.autowrite.common.framework.entity.BoardListEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
+import com.autowrite.common.framework.entity.SiteListEntity;
 import com.autowrite.common.framework.entity.UserEntity;
 
 @Controller
@@ -63,14 +63,46 @@ public class SiteController extends CommonController{
 		
 		setDefaultParameter(req, e, model, param);
 		
-		BoardListEntity boardListEntity = siteService.listPrivateSite(param);
-		List<BoardEntity> boardList = boardListEntity.getBoardList();
+		SiteListEntity siteListEntity = siteService.listPrivateSite(param);
+		List<SiteEntity> siteList = siteListEntity.getSiteList();
 		
-		boardListEntity.setSearchKey(searchKey);
-		boardListEntity.setSearchValue(searchValue);
+		siteListEntity.setSearchKey(searchKey);
+		siteListEntity.setSearchValue(searchValue);
 		
-		model.addObject("SiteList", boardList);
-		model.addObject("SiteListEntity", boardListEntity);
+		model.addObject("SiteList", siteList);
+		model.addObject("SiteListEntity", siteListEntity);
+		
+		return model;
+	}
+	
+	
+	@RequestMapping("/siteInfoList.do")
+	public ModelAndView siteInfoList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+		ModelAndView model = null;
+		
+		model = setJsp(req, "system/siteList");
+		
+		Map param = new HashMap();
+		
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		if ( searchKey != null && searchKey.length() > 0) {
+			param.put("SEARCH_KEY", searchKey);
+		}
+		if ( searchValue != null && searchValue.toString().length() > 0 ) {
+			param.put("SEARCH_VALUE", searchValue);
+		}
+		
+		setDefaultParameter(req, e, model, param);
+		
+		SiteListEntity siteListEntity = siteService.listMasterSite(param);
+		List<SiteEntity> siteList = siteListEntity.getSiteList();
+		
+		siteListEntity.setSearchKey(searchKey);
+		siteListEntity.setSearchValue(searchValue);
+		
+		model.addObject("SiteList", siteList);
+		model.addObject("SiteListEntity", siteListEntity);
 		
 		return model;
 	}
@@ -102,8 +134,8 @@ public class SiteController extends CommonController{
 			throw new Exception("Login please.");
 		}
 		
-		BoardListEntity siteListEntity = siteService.writePrivateSite(req, param);
-		List<BoardEntity> boardList = siteListEntity.getBoardList();
+		SiteListEntity siteListEntity = siteService.writePrivateSite(req, param);
+		List<SiteEntity> siteList = siteListEntity.getSiteList();
 		
 		
 		String redirectUrl = "siteList.do?jsp=site/siteList";
@@ -152,10 +184,10 @@ public class SiteController extends CommonController{
 		}
 		
 		
-		BoardListEntity boardListEntity = siteService.modifySite(req, param);
-		List<BoardEntity> boardList = boardListEntity.getBoardList();
+//		SiteListEntity siteListEntity = siteService.modifySite(req, param);
+//		List<SiteEntity> siteList = siteListEntity.getSiteList();
 		
-		String redirectUrl = "boardListView.do?jsp=site/siteList";
+		String redirectUrl = "siteListView.do?jsp=site/siteList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
 		
 		return model;

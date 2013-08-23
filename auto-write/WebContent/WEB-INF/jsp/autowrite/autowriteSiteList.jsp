@@ -9,12 +9,12 @@
 <%@ page import="com.autowrite.common.framework.entity.ConditionEntity"%>
 
 <%
-	AutowriteListEntity autowriteMasterListEntity = (AutowriteListEntity) request.getAttribute("AutowriteListEntity");
+	AutowriteListEntity autowriteSiteListEntity = (AutowriteListEntity) request.getAttribute("AutowriteListEntity");
 	
-	List<AutowriteEntity> autowriteMasterList = autowriteMasterListEntity.getAutowriteList();
+	List<AutowriteEntity> autowriteSiteList = autowriteSiteListEntity.getAutowriteList();
 	
-	String searchKey = autowriteMasterListEntity.writeSearchKey();
-	String searchValue = autowriteMasterListEntity.writeSearchValue();
+	String searchKey = autowriteSiteListEntity.writeSearchKey();
+	String searchValue = autowriteSiteListEntity.writeSearchValue();
 %>
 
 <!-- 헤더 스크립트 -->
@@ -29,15 +29,7 @@
 <table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
-		<td width="220" valign="top">
-			<ul class="L_Menus" style="">
-			<li class="Menu_Title">자동등록<li>
-			<li class="Menu_tex"><a href="autowriteMasterList.do?jsp=autowrite/autowriteMasterList" onfocus="blur()" >자동등록 목록</a><li>
-			<li class="Menu_tex"><a href="autowriteWriteForm.do?jsp=autowrite/autowriteWrite" onfocus="blur()" >자동등록</a><li>
-			<li class="Menu_tex"><a href="jspView.do?jsp=jump/jumpList" onfocus="blur()" >JUMP</a><li>
-			</ul>
-		</td>
-
+		<jsp:include page="../include/leftAutowrite.jsp" flush="false" />
 
 		<!--우측컨-->
 		<td width="800" valign="top">
@@ -55,34 +47,38 @@
 					<table class="list01">
 						<colgroup>
 							<col width="70" />
-							<col width="70" />
+							<col width="100" />
+							<col width="100" />
+							<col width="100" />
+							<col width="100" />
 							<col width="/" />
-							<col width="100" />
-							<col width="100" />
-							<col width="100" />
 						</colgroup>
 						<tbody>
 
 							<tr>
-								<th>선택</th>
 								<th>순번</th>
 								<th>사이트명</th>
 								<th>실행일시</th>
 								<th>성공여부</th>
 								<th>등록시도회수</th>
+								<th>최종응답</th>
 							</tr>
 							
 							<%
-								for ( int ii = 0 ; ii < autowriteMasterList.size() ; ii ++ ) {
-									AutowriteEntity autowriteEntity = autowriteMasterList.get(ii);
+								for ( int ii = 0 ; ii < autowriteSiteList.size() ; ii ++ ) {
+									AutowriteEntity autowriteEntity = autowriteSiteList.get(ii);
 							%>
 							<tr>
-								<td><input type=checkbox value=''></td>
-								<td><%=autowriteEntity.getSeq_id()%></td>
-								<td><%=autowriteEntity.getSite_name()%></td>
+								<td><%=autowriteSiteList.size() - ii%></td>
+								<td>
+									<a href="autowriteLogList.do?jsp=autowrite/autowriteLogList&autowriteSiteSeqid=<%=autowriteEntity.getSeq_id()%>&autowriteMasterSeqid=<%=autowriteEntity.getAutowrite_master_seq_id()%>">
+										<%=autowriteEntity.getSite_name()%>
+									</a>
+								</td>
 								<td><%=autowriteEntity.getTry_datetime()%></td>
 								<td><%=autowriteEntity.getSuccess_yn()%></td>
 								<td><%=autowriteEntity.getTry_count()%></td>
+								<td><%=autowriteEntity.getResponse_content()%></td>
 							</tr>
 							<%
 								}
@@ -95,11 +91,9 @@
 
 
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="자동등록"
-							OnClick="popup_check();" class="input_gr">&nbsp;&nbsp;<input
-							class="in_btnc" type="button" value="JUMP"
-							OnClick="history.back();" class="input_gr">
-
+						<input class="in_btn" type="button" value="재실행" OnClick="popup_check();" class="input_gr">
+						&nbsp;&nbsp;
+						<input class="in_btnc" type="button" value="뒤로가기" OnClick="history.back();" class="input_gr">
 					</div>
 				</div>
 

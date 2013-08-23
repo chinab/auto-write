@@ -6,11 +6,25 @@ CREATE  TABLE `site_master` (
 
   `site_name` VARCHAR(255) NULL ,
 
+  `site_id_key` VARCHAR(255) NULL ,
+
+  `site_passwd_key` VARCHAR(255) NULL ,
+
+  `login_url` VARCHAR(255) NULL ,
+
   `write_url` VARCHAR(255) NULL ,
 
   `modify_url` VARCHAR(255) NULL ,
 
   `delete_url` VARCHAR(255) NULL ,
+
+  `login_type` VARCHAR(255) NULL ,
+
+  `write_type` VARCHAR(255) NULL ,
+
+  `modify_type` VARCHAR(255) NULL ,
+
+  `delete_type` VARCHAR(255) NULL ,
 
   `writer_seq_id` BIGINT NULL ,
 

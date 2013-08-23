@@ -23,7 +23,7 @@
 	</statement>
 	
 	
-	<statement id="site.private.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
+	<statement id="site.private.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
 		select @RNUM:=0, Q.* from (
 			select
 				SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
@@ -63,7 +63,7 @@
 	</statement>
 	
 	
-	<statement id="site.master.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.BoardEntity">
+	<statement id="site.master.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
 		select @RNUM:=0, Q.* from (
 			select
 				SEQ_ID, DOMAIN, SITE_NAME, WRITE_URL, MODIFY_URL, DELETE_URL, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
@@ -87,6 +87,18 @@
 		) values (
 			#MASTER_SEQ_ID#, #DOMAIN#, #SITE_NAME#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
 		)
+	</statement>
+	
+	
+	<statement id="site.parameter.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteParameterEntity">
+		select
+			SEQ_ID, MASTER_SEQ_ID, MODE, P_KEY, P_VALUE
+		from
+			SITE_PARAMETER
+		where
+			MASTER_SEQ_ID = #SITE_MASTER_SEQ_ID#
+		order by
+			SEQ_ID desc
 	</statement>
 	
 	
@@ -253,7 +265,7 @@
 		select @RNUM:=0, Q.* from (
 			select
 				SEQ_ID, AUTOWRITE_MASTER_SEQ_ID, SITE_SEQ_ID, SUCCESS_YN, RESPONSE_CONTENT, TRY_COUNT, TRY_DATETIME
-				, (select SITE_NAME from SITE_PRIVATE where SEQ_ID = SITE_SEQ_ID) as SITE_NAME
+				, (select SITE_NAME from SITE_PRIVATE where SEQ_ID = S.SITE_SEQ_ID) as SITE_NAME
 			from
 				AUTOWRITE_SITE S
 			where
@@ -295,8 +307,9 @@
 		select @RNUM:=0, Q.* from (
 			select
 				SEQ_ID, AUTOWRITE_MASTER_SEQ_ID, AUTOWRITE_SITE_SEQ_ID, SITE_SEQ_ID, SUCCESS_YN, RESPONSE_CONTENT, TRY_DATETIME
+				, (select SITE_NAME from SITE_PRIVATE where SEQ_ID = L.SITE_SEQ_ID) as SITE_NAME
 			from
-				AUTOWRITE_LOG
+				AUTOWRITE_LOG L
 			where
 				AUTOWRITE_MASTER_SEQ_ID = #AUTOWRITE_MASTER_SEQ_ID#
 				AND AUTOWRITE_SITE_SEQ_ID = #AUTOWRITE_SITE_SEQ_ID#
@@ -310,5 +323,16 @@
 			</isNotNull>
 	</statement>
 	
+	<statement id="autowrite.site.info.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
+		select
+			P.SEQ_ID, M.SEQ_ID AS MASTER_SEQ_ID, P.DOMAIN, P.SITE_NAME, P.SITE_ID, P.SITE_PASSWD, P.WRITER_SEQ_ID, P.WRITER_ID, P.WRITE_DATETIME
+			, M.LOGIN_URL, M.WRITE_URL, M.MODIFY_URL, M.DELETE_URL, M.LOGIN_TYPE, M.WRITE_TYPE, M.MODIFY_TYPE, M.DELETE_TYPE
+			, M.SITE_ID_KEY, M.SITE_PASSWD_KEY
+		from
+			SITE_MASTER M, SITE_PRIVATE P
+		where
+			M.SEQ_ID = P.MASTER_SEQ_ID
+			AND P.SEQ_ID = #SITE_SEQ_ID#
+	</statement>
 	
 </sqlMap>

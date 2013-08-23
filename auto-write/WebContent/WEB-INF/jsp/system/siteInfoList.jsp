@@ -21,9 +21,6 @@
 %>
 
 <html>
-<head>
-<title>자동등록</title>
-</head>
 
 <!-- 헤더 스크립트 -->
 <jsp:include page="../include/header.jsp" flush="false" />
@@ -43,17 +40,7 @@
 	align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
-		<td width="220" valign="top">
-
-			<ul class="L_Menus" style="">
-				<li class="Menu_Title">사이트설정
-				<li>
-				<li class="Menu_tex"><a href="siteList.do?jsp=site/siteList" onfocus="blur()">사이트리스트</a>
-				<li>
-				<li class="Menu_tex"><a href="jspView.do?jsp=site/siteWrite" onfocus="blur()">사이트등록</a>
-				<li>
-			</ul>
-		</td>
+		<jsp:include page="../include/leftSystem.jsp" flush="false" />
 
 
 		<!--우측컨-->
@@ -61,10 +48,10 @@
 			<div style="margin-left: 30px; width: 750px;">
 
 				<div
-					style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">사이트 설정 > 사이트리스트</div>
+					style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">SYSTEM > 사이트마스터</div>
 				<div style="width: 100%; margin-top: 30px;">
 					<img src="images/title_dot.gif">
-					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">사이트리스트</span>
+					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">사이트마스터</span>
 				</div>
 
 				<div style="margin-top: 5px;">
@@ -129,7 +116,7 @@
 					
 					<!--페이지링크-->
 					<div class="paging">
-						<%=siteListEntity.getPagination("listSite", null, siteListEntity.getPageNum())%>
+						<%=siteListEntity.getPagination("listBoard", null, siteListEntity.getPageNum())%>
 					</div>
 				</div>
 

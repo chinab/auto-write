@@ -137,7 +137,7 @@ public class AutowriteController extends CommonController{
 		param.put("AUTOWRITE_MASTER_SEQ_ID", autowriteMasterSeqid);
 		
 		String autowriteSiteSeqid = req.getParameter("autowriteSiteSeqid");
-		param.put("AUTOWRITE_SITE_SEQ_ID", autowriteMasterSeqid);
+		param.put("AUTOWRITE_SITE_SEQ_ID", autowriteSiteSeqid);
 		
 		AutowriteListEntity autowriteListEntity = autowriteService.listAutowriteLog(param);
 		List<AutowriteEntity> autowriteList = autowriteListEntity.getAutowriteList();

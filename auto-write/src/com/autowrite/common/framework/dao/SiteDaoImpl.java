@@ -8,8 +8,10 @@ import org.springframework.orm.ibatis.SqlMapClientTemplate;
 import org.springframework.stereotype.Component;
 
 import com.autowrite.common.framework.entity.AttachmentEntity;
-import com.autowrite.common.framework.entity.BoardEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
 import com.autowrite.common.framework.entity.PaymentMasterEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
+import com.autowrite.common.framework.entity.SiteParameterEntity;
 
 @Component
 public class SiteDaoImpl implements SiteDao {
@@ -24,8 +26,8 @@ public class SiteDaoImpl implements SiteDao {
 
 	
 	@Override
-	public List<BoardEntity> listPrivateSite(Map param) {
-		return (List<BoardEntity>)sqlHelper.queryForList("site.private.list", param);
+	public List<SiteEntity> listPrivateSite(Map param) {
+		return (List<SiteEntity>)sqlHelper.queryForList("site.private.list", param);
 	}
 	
 	@Override
@@ -35,8 +37,8 @@ public class SiteDaoImpl implements SiteDao {
 
 	
 	@Override
-	public List<BoardEntity> listMasterSite(Map param) {
-		return (List<BoardEntity>)sqlHelper.queryForList("site.master.list", param);
+	public List<SiteEntity> listMasterSite(Map param) {
+		return (List<SiteEntity>)sqlHelper.queryForList("site.master.list", param);
 	}
 	
 	@Override
@@ -50,13 +52,20 @@ public class SiteDaoImpl implements SiteDao {
 	}
 
 	@Override
-	public List<BoardEntity> listBoard(Map param) {
-		return sqlHelper.queryForList("board.list", param);
+	public SiteEntity readSite(Map param) {
+		return (SiteEntity) sqlHelper.queryForObject("board.read", param);
 	}
 
+
 	@Override
-	public BoardEntity readBoard(Map param) {
-		return (BoardEntity) sqlHelper.queryForObject("board.read", param);
+	public SiteEntity getAutowriteSiteInfo(Map param) {
+		return (SiteEntity) sqlHelper.queryForObject("autowrite.site.info.read", param);
+	}
+
+
+	@Override
+	public List<SiteParameterEntity> listSiteParameter(Map param) {
+		return (List<SiteParameterEntity>)sqlHelper.queryForList("site.parameter.list", param);
 	}
 	
 }
