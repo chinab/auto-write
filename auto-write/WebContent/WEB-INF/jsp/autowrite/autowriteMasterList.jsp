@@ -1,5 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.List, java.net.URLEncoder"%>
+<%@ page import="java.util.Map, java.util.Iterator, java.util.HashMap"%>
+<%@ page import="com.autowrite.common.framework.entity.UserEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.AutowriteEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.AutowriteListEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.ConditionEntity"%>
+
+<%
+	AutowriteListEntity autowriteMasterListEntity = (AutowriteListEntity) request.getAttribute("AutowriteListEntity");
+	
+	List<AutowriteEntity> autowriteMasterList = autowriteMasterListEntity.getAutowriteList();
+	
+	String searchKey = autowriteMasterListEntity.writeSearchKey();
+	String searchValue = autowriteMasterListEntity.writeSearchValue();
+%>
 
 <!-- 헤더 스크립트 -->
 <jsp:include page="../include/header.jsp" flush="false" />
@@ -15,8 +31,8 @@
 		<!--좌측메뉴-->
 		<td width="220" valign="top">
 			<ul class="L_Menus" style="">
-			<li class="Menu_Title">JUMP<li>
-			<li class="Menu_tex"><a href="jspView.do?jsp=jump/autoWriteList" onfocus="blur()" >자동등록 목록</a><li>
+			<li class="Menu_Title">자동등록<li>
+			<li class="Menu_tex"><a href="autowriteMasterList.do?jsp=autowrite/autowriteMasterList" onfocus="blur()" >자동등록 목록</a><li>
 			<li class="Menu_tex"><a href="autowriteWriteForm.do?jsp=autowrite/autowriteWrite" onfocus="blur()" >자동등록</a><li>
 			<li class="Menu_tex"><a href="jspView.do?jsp=jump/jumpList" onfocus="blur()" >JUMP</a><li>
 			</ul>
@@ -27,7 +43,7 @@
 		<td width="800" valign="top">
 			<div style="margin-left: 30px; width: 750px;">
 
-				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">JUMP > 자동등록목록</div>
+				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">자동등록 > 자동등록목록</div>
 				<div style="width: 100%; margin-top: 30px;">
 					<img src="images/title_dot.gif"/>
 					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">자동등록 목록</span>
@@ -50,56 +66,32 @@
 							<tr>
 								<th>선택</th>
 								<th>순번</th>
-								<th>본문이름</th>
+								<th>제목</th>
 								<th>실행일시</th>
 								<th>성공</th>
 								<th>실패</th>
 							</tr>
-
+							
+							<%
+								for ( int ii = 0 ; ii < autowriteMasterList.size() ; ii ++ ) {
+									AutowriteEntity autowriteEntity = autowriteMasterList.get(ii);
+							%>
 							<tr>
 								<td><input type=checkbox value=''></td>
-								<td>5</td>
-								<td>8월 5일 출근부</td>
-								<td>2013.08.05</td>
-								<td>123</td>
-								<td>123</td>
+								<td><%=autowriteEntity.getSeq_id()%></td>
+								<td>
+									<a href="autowriteSiteList.do?jsp=autowrite/autowriteSiteList&autowriteMasterSeqid=<%=autowriteEntity.getSeq_id()%>">
+										<%=autowriteEntity.getTitle()%>
+									</a>
+								</td>
+								<td><%=autowriteEntity.getWriteBoardDateTime()%></td>
+								<td><%=autowriteEntity.getSuccess_count()%></td>
+								<td><%=autowriteEntity.getFail_count()%></td>
 							</tr>
-
-							<tr>
-								<td><input type=checkbox value=''></td>
-								<td>4</td>
-								<td>8월 5일 출근부</td>
-								<td>2013.08.05</td>
-								<td>123</td>
-								<td>123</td>
-							</tr>
-
-							<tr>
-								<td><input type=checkbox value=''></td>
-								<td>3</td>
-								<td>8월 5일 출근부</td>
-								<td>2013.08.05</td>
-								<td>123</td>
-								<td>123</td>
-							</tr>
-
-							<tr>
-								<td><input type=checkbox value=''></td>
-								<td>2</td>
-								<td>8월 3일 출근부</td>
-								<td>2013.08.05</td>
-								<td>345</td>
-								<td>1213</td>
-							</tr>
-
-							<tr>
-								<td><input type=checkbox value=''></td>
-								<td>1</td>
-								<td>8월 2일 출근부</td>
-								<td>2013.08.05</td>
-								<td>567</td>
-								<td>123</td>
-							</tr>
+							<%
+								}
+							%>
+							
 
 						</tbody>
 					</table>

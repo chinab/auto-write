@@ -16,17 +16,6 @@ public class AutowriteDaoImpl implements AutowriteDao {
 	SqlMapClientTemplate sqlHelper;
 	
 	@Override
-	public Long countListAutowrite(Map param) {
-		return (Long) sqlHelper.queryForObject("autowrite.private.list.count", param);
-	}
-
-	
-	@Override
-	public List<AutowriteEntity> listAutowrite(Map param) {
-		return (List<AutowriteEntity>)sqlHelper.queryForList("autowrite.private.list", param);
-	}
-	
-	@Override
 	public Long writeAutowriteMaster(Map param) {
 		long seqId = 0;
 		
@@ -40,15 +29,56 @@ public class AutowriteDaoImpl implements AutowriteDao {
 		return seqId;
 	}
 
+
 	@Override
-	public AutowriteEntity autowriteView(Map param) {
-		return (AutowriteEntity) sqlHelper.queryForObject("autowrite.private.select", param);
+	public Long writeAutowriteSite(Map param) {
+		long seqId = 0;
+		
+		try {
+			seqId = (Long) sqlHelper.insert("autowrite.site.write", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return seqId;
 	}
 
+	@Override
+	public void writeAutowriteLog(Map param) {
+		sqlHelper.insert("autowrite.log.write", param);
+	}
 
 	@Override
-	public void writeAutowriteSite(Map param) {
-		sqlHelper.insert("autowrite.site.write", param);
+	public Long countListAutowriteMaster(Map param) {
+		return (Long) sqlHelper.queryForObject("autowrite.master.list.count", param);
+	}
+
+	
+	@Override
+	public List<AutowriteEntity> listAutowriteMaster(Map param) {
+		return (List<AutowriteEntity>)sqlHelper.queryForList("autowrite.master.list", param);
 	}
 	
+	@Override
+	public Long countListAutowriteSite(Map param) {
+		return (Long) sqlHelper.queryForObject("autowrite.site.list.count", param);
+	}
+
+	
+	@Override
+	public List<AutowriteEntity> listAutowriteSite(Map param) {
+		return (List<AutowriteEntity>)sqlHelper.queryForList("autowrite.site.list", param);
+	}
+	
+	@Override
+	public Long countListAutowriteLog(Map param) {
+		return (Long) sqlHelper.queryForObject("autowrite.log.list.count", param);
+	}
+
+	
+	@Override
+	public List<AutowriteEntity> listAutowriteLog(Map param) {
+		return (List<AutowriteEntity>)sqlHelper.queryForList("autowrite.log.list", param);
+	}
 }

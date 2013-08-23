@@ -47,11 +47,11 @@ public class AutowriteController extends CommonController{
 		logger = Logger.getLogger(getClass());
 	}
 	
-	@RequestMapping("/autowriteList.do")
-	public ModelAndView autowriteList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+	@RequestMapping("/autowriteMasterList.do")
+	public ModelAndView autowriteMasterList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
 		ModelAndView model = null;
 		
-		model = setJsp(req, "autowrite/autowriteList");
+		model = setJsp(req, "autowrite/autowriteMasterList");
 		
 		Map param = new HashMap();
 		
@@ -66,14 +66,87 @@ public class AutowriteController extends CommonController{
 		
 		setDefaultParameter(req, e, model, param);
 		
-		AutowriteListEntity boardListEntity = autowriteService.listAutowrite(param);
-		List<AutowriteEntity> boardList = boardListEntity.getAutowriteList();
+		AutowriteListEntity autowriteListEntity = autowriteService.listAutowriteMaster(param);
+		List<AutowriteEntity> autowriteList = autowriteListEntity.getAutowriteList();
 		
-		boardListEntity.setSearchKey(searchKey);
-		boardListEntity.setSearchValue(searchValue);
+		autowriteListEntity.setSearchKey(searchKey);
+		autowriteListEntity.setSearchValue(searchValue);
 		
-		model.addObject("AutowriteList", boardList);
-		model.addObject("AutowriteListEntity", boardListEntity);
+		model.addObject("AutowriteList", autowriteList);
+		model.addObject("AutowriteListEntity", autowriteListEntity);
+		
+		return model;
+	}
+	
+	
+	@RequestMapping("/autowriteSiteList.do")
+	public ModelAndView autowriteSiteList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+		ModelAndView model = null;
+		
+		model = setJsp(req, "autowrite/autowriteSiteList");
+		
+		Map param = new HashMap();
+		
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		if ( searchKey != null && searchKey.length() > 0) {
+			param.put("SEARCH_KEY", searchKey);
+		}
+		if ( searchValue != null && searchValue.toString().length() > 0 ) {
+			param.put("SEARCH_VALUE", searchValue);
+		}
+		
+		setDefaultParameter(req, e, model, param);
+		
+		String autowriteMasterSeqid = req.getParameter("autowriteMasterSeqid");
+		param.put("AUTOWRITE_MASTER_SEQ_ID", autowriteMasterSeqid);
+		
+		AutowriteListEntity autowriteListEntity = autowriteService.listAutowriteSite(param);
+		List<AutowriteEntity> autowriteList = autowriteListEntity.getAutowriteList();
+		
+		autowriteListEntity.setSearchKey(searchKey);
+		autowriteListEntity.setSearchValue(searchValue);
+		
+		model.addObject("AutowriteList", autowriteList);
+		model.addObject("AutowriteListEntity", autowriteListEntity);
+		
+		return model;
+	}
+	
+	
+	@RequestMapping("/autowriteLogList.do")
+	public ModelAndView autowriteLogList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+		ModelAndView model = null;
+		
+		model = setJsp(req, "autowrite/autowriteLogList");
+		
+		Map param = new HashMap();
+		
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		if ( searchKey != null && searchKey.length() > 0) {
+			param.put("SEARCH_KEY", searchKey);
+		}
+		if ( searchValue != null && searchValue.toString().length() > 0 ) {
+			param.put("SEARCH_VALUE", searchValue);
+		}
+		
+		setDefaultParameter(req, e, model, param);
+		
+		String autowriteMasterSeqid = req.getParameter("autowriteMasterSeqid");
+		param.put("AUTOWRITE_MASTER_SEQ_ID", autowriteMasterSeqid);
+		
+		String autowriteSiteSeqid = req.getParameter("autowriteSiteSeqid");
+		param.put("AUTOWRITE_SITE_SEQ_ID", autowriteMasterSeqid);
+		
+		AutowriteListEntity autowriteListEntity = autowriteService.listAutowriteLog(param);
+		List<AutowriteEntity> autowriteList = autowriteListEntity.getAutowriteList();
+		
+		autowriteListEntity.setSearchKey(searchKey);
+		autowriteListEntity.setSearchValue(searchValue);
+		
+		model.addObject("AutowriteList", autowriteList);
+		model.addObject("AutowriteListEntity", autowriteListEntity);
 		
 		return model;
 	}
@@ -104,7 +177,7 @@ public class AutowriteController extends CommonController{
 		
 		AutowriteEntity autowriteEntity = autowriteService.getDefaultAutowriteEntity(req, param);
 		
-		ModelAndView model = setJsp(req, "autowriteList.do?jsp=autowrite/autowriteList");
+		ModelAndView model = setJsp(req, "autowrite/autowriteWrite");
 		
 		model.addObject("AutowriteEntity", autowriteEntity);
 		
@@ -125,7 +198,7 @@ public class AutowriteController extends CommonController{
 		setDefaultParameter(req, httpSession, null, param);
 		
 		if ( userInfo != null ) {
-			param.put("CONTENTS_NAME", req.getParameter("autowriteName"));
+			param.put("CONTENTS_SEQ_ID", req.getParameter("contentsSeqId"));
 			param.put("TITLE", req.getParameter("title"));
 			param.put("CONTENT", req.getParameter("content").getBytes("UTF-8"));
 			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
@@ -137,74 +210,12 @@ public class AutowriteController extends CommonController{
 		}
 		
 		AutowriteListEntity autowriteListEntity = autowriteService.writePrivateAutowrite(req, param);
-		List<AutowriteEntity> boardList = autowriteListEntity.getAutowriteList();
+		List<AutowriteEntity> autowriteList = autowriteListEntity.getAutowriteList();
 		
 		
-		String redirectUrl = "autowriteList.do?jsp=autowrite/autowriteList";
+		String redirectUrl = "autowriteMasterList.do?jsp=autowrite/autowriteMasterList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
 		
 		return model;
-	}
-	
-	
-	@RequestMapping("/autowriteView.do")
-	public ModelAndView autowriteView(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
-		ModelAndView model = null;
-		
-		model = setJsp(req, "autowrite/autowriteWrite");
-		
-		Map param = new HashMap();
-		
-		setDefaultParameter(req, e, model, param);
-		
-		param.put("SEQ_ID", req.getParameter("seqId"));
-		
-		AutowriteEntity autowriteEntity = autowriteService.autowriteView(param);
-		
-		model.addObject("AutowriteEntity", autowriteEntity);
-		
-		return model;
-	}
-	
-	
-	@RequestMapping("/readAutowrite.do")
-	public void readAutowrite(@RequestParam(value = "p") String p, HttpServletRequest req, ServletResponse res) {
-		Map map;
-		map = new HashMap();
-		map.put("Code", "S");
-		map.put("Text", "Success");
-		
-		try {
-			JSONObject parameters = JSONObject.fromObject(p);
-			Map bean = (Map) JSONObject.toBean(parameters, java.util.HashMap.class);
-			
-			String jobType =(String)bean.get("JobType");
-			String category =(String)bean.get("category");
-			String seqId =(String)bean.get("seqId");
-			
-			HttpSession httpSession = req.getSession(true);
-			UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
-			
-			if ( userInfo != null ) {
-				map.put("ROOT_SEQ_ID", seqId);
-			} else {
-				throw new Exception("Login please.");
-			}
-			
-//			List<Map> dataMap = boardService.readReply(req, map);
-//			map.put("Data", dataMap);
-		} catch (Exception ex) {
-			map.put("Code", "E");
-			ex.printStackTrace();
-			String errorText = ex.getMessage();
-			map.put("Text", errorText);
-		} finally {
-			JSONObject jsonObject = JSONObject.fromObject(map);
-			try {
-				res.getWriter().write(jsonObject.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }

@@ -151,15 +151,164 @@
 	
 	<insert id="autowrite.master.write" parameterClass="java.util.HashMap" >
 	    <![CDATA[
-	        insert into $TABLE_NAME$ (
-				USER_SEQ_ID, USER_ID, TITLE, FACILITY_NAME, FACILITY_USER_NAME, FACILITY_PHONE, FACILITY_ADDRESS, FACILITY_HOME_PAGE, VISIT_TIME, WAITERESS_NAME, CONTENT, CATEGORY, TARGET_CATEGORY, REGION, HIT, RECOMMEND, REJECT, SECRET_YN, BLIND_YN, DEL_YN, WRITER_IP, WRITE_DATETIME
+	        insert into AUTOWRITE_MASTER (
+				CONTENTS_SEQ_ID, TITLE, CONTENT, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
 			) values (
-				#USER_SEQ_ID#, #USER_ID#, #TITLE#, #FACILITY_NAME#, #FACILITY_USER_NAME#, #FACILITY_PHONE#, #FACILITY_ADDRESS#, #FACILITY_HOME_PAGE#, #VISIT_TIME#, #WAITERESS_NAME#, #CONTENT#, #CATEGORY#, #TARGET_CATEGORY#, #REGION#, #HIT#, #RECOMMEND#, #REJECT#, #SECRET_YN#, #BLIND_YN#, #DEL_YN#, #WRITER_IP#, sysdate()
+				#CONTENTS_SEQ_ID#, #TITLE#, #CONTENT#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
 			)
 	    ]]>
 	    <selectKey keyProperty="seqId" resultClass="Long">
 	        SELECT LAST_INSERT_ID()
 	    </selectKey>
 	</insert>
+	
+	
+	<insert id="autowrite.site.write" parameterClass="java.util.HashMap" >
+	    <![CDATA[
+	        insert into AUTOWRITE_SITE (
+				AUTOWRITE_MASTER_SEQ_ID, SITE_SEQ_ID, SUCCESS_YN, RESPONSE_CONTENT, TRY_COUNT, TRY_DATETIME
+			) values (
+				#AUTOWRITE_MASTER_SEQ_ID#, #SITE_SEQ_ID#, #SUCCESS_YN#, #RESPONSE_CONTENT#, #TRY_COUNT#, sysdate()
+			)
+	    ]]>
+	    <selectKey keyProperty="seqId" resultClass="Long">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+	
+	<insert id="autowrite.log.write" parameterClass="java.util.HashMap" >
+	    insert into AUTOWRITE_LOG (
+			AUTOWRITE_MASTER_SEQ_ID, AUTOWRITE_SITE_SEQ_ID, SITE_SEQ_ID, SUCCESS_YN, RESPONSE_CONTENT, TRY_DATETIME
+		) values (
+			#AUTOWRITE_MASTER_SEQ_ID#, #AUTOWRITE_SITE_SEQ_ID#, #SITE_SEQ_ID#, #SUCCESS_YN#, #RESPONSE_CONTENT#, sysdate()
+		)
+	</insert>
+	
+	
+	<statement id="autowrite.master.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					AUTOWRITE_MASTER
+				where
+					WRITER_SEQ_ID = #USER_SEQ_ID#
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="autowrite.master.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AutowriteEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, CONTENTS_SEQ_ID, TITLE, CONTENT, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+				, (select count(1) from AUTOWRITE_SITE where AUTOWRITE_MASTER_SEQ_ID = M.SEQ_ID and SUCCESS_YN = 'Y') SUCCESS_COUNT
+				, (select count(1) from AUTOWRITE_SITE where AUTOWRITE_MASTER_SEQ_ID = M.SEQ_ID and SUCCESS_YN = 'N') FAIL_COUNT
+			from
+				AUTOWRITE_MASTER M
+			where
+				WRITER_SEQ_ID = #USER_SEQ_ID#
+			order by
+				WRITE_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+	
+	<statement id="autowrite.site.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					AUTOWRITE_SITE
+				where
+					AUTOWRITE_MASTER_SEQ_ID = #AUTOWRITE_MASTER_SEQ_ID#
+				order by
+					TRY_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="autowrite.site.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AutowriteEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, AUTOWRITE_MASTER_SEQ_ID, SITE_SEQ_ID, SUCCESS_YN, RESPONSE_CONTENT, TRY_COUNT, TRY_DATETIME
+				, (select SITE_NAME from SITE_PRIVATE where SEQ_ID = SITE_SEQ_ID) as SITE_NAME
+			from
+				AUTOWRITE_SITE S
+			where
+				AUTOWRITE_MASTER_SEQ_ID = #AUTOWRITE_MASTER_SEQ_ID#
+			order by
+				TRY_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+	
+	<statement id="autowrite.log.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					AUTOWRITE_LOG
+				where
+					AUTOWRITE_MASTER_SEQ_ID = #AUTOWRITE_MASTER_SEQ_ID#
+					AND AUTOWRITE_SITE_SEQ_ID = #AUTOWRITE_SITE_SEQ_ID#
+				order by
+					TRY_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="autowrite.log.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AutowriteEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, AUTOWRITE_MASTER_SEQ_ID, AUTOWRITE_SITE_SEQ_ID, SITE_SEQ_ID, SUCCESS_YN, RESPONSE_CONTENT, TRY_DATETIME
+			from
+				AUTOWRITE_LOG
+			where
+				AUTOWRITE_MASTER_SEQ_ID = #AUTOWRITE_MASTER_SEQ_ID#
+				AND AUTOWRITE_SITE_SEQ_ID = #AUTOWRITE_SITE_SEQ_ID#
+			order by
+				TRY_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
 	
 </sqlMap>

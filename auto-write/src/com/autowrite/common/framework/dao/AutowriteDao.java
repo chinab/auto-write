@@ -9,13 +9,19 @@ public interface AutowriteDao {
 
 	public abstract Long writeAutowriteMaster(Map param);
 	
-	public abstract void writeAutowriteSite(Map param);
+	public abstract Long writeAutowriteSite(Map param);
 	
-	public abstract List<AutowriteEntity> listAutowrite(Map param);
+	public abstract void writeAutowriteLog(Map param);
 
-	public abstract Long countListAutowrite(Map param);
+	public abstract List<AutowriteEntity> listAutowriteMaster(Map param);
 
-	public abstract AutowriteEntity autowriteView(Map param);
+	public abstract Long countListAutowriteMaster(Map param);
 
-	
+	public abstract List<AutowriteEntity> listAutowriteSite(Map param);
+
+	public abstract Long countListAutowriteSite(Map param);
+
+	public abstract Long countListAutowriteLog(Map param);
+
+	public abstract List<AutowriteEntity> listAutowriteLog(Map param);
 }

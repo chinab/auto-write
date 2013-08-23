@@ -92,8 +92,6 @@ CREATE  TABLE `autowrite_master` (
 
   `contents_seq_id` BIGINT NULL ,
 
-  `contents_name` VARCHAR(4000) NULL ,
-
   `title` VARCHAR(4000) NULL ,
 
   `content` LONGTEXT NULL ,

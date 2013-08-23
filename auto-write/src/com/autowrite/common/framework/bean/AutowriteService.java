@@ -69,12 +69,12 @@ public class AutowriteService extends CommonService{
 
 	
 	/**
-	 * 개인별 사이트 리스트
+	 * 자동등록 마스터 리스트
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
-	public AutowriteListEntity listAutowrite(Map param) throws Exception {
+	public AutowriteListEntity listAutowriteMaster(Map param) throws Exception {
 		setCondition(param);
 		
 		AutowriteListEntity listEntity = new AutowriteListEntity();
@@ -88,10 +88,10 @@ public class AutowriteService extends CommonService{
 			e.printStackTrace();
 		}
 		
-		Long boardCount = autowriteDao.countListAutowrite(param);
+		Long boardCount = autowriteDao.countListAutowriteMaster(param);
 		listEntity.setTotalListCount(boardCount);
 		
-		List<AutowriteEntity> boardList = autowriteDao.listAutowrite(param);
+		List<AutowriteEntity> boardList = autowriteDao.listAutowriteMaster(param);
 		
 		listEntity.setAutowriteList(boardList);
 		
@@ -99,10 +99,53 @@ public class AutowriteService extends CommonService{
 	}
 
 
-	public AutowriteEntity autowriteView(Map param) {
-		AutowriteEntity boardEntity = autowriteDao.autowriteView(param);
+	public AutowriteListEntity listAutowriteSite(Map param) {
+		setCondition(param);
 		
-		return boardEntity;
+		AutowriteListEntity listEntity = new AutowriteListEntity();
+		
+		try {
+			Long pageNum = (Long) param.get("PAGE_NUM");
+			Long pageSize = (Long) param.get("PAGE_SIZE");
+			listEntity.setPageNum(pageNum);
+			listEntity.setPageSize(pageSize);
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+		
+		Long boardCount = autowriteDao.countListAutowriteSite(param);
+		listEntity.setTotalListCount(boardCount);
+		
+		List<AutowriteEntity> boardList = autowriteDao.listAutowriteSite(param);
+		
+		listEntity.setAutowriteList(boardList);
+		
+		return listEntity;
+	}
+
+
+	public AutowriteListEntity listAutowriteLog(Map param) {
+		setCondition(param);
+		
+		AutowriteListEntity listEntity = new AutowriteListEntity();
+		
+		try {
+			Long pageNum = (Long) param.get("PAGE_NUM");
+			Long pageSize = (Long) param.get("PAGE_SIZE");
+			listEntity.setPageNum(pageNum);
+			listEntity.setPageSize(pageSize);
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+		
+		Long boardCount = autowriteDao.countListAutowriteLog(param);
+		listEntity.setTotalListCount(boardCount);
+		
+		List<AutowriteEntity> boardList = autowriteDao.listAutowriteLog(param);
+		
+		listEntity.setAutowriteList(boardList);
+		
+		return listEntity;
 	}
 
 
@@ -111,8 +154,8 @@ public class AutowriteService extends CommonService{
 		
 		String[] siteSeqidArray = req.getParameterValues("siteSeqIdList");
 		
-		Long masterSeqId = autowriteDao.writeAutowriteMaster(param);
-		param.put("AUTOWRITE_MASTER_SEQ_ID", masterSeqId);
+		Long autowriteMasterSeqId = autowriteDao.writeAutowriteMaster(param);
+		param.put("AUTOWRITE_MASTER_SEQ_ID", autowriteMasterSeqId);
 		
 		for ( int ii = 0 ; ii < siteSeqidArray.length ; ii ++ ) {
 			param.put("SITE_SEQ_ID", siteSeqidArray[ii]);
@@ -121,10 +164,14 @@ public class AutowriteService extends CommonService{
 			
 			param.put("TRY_COUNT", 1);
 			
-			autowriteDao.writeAutowriteSite(param);
+			Long autowriteSiteSeqId = autowriteDao.writeAutowriteSite(param);
+			
+			param.put("AUTOWRITE_SITE_SEQ_ID", autowriteSiteSeqId);
+			
+			autowriteDao.writeAutowriteLog(param);
 		}
 		
-		return listAutowrite(param);
+		return listAutowriteMaster(param);
 	}
 	
 	
@@ -139,7 +186,7 @@ public class AutowriteService extends CommonService{
 		
 		Autowriter autowriter = new Autowriter();
 		try {
-			autowriter.executeHttpConnection(siteInfo);
+//			autowriter.executeHttpConnection(siteInfo);
 		} catch (Exception e) {
 			successYn = "N";
 			responseContent = e.getMessage();
