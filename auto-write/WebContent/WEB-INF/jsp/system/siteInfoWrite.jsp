@@ -31,7 +31,7 @@
 			return false;
 		}
 		
-		frm.action = "siteWrite.do";
+		frm.action = "siteInfoWrite.do";
 		frm.method = "post";
 		
 		frm.submit();
@@ -96,7 +96,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="subject5">&nbsp;&nbsp;<b>ID</b></td>
+								<td class="subject5">&nbsp;&nbsp;<b>ID KEY</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
 									<input name="siteIdKey" class="s_id" type="text" size="65" style="width: 150px;">
@@ -106,7 +106,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="subject5">&nbsp;&nbsp;<b>Password</b></td>
+								<td class="subject5">&nbsp;&nbsp;<b>Password KEY</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
 									<input name="sitePasswdKey" class="s_id" type="text" size="65" style="width: 150px;">

@@ -90,6 +90,15 @@ public class SiteService extends CommonService{
 		
 		return listPrivateSite(param);
 	}
+
+
+	public SiteListEntity writeMasterSite(HttpServletRequest req, Map param) {
+		setCondition(param);
+		
+		siteDao.writeMasterSite(param);
+		
+		return listMasterSite(param);
+	}
 	
 	
 	

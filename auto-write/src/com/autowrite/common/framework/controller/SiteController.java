@@ -80,7 +80,7 @@ public class SiteController extends CommonController{
 	public ModelAndView siteInfoList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
 		ModelAndView model = null;
 		
-		model = setJsp(req, "system/siteList");
+		model = setJsp(req, "system/siteInfoList");
 		
 		Map param = new HashMap();
 		
@@ -145,6 +145,46 @@ public class SiteController extends CommonController{
 	}
 	
 	
+	@RequestMapping("/siteInfoWrite.do")
+	public ModelAndView siteInfoWrite(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		if ( userInfo != null ) {
+			param.put("DOMAIN", req.getParameter("siteDomain"));
+			param.put("SITE_NAME", req.getParameter("siteName"));
+			param.put("SITE_ID_KEY", req.getParameter("siteIdKey"));
+			param.put("SITE_PASSWD_KEY", req.getParameter("sitePasswdKey"));
+			param.put("LOGIN_URL", req.getParameter("loginUrl"));
+			param.put("WRITE_URL", req.getParameter("writeUrl"));
+			param.put("MODIFY_URL", req.getParameter("modifyUrl"));
+			param.put("DELETE_URL", req.getParameter("deleteUrl"));
+			param.put("LOGIN_TYPE", req.getParameter("loginType"));
+			param.put("WRITE_TYPE", req.getParameter("writeType"));
+			param.put("MODIFY_TYPE", req.getParameter("modifyType"));
+			param.put("DELETE_TYPE", req.getParameter("deleteType"));
+			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
+			param.put("WRITER_ID", userInfo.getId());
+			param.put("WRITER_IP", req.getRemoteAddr());
+			param.put("WRITE_DATETIME", req.getParameter("write_datetime"));
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+		SiteListEntity siteListEntity = siteService.writeMasterSite(req, param);
+		List<SiteEntity> siteList = siteListEntity.getSiteList();
+		
+		String redirectUrl = "siteInfoList.do?jsp=system/siteInfoList";
+		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
+		
+		return model;
+	}
+	
+	
 	@RequestMapping("/siteUpdate.do")
 	public ModelAndView doSiteModify(String p, HttpServletRequest req, ServletResponse res) throws Exception {
 		Map param;
@@ -192,4 +232,46 @@ public class SiteController extends CommonController{
 		
 		return model;
 	}
+	
+	
+	@RequestMapping("/siteInfoUpdate.do")
+	public ModelAndView siteInfoUpdate(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		if ( userInfo != null ) {
+			param.put("DOMAIN", req.getParameter("siteDomain"));
+			param.put("SITE_NAME", req.getParameter("siteName"));
+			param.put("SITE_ID_KEY", req.getParameter("siteIdKey"));
+			param.put("SITE_PASSWD_KEY", req.getParameter("sitePasswdKey"));
+			param.put("LOGIN_URL", req.getParameter("loginUrl"));
+			param.put("WRITE_URL", req.getParameter("writeUrl"));
+			param.put("MODIFY_URL", req.getParameter("modifyUrl"));
+			param.put("DELETE_URL", req.getParameter("deleteUrl"));
+			param.put("LOGIN_TYPE", req.getParameter("loginType"));
+			param.put("WRITE_TYPE", req.getParameter("writeType"));
+			param.put("MODIFY_TYPE", req.getParameter("modifyType"));
+			param.put("DELETE_TYPE", req.getParameter("deleteType"));
+			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
+			param.put("WRITER_ID", userInfo.getId());
+			param.put("WRITER_IP", req.getRemoteAddr());
+			param.put("WRITE_DATETIME", req.getParameter("write_datetime"));
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+//		SiteListEntity siteListEntity = siteService.modifySite(req, param);
+//		List<SiteEntity> siteList = siteListEntity.getSiteList();
+		
+		String redirectUrl = "siteInfoList.do?jsp=system/siteInfoList";
+		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
+		
+		return model;
+	}
+	
+	
 }

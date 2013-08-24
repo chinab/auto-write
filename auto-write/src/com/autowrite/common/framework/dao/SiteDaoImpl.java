@@ -20,6 +20,26 @@ public class SiteDaoImpl implements SiteDao {
 	SqlMapClientTemplate sqlHelper;
 	
 	@Override
+	public void writePrivateSite(Map param) {
+		try {
+			sqlHelper.insert("site.private.write", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void writeMasterSite(Map param) {
+		try {
+			sqlHelper.insert("site.master.write", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	@Override
 	public Long countListPrivateSite(Map param) {
 		return (Long) sqlHelper.queryForObject("site.private.list.count", param);
 	}
@@ -41,16 +61,6 @@ public class SiteDaoImpl implements SiteDao {
 		return (List<SiteEntity>)sqlHelper.queryForList("site.master.list", param);
 	}
 	
-	@Override
-	public void writePrivateSite(Map param) {
-		try {
-			sqlHelper.insert("site.private.write", param);
-		} catch ( Exception e ){
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public SiteEntity readSite(Map param) {
 		return (SiteEntity) sqlHelper.queryForObject("board.read", param);

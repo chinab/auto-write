@@ -12,6 +12,8 @@ import com.autowrite.common.framework.entity.SiteParameterEntity;
 public interface SiteDao {
 
 	public abstract void writePrivateSite(Map param);
+
+	public abstract void writeMasterSite(Map param);
 	
 	public abstract SiteEntity readSite(Map param);
 	
@@ -26,5 +28,4 @@ public interface SiteDao {
 	public abstract SiteEntity getAutowriteSiteInfo(Map param);
 
 	public abstract List<SiteParameterEntity> listSiteParameter(Map param);
-
 }
