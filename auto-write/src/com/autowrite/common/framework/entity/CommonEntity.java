@@ -37,4 +37,11 @@ public class CommonEntity {
 		}
 	}
 	
+	public String nvl(String value){
+		if ( value == null ) {
+			return "";
+		} else {
+			return value;
+		}
+	}
 }

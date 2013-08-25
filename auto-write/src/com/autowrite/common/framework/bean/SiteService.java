@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.autowrite.common.framework.dao.SiteDao;
-import com.autowrite.common.framework.entity.BoardEntity;
-import com.autowrite.common.framework.entity.BoardListEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 import com.autowrite.common.framework.entity.SiteListEntity;
 
@@ -58,7 +56,7 @@ public class SiteService extends CommonService{
 	}
 
 
-	public SiteListEntity listMasterSite(Map param) {
+	public SiteListEntity listMasterSite(Map param) throws Exception {
 		setCondition(param);
 		
 		SiteListEntity listEntity = new SiteListEntity();
@@ -92,7 +90,7 @@ public class SiteService extends CommonService{
 	}
 
 
-	public SiteListEntity writeMasterSite(HttpServletRequest req, Map param) {
+	public SiteListEntity writeMasterSite(HttpServletRequest req, Map param) throws Exception {
 		setCondition(param);
 		
 		siteDao.writeMasterSite(param);
@@ -102,57 +100,53 @@ public class SiteService extends CommonService{
 	
 	
 	
-	public BoardListEntity modifySite(HttpServletRequest req, Map param) {
-		// TODO Auto-generated method stub
-		return null;
+	public SiteListEntity modifyPrivateSite(HttpServletRequest req, Map param) throws Exception {
+		setCondition(param);
+		
+		siteDao.modifyPrivateSite(param);
+		
+		return listPrivateSite(param);
 	}
 
 
+	public SiteListEntity modifyMasterSite(HttpServletRequest req, Map param) throws Exception {
+		setCondition(param);
+		
+		siteDao.modifyMasterSite(param);
+		
+		return listMasterSite(param);
+	}
 	
 	
-//	public BoardListEntity modifyBoard(HttpServletRequest req, Map param) throws Exception {
-//		String menuCode = param.get("category").toString();
-//		
-//		String tableName = getTableNameAsMenuCode(menuCode);
-//		
-//		param.put("TABLE_NAME", tableName);
-//		
-//		setCondition(param);
-//		
-//		fileUpload(req, param);
-//		
-//		if ( menuCode.startsWith("02") || menuCode.startsWith("03") ){
-//			siteDao.modifyBoardAdmin(param);
-//		} else {
-//			siteDao.modifyBoard(param);
-//		}
-//		
-//		return listBoard(param);
-//	}
-//
-//	public BoardListEntity deleteBoard(HttpServletRequest req, Map param) throws Exception {
-//		String menuCode = param.get("category").toString();
-//		
-//		String tableName = getTableNameAsMenuCode(menuCode);
-//		param.put("TABLE_NAME", tableName);
-//		
-//		param.put("DEL_YN", "Y");
-//		
-//		siteDao.boardUpdateDelYn(param);
-//		
-//		return listBoard(param);
-//	}
-//
-//
-//	public BoardEntity readBoard(Map param) throws Exception {
-//		String menuCode = param.get("CATEGORY").toString();
-//		
-//		param.put("TABLE_NAME", getTableNameAsMenuCode(menuCode));
-//		
-//		BoardEntity boardEntity = siteDao.readBoard(param);
-//		
-//		setWriterImagePath(param, boardEntity);
-//		
-//		return boardEntity;
-//	}
+	public SiteListEntity deletePrivateSite(HttpServletRequest req, Map param) throws Exception {
+		setCondition(param);
+		
+		siteDao.deletePrivateSite(param);
+		
+		return listPrivateSite(param);
+	}
+	
+	
+	public SiteListEntity deleteMasterSite(HttpServletRequest req, Map param) throws Exception {
+		setCondition(param);
+		
+		siteDao.deleteMasterSite(param);
+		
+		return listMasterSite(param);
+	}
+	
+	
+	public SiteEntity readPrivateSite(HttpServletRequest req, Map param) throws Exception {
+		setCondition(param);
+		
+		return siteDao.readPrivateSite(param);
+	}
+	
+	
+	public SiteEntity readMasterSite(HttpServletRequest req, Map param) throws Exception {
+		setCondition(param);
+		
+		return siteDao.readMasterSite(param);
+	}
+
 }

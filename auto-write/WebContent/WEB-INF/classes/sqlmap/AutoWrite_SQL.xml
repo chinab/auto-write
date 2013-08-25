@@ -107,6 +107,84 @@
 	</statement>
 	
 	
+	<statement id="site.private.update" parameterClass="java.util.HashMap">
+		update
+			SITE_PRIVATE
+		set
+			MASTER_SEQ_ID = #MASTER_SEQ_ID#, 
+			DOMAIN = #DOMAIN#, 
+			SITE_NAME = #SITE_NAME#, 
+			SITE_ID = #SITE_ID#, 
+			SITE_PASSWD = #SITE_PASSWD#, 
+			WRITER_SEQ_ID = #WRITER_SEQ_ID#, 
+			WRITER_ID = #WRITER_ID#
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="site.master.update" parameterClass="java.util.HashMap">
+		update
+			SITE_MASTER
+		set
+			DOMAIN = #DOMAIN#, 
+			SITE_NAME = #SITE_NAME#, 
+			SITE_ID_KEY = #SITE_ID_KEY#, 
+			SITE_PASSWD_KEY = #SITE_PASSWD_KEY#, 
+			LOGIN_URL = #LOGIN_URL#, 
+			WRITE_URL = #WRITE_URL#, 
+			MODIFY_URL = #MODIFY_URL#, 
+			DELETE_URL = #DELETE_URL#, 
+			LOGIN_TYPE = #LOGIN_TYPE#, 
+			WRITE_TYPE = #WRITE_TYPE#, 
+			MODIFY_TYPE = #MODIFY_TYPE#, 
+			DELETE_TYPE = #DELETE_TYPE#, 
+			WRITER_SEQ_ID = #WRITER_SEQ_ID#, 
+			WRITER_ID = #WRITER_ID#
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="site.private.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
+		select
+			SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
+		from
+			SITE_PRIVATE
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="site.master.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
+		select
+			SEQ_ID, DOMAIN, SITE_NAME, SITE_ID_KEY, SITE_PASSWD_KEY, 
+			LOGIN_URL, WRITE_URL, MODIFY_URL, DELETE_URL, 
+			LOGIN_TYPE, WRITE_TYPE, MODIFY_TYPE, DELETE_TYPE, 
+			WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+		from
+			SITE_MASTER
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="site.private.delete" parameterClass="java.util.HashMap">
+		delete from
+			SITE_PRIVATE
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="site.master.delete" parameterClass="java.util.HashMap">
+		delete from
+			SITE_MASTER
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
 	<statement id="site.parameter.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteParameterEntity">
 		select
 			SEQ_ID, MASTER_SEQ_ID, MODE, P_KEY, P_VALUE

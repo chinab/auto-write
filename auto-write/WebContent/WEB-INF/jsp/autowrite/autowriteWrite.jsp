@@ -5,6 +5,7 @@
 <%@ page import="java.util.Map, java.util.Iterator, java.util.HashMap"%>
 <%@ page import="com.autowrite.common.framework.entity.UserEntity"%>
 <%@ page import="com.autowrite.common.framework.entity.BoardEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.SiteEntity"%>
 <%@ page import="com.autowrite.common.framework.entity.AutowriteEntity"%>
 
 <%
@@ -12,8 +13,6 @@
 	
 	if ( autowriteEntity == null ){
 		autowriteEntity = new AutowriteEntity();
-		autowriteEntity.setSiteEntityList(new ArrayList<BoardEntity>());
-		autowriteEntity.setContentsEntityList(new ArrayList<BoardEntity>());
 	}
 	
 	String selectedContent = "";
@@ -42,8 +41,6 @@
 
 <script>
 	function autowriteWrite(){
-		alert("autowriteWrite");
-		
 		var frm = document.writeForm;
 		
 		if(frm.title.value.length == 0) {
@@ -145,10 +142,10 @@
 								</td>
 								<td class="subject">
 									<%
-										List<BoardEntity> siteEntityList = autowriteEntity.getSiteEntityList();
+										List<SiteEntity> siteEntityList = autowriteEntity.getSiteEntityList();
 									
 										for ( int ii = 0 ; ii < siteEntityList.size() ;  ii++ ){
-											BoardEntity siteEntity = siteEntityList.get(ii);
+											SiteEntity siteEntity = siteEntityList.get(ii);
 									%>
 										<input type="checkbox" name="siteSeqIdList" value="<%=siteEntity.getSeq_id()%>" checked="checked">
 										<%=siteEntity.getSite_name()%>

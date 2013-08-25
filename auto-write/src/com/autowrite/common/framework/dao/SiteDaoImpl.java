@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ibatis.SqlMapClientTemplate;
 import org.springframework.stereotype.Component;
 
-import com.autowrite.common.framework.entity.AttachmentEntity;
-import com.autowrite.common.framework.entity.SiteEntity;
-import com.autowrite.common.framework.entity.PaymentMasterEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 import com.autowrite.common.framework.entity.SiteParameterEntity;
 
@@ -62,11 +59,45 @@ public class SiteDaoImpl implements SiteDao {
 	}
 	
 	@Override
-	public SiteEntity readSite(Map param) {
-		return (SiteEntity) sqlHelper.queryForObject("board.read", param);
+	public void modifyPrivateSite(Map param) {
+		try {
+			sqlHelper.insert("site.private.update", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
+	@Override
+	public void modifyMasterSite(Map param) {
+		try {
+			sqlHelper.insert("site.master.update", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
+	@Override
+	public void deletePrivateSite(Map param) {
+		sqlHelper.delete("site.private.delete", param);
+	}
+
+	@Override
+	public void deleteMasterSite(Map param) {
+		sqlHelper.delete("site.master.delete", param);
+	}
+
+	@Override
+	public SiteEntity readPrivateSite(Map param) {
+		return (SiteEntity) sqlHelper.queryForObject("site.private.read", param);
+	}
+
+	@Override
+	public SiteEntity readMasterSite(Map param) {
+		return (SiteEntity) sqlHelper.queryForObject("site.master.read", param);
+	}
+	
 	@Override
 	public SiteEntity getAutowriteSiteInfo(Map param) {
 		return (SiteEntity) sqlHelper.queryForObject("autowrite.site.info.read", param);
@@ -77,5 +108,6 @@ public class SiteDaoImpl implements SiteDao {
 	public List<SiteParameterEntity> listSiteParameter(Map param) {
 		return (List<SiteParameterEntity>)sqlHelper.queryForList("site.parameter.list", param);
 	}
+
 	
 }

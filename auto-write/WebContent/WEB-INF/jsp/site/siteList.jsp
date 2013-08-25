@@ -43,19 +43,8 @@
 	align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
-		<td width="220" valign="top">
-
-			<ul class="L_Menus" style="">
-				<li class="Menu_Title">사이트설정
-				<li>
-				<li class="Menu_tex"><a href="siteList.do?jsp=site/siteList" onfocus="blur()">사이트리스트</a>
-				<li>
-				<li class="Menu_tex"><a href="jspView.do?jsp=site/siteWrite" onfocus="blur()">사이트등록</a>
-				<li>
-			</ul>
-		</td>
-
-
+		<jsp:include page="../include/leftSite.jsp" flush="false" />
+		
 		<!--우측컨-->
 		<td width="800" valign="top">
 			<div style="margin-left: 30px; width: 750px;">
@@ -103,10 +92,14 @@
 								for ( int ii = 0 ; ii < siteList.size() ; ii ++ ) {
 									SiteEntity siteEntity = siteList.get(ii);
 							%>
-							<tr>
+							<tr onClick="location.href='siteRead.do?jsp=site/siteWrite&seqId=<%=siteEntity.getSeq_id()%>'" >
 								<td><input type=checkbox value=''></td>
 								<td><%= startSequence-- %></td>
-								<td><%=siteEntity.getSite_name()%></td>
+								<td>
+									<a href="siteRead.do?jsp=site/siteWrite&seqId=<%=siteEntity.getSeq_id()%>">
+										<%=siteEntity.getSite_name()%>
+									</a>
+								</td>
 								<td><%=siteEntity.getDomain()%></td>
 								<td><%=siteEntity.getWriteBoardDateTime(siteEntity.getWrite_datetime())%></td>
 							</tr>
@@ -115,16 +108,13 @@
 							%>
 						</tbody>
 					</table>
-
-
-
+					
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="등록"
-							OnClick="javascript:location.href='jspView.do?jsp=site/siteWrite';" class="input_gr">&nbsp;&nbsp;<input
-							class="in_btnc2" type="button" value="수정"
-							OnClick="history.back();" class="input_gr">&nbsp;&nbsp;<input
-							class="in_btnc" type="button" value="삭제"
-							OnClick="history.back();" class="input_gr">
+						<input class="in_btn" type="button" value="등록" OnClick="javascript:location.href='jspView.do?jsp=site/siteWrite';" class="input_gr">
+						&nbsp;&nbsp;
+						<input class="in_btnc2" type="button" value="수정" OnClick="alert('working');" class="input_gr">
+						&nbsp;&nbsp;
+						<input class="in_btnc" type="button" value="삭제" OnClick="alert('working');" class="input_gr">
 					</div>
 					
 					<!--페이지링크-->

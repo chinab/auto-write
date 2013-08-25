@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ibatis.SqlMapClientTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -121,7 +120,7 @@ public class SiteController extends CommonController{
 		setDefaultParameter(req, httpSession, null, param);
 		
 		if ( userInfo != null ) {
-			param.put("MASTER_SEQ_ID", req.getParameter("master_seq_id"));
+			param.put("MASTER_SEQ_ID", req.getParameter("masterSeqId"));
 			param.put("DOMAIN", req.getParameter("siteDomain"));
 			param.put("SITE_NAME", req.getParameter("siteName"));
 			param.put("SITE_ID", req.getParameter("siteId"));
@@ -186,7 +185,7 @@ public class SiteController extends CommonController{
 	
 	
 	@RequestMapping("/siteUpdate.do")
-	public ModelAndView doSiteModify(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+	public ModelAndView siteUpdate(String p, HttpServletRequest req, ServletResponse res) throws Exception {
 		Map param;
 		param = new HashMap();
 		param.put("Code", "S");
@@ -204,38 +203,32 @@ public class SiteController extends CommonController{
 		
 		if ( userInfo != null ) {
 			param.put("SEQ_ID", req.getParameter("seqId"));
-			param.put("TITLE", req.getParameter("title"));
-			param.put("FACILITY_NAME", req.getParameter("facility_name"));
-			param.put("FACILITY_USER_NAME", req.getParameter("facility_user_name"));
-			param.put("FACILITY_PHONE", req.getParameter("facility_phone"));
-			param.put("FACILITY_ADDRESS", req.getParameter("facility_address"));
-			param.put("FACILITY_HOME_PAGE", req.getParameter("facility_home_page"));
-			param.put("VISIT_TIME", req.getParameter("visit_time"));
-			param.put("WAITERESS_NAME", req.getParameter("waiteress_name"));
-			param.put("CONTENT", req.getParameter("content").getBytes("UTF-8"));
-			param.put("TARGET_CATEGORY", req.getParameter("target_category"));
-			if ( req.getParameter("region") != null && req.getParameter("region").toString().length() > 0 ){
-				param.put("REGION", req.getParameter("region"));
-			}
-			param.put("SECRET_YN", req.getParameter("secretYn"));
-			param.put("BLIND_YN", req.getParameter("blindYn"));
+			param.put("MASTER_SEQ_ID", req.getParameter("masterSeqId"));
+			param.put("DOMAIN", req.getParameter("siteDomain"));
+			param.put("SITE_NAME", req.getParameter("siteName"));
+			param.put("SITE_ID", req.getParameter("siteId"));
+			param.put("SITE_PASSWD", req.getParameter("sitePasswd"));
+			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
+			param.put("WRITER_ID", userInfo.getId());
+			param.put("WRITER_IP", req.getRemoteAddr());
+			param.put("WRITE_DATETIME", req.getParameter("write_datetime"));
 		} else {
 			throw new Exception("Login please.");
 		}
 		
 		
-//		SiteListEntity siteListEntity = siteService.modifySite(req, param);
-//		List<SiteEntity> siteList = siteListEntity.getSiteList();
+		SiteListEntity siteListEntity = siteService.modifyPrivateSite(req, param);
+		List<SiteEntity> siteList = siteListEntity.getSiteList();
 		
-		String redirectUrl = "siteListView.do?jsp=site/siteList";
+		String redirectUrl = "siteList.do?jsp=site/siteList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
 		
 		return model;
 	}
 	
 	
-	@RequestMapping("/siteInfoUpdate.do")
-	public ModelAndView siteInfoUpdate(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+	@RequestMapping("/siteInfoModify.do")
+	public ModelAndView siteInfoModify(String p, HttpServletRequest req, ServletResponse res) throws Exception {
 		Map param = new HashMap();
 		
 		HttpSession httpSession = req.getSession(true);
@@ -244,6 +237,7 @@ public class SiteController extends CommonController{
 		setDefaultParameter(req, httpSession, null, param);
 		
 		if ( userInfo != null ) {
+			param.put("SEQ_ID", req.getParameter("seqId"));
 			param.put("DOMAIN", req.getParameter("siteDomain"));
 			param.put("SITE_NAME", req.getParameter("siteName"));
 			param.put("SITE_ID_KEY", req.getParameter("siteIdKey"));
@@ -264,8 +258,8 @@ public class SiteController extends CommonController{
 			throw new Exception("Login please.");
 		}
 		
-//		SiteListEntity siteListEntity = siteService.modifySite(req, param);
-//		List<SiteEntity> siteList = siteListEntity.getSiteList();
+		SiteListEntity siteListEntity = siteService.modifyMasterSite(req, param);
+		List<SiteEntity> siteList = siteListEntity.getSiteList();
 		
 		String redirectUrl = "siteInfoList.do?jsp=system/siteInfoList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
@@ -274,4 +268,108 @@ public class SiteController extends CommonController{
 	}
 	
 	
+	@RequestMapping("/siteDelete.do")
+	public ModelAndView siteDelete(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		if ( userInfo != null ) {
+			param.put("SEQ_ID", req.getParameter("seqId"));
+			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+		SiteListEntity siteListEntity = siteService.deletePrivateSite(req, param);
+		List<SiteEntity> siteList = siteListEntity.getSiteList();
+		
+		String redirectUrl = "siteList.do?jsp=site/siteList";
+		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
+		
+		return model;
+	}
+	
+	
+	@RequestMapping("/siteInfoDelete.do")
+	public ModelAndView siteInfoDelete(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		if ( userInfo != null ) {
+			param.put("SEQ_ID", req.getParameter("seqId"));
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+		SiteListEntity siteListEntity = siteService.deleteMasterSite(req, param);
+		List<SiteEntity> siteList = siteListEntity.getSiteList();
+		
+		String redirectUrl = "siteInfoList.do?jsp=system/siteInfoList";
+		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
+		
+		return model;
+	}
+	
+	
+	@RequestMapping("/siteRead.do")
+	public ModelAndView siteRead(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+		ModelAndView model = setJsp(req, "site/siteWrite");
+		
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		if ( userInfo != null ) {
+			param.put("SEQ_ID", req.getParameter("seqId"));
+			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+		if ( req.getParameter("seqId") != null ) {
+			SiteEntity siteEntity = siteService.readPrivateSite(req, param);
+			model.addObject("SiteEntity", siteEntity);
+		}
+		
+		SiteListEntity siteListEntity = siteService.listMasterSite(param);
+		model.addObject("SiteMasterList", siteListEntity);
+		
+		return model;
+	}
+	
+	
+	@RequestMapping("/siteInfoRead.do")
+	public ModelAndView siteInfoRead(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+		ModelAndView model = setJsp(req, "system/siteInfoWrite");
+		
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		if ( userInfo != null ) {
+			param.put("SEQ_ID", req.getParameter("seqId"));
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+		SiteEntity siteEntity = siteService.readMasterSite(req, param);
+		
+		model.addObject("SiteEntity", siteEntity);
+		
+		return model;
+	}
 }

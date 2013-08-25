@@ -92,7 +92,11 @@
 							<tr>
 								<td><input type=checkbox value=''></td>
 								<td><%= startSequence-- %></td>
-								<td><%=siteEntity.getSite_name()%></td>
+								<td>
+									<a href="siteInfoRead.do?jsp=system/siteInfoWrite&seqId=<%=siteEntity.getSeq_id()%>">
+										<%=siteEntity.getSite_name()%>
+									</a>
+								</td>
 								<td><%=siteEntity.getDomain()%></td>
 								<td><%=siteEntity.getWriteBoardDateTime(siteEntity.getWrite_datetime())%></td>
 							</tr>
