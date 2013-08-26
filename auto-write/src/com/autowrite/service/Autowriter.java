@@ -188,10 +188,8 @@ public class Autowriter {
 	private static List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
-		String content = autowriteInfo.getContent();
-		
 		nvps.add(new BasicNameValuePair("title", autowriteInfo.getTitle()));
-		nvps.add(new BasicNameValuePair("content", content));
+		nvps.add(new BasicNameValuePair("content", autowriteInfo.getContent()));
 		nvps.add(new BasicNameValuePair("category", "030600"));
 		nvps.add(new BasicNameValuePair("region", "인부천"));
 		

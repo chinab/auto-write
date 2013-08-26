@@ -46,12 +46,12 @@
 					<!--게시판 시작-->
 					<table class="list01">
 						<colgroup>
-							<col width="70" />
-							<col width="70" />
+							<col width="50" />
+							<col width="60" />
 							<col width="/" />
-							<col width="100" />
-							<col width="100" />
-							<col width="100" />
+							<col width="70" />
+							<col width="70" />
+							<col width="70" />
 						</colgroup>
 						<tbody>
 
@@ -73,7 +73,7 @@
 								<td><%=autowriteEntity.getSeq_id()%></td>
 								<td>
 									<a href="autowriteSiteList.do?jsp=autowrite/autowriteSiteList&autowriteMasterSeqid=<%=autowriteEntity.getSeq_id()%>">
-										<%=autowriteEntity.getTitleLength(autowriteEntity.getTitle(), 20)%>
+										<%=autowriteEntity.getTitleLength(autowriteEntity.getTitle(), 30)%>
 									</a>
 								</td>
 								<td><%=autowriteEntity.getWriteBoardDateTime(autowriteEntity.getWrite_datetime())%></td>
