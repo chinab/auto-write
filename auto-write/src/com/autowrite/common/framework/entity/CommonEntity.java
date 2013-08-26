@@ -44,4 +44,12 @@ public class CommonEntity {
 			return value;
 		}
 	}
+	
+	public String getTitleLength(String title, int length) {
+		if ( title.length() > length ){
+			return title.substring(0, length) + "...";
+		} else {
+			return title;
+		}
+	}
 }

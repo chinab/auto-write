@@ -200,7 +200,7 @@ public class AutowriteController extends CommonController{
 		if ( userInfo != null ) {
 			param.put("CONTENTS_SEQ_ID", req.getParameter("contentsSeqId"));
 			param.put("TITLE", req.getParameter("title"));
-			param.put("CONTENT", req.getParameter("content").getBytes("UTF-8"));
+			param.put("CONTENT", req.getParameter("content"));
 			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
 			param.put("WRITER_ID", userInfo.getId());
 			param.put("WRITER_IP", req.getRemoteAddr());

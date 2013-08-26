@@ -1,6 +1,8 @@
 package com.autowrite.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,9 +68,18 @@ public class Autowriter {
 		try {
 			setCookie(autowriteInfo);
 			
-			loginJson(autowriteInfo);
-
-			writeBoard(autowriteInfo);
+			if ( loginJson(autowriteInfo) ) {
+				writeBoard(autowriteInfo);
+			} else {
+				// login 100회 반복.
+//				for ( int ii = 0 ; ii < 100 ; ii ++ ) {
+//					if ( loginJson(autowriteInfo) ){
+//						writeBoard(autowriteInfo);
+//						break;
+//					}
+//				}
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -77,23 +88,12 @@ public class Autowriter {
 		}
 	}
 
-	private void writeBoard(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
-		String writeUrl = "http://www.hwaru1.net/jekyll/writeBoard.do";
-
-		HttpPost httpost = new HttpPost(writeUrl);
-		List<NameValuePair> nvps2 = setNvpsParams();
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
-
-		HttpResponse response = httpclient.execute(httpost);
-		HttpEntity entity = response.getEntity();
-
-		printResponseBody(entity);
-
-		System.out.println("Post logon cookies:");
-	}
-
-	private void setCookie(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, Exception {
+    private void setCookie(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, Exception {
 		domainUrl = autowriteInfo.getSiteEntity().getDomain();
+		
+		if ( !domainUrl.startsWith("http://") ){
+			domainUrl = "http://" + domainUrl;
+		}
 		
 		HttpGet httpget = new HttpGet(domainUrl);
 
@@ -105,86 +105,117 @@ public class Autowriter {
 
 		System.out.println("Initial set of cookies:");
 		cookies = httpclient.getCookieStore().getCookies();
-		if (cookies.isEmpty()) {
-			System.out.println("Login Failed. Cookie does not exist.");
-			throw new Exception("Login Failed. Cookie does not exist.");
-		} else {
-			for (int i = 0; i < cookies.size(); i++) {
-				System.out.println("- " + cookies.get(i).toString());
-			}
-		}
 	}
 
-	private void loginJson(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
-		SiteEntity siteInfo = autowriteInfo.getSiteEntity();
-//		String loginUrl = "http://www.hwaru1.net/jekyll/dologin.do";
-		String loginUrl = siteInfo.getLogin_url();
-		HttpPost httpost = new HttpPost(loginUrl);
-
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-//			nvps.add(new BasicNameValuePair("u_id", "kshrabbit"));
-//			nvps.add(new BasicNameValuePair("password", "!lim0301"));
-		nvps.add(new BasicNameValuePair("u_id", siteInfo.getSite_id()));
-		nvps.add(new BasicNameValuePair("password", siteInfo.getSite_passwd()));
+	
+    private boolean loginJson(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
+    	
+    	try {
+			SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+			String loginUrl = siteInfo.getLogin_url();
+			HttpPost httpost = new HttpPost(loginUrl);
+	
+			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+			nvps.add(new BasicNameValuePair("u_id", "hwaru"));
+			nvps.add(new BasicNameValuePair("password", "!lim0301"));
+			
+			
+			JSONObject json = new JSONObject();
+			json.put("u_id", "edge0117");
+			json.put("password", "ai0105");
+//			json.put("u_id", siteInfo.getSite_id());
+//			json.put("password", siteInfo.getSite_passwd());
+			
+			nvps.add(new BasicNameValuePair("p", json.toString()));
+	
+			httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
+			
+			HttpResponse response = httpclient.execute(httpost);
+			HttpEntity entity = response.getEntity();
+			
+			String responseBody = parseResponse(entity);
+			
+			if ( responseBody.contains("권한이 없습니다") ) {
+				throw new Exception("권한이 없습니다");
+			} else {
+				System.out.println(responseBody);
+			}
+			
+			System.out.println("Login form get: " + response.getStatusLine());
+			EntityUtils.consume(entity);
+	
+			System.out.println("Post logon cookies:");
+			cookies = httpclient.getCookieStore().getCookies();
+			if (cookies.isEmpty()) {
+				System.out.println("None");
+			} else {
+				for (int i = 0; i < cookies.size(); i++) {
+					System.out.println("- " + cookies.get(i).toString());
+				}
+			}
+    	} catch (Exception e){
+    		e.printStackTrace();
+    		return false;
+    	}
 		
-		
-		JSONObject json = new JSONObject();
-		json.put("u_id", "hwaru");
-		json.put("password", "!lim0301");
+		return true;
+	}
 
-		nvps.add(new BasicNameValuePair("p", json.toString()));
 
-		httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
+	private void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
+		String writeUrl = autowriteInfo.getSiteEntity().getWrite_url(); 
+				
+		HttpPost httpost = new HttpPost(writeUrl);
+		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
 		
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
+
+		String responseBody = parseResponse(entity);
 		
-		response = httpclient.execute(httpost);
-		entity = response.getEntity();
-
-		printResponseBody(entity);
-
-		System.out.println("Login form get: " + response.getStatusLine());
-		EntityUtils.consume(entity);
+		System.out.println(responseBody);
+		
+		if ( responseBody.contains("권한이 없습니다") ) {
+			throw new Exception("권한이 없습니다");
+		} else {
+			System.out.println(responseBody);
+		}
 
 		System.out.println("Post logon cookies:");
-		cookies = httpclient.getCookieStore().getCookies();
-		if (cookies.isEmpty()) {
-			System.out.println("None");
-		} else {
-			for (int i = 0; i < cookies.size(); i++) {
-				System.out.println("- " + cookies.get(i).toString());
-			}
-		}
 	}
 
-
-	private static List<NameValuePair> setNvpsParams() {
+	private static List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-
-		nvps.add(new BasicNameValuePair("title", "한글테스트"));
-		nvps.add(new BasicNameValuePair("content", "한글테스트"));
-		nvps.add(new BasicNameValuePair("category", "020100"));
-		nvps.add(new BasicNameValuePair("actionType", "WRITE"));
+		
+		String content = autowriteInfo.getContent();
+		
+		nvps.add(new BasicNameValuePair("title", autowriteInfo.getTitle()));
+		nvps.add(new BasicNameValuePair("content", content));
+		nvps.add(new BasicNameValuePair("category", "030600"));
+		nvps.add(new BasicNameValuePair("region", "인부천"));
 		
 		return nvps;
 	}
 
 
-	private static void printResponseBody(HttpEntity entity) throws IOException, UnsupportedEncodingException {
+	private String parseResponse(HttpEntity entity) throws Exception {
 		EofSensorInputStream content = (EofSensorInputStream) entity.getContent();
-		byte[] buffer = new byte[1024] ;
-		int readCnt = 0;
-		long conLen = entity.getContentLength();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+		String curr = null;
 		
-		System.out.println("Response content length: " + conLen);
-		System.out.println("Response content: ");
+		StringBuffer sb = new StringBuffer();
 		
-		String responseHtml = null;
-		while((readCnt = content.read(buffer)) != -1 ){
-			responseHtml = new String(buffer, 0, readCnt, "UTF-8");
-//        		responseHtml = new String(buffer, 0, readCnt, "EUC-KR");
-			System.out.print(responseHtml);
+		try {
+			while((curr = reader.readLine()) != null ){
+				sb.append(curr + "\n");
+			}
+		} catch ( Exception e ) {
+			throw e;
+		} finally {
+			content.close();
 		}
+		
+		return sb.toString();
 	}
 }

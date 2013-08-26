@@ -73,7 +73,7 @@
 								<td><%=autowriteEntity.getSeq_id()%></td>
 								<td>
 									<a href="autowriteSiteList.do?jsp=autowrite/autowriteSiteList&autowriteMasterSeqid=<%=autowriteEntity.getSeq_id()%>">
-										<%=autowriteEntity.getTitle()%>
+										<%=autowriteEntity.getTitleLength(autowriteEntity.getTitle(), 20)%>
 									</a>
 								</td>
 								<td><%=autowriteEntity.getWriteBoardDateTime(autowriteEntity.getWrite_datetime())%></td>
