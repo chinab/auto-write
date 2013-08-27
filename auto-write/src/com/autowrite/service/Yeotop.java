@@ -1,6 +1,5 @@
 package com.autowrite.service;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,7 +33,7 @@ import org.apache.http.util.EntityUtils;
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 
-public class Autowriter {
+public class Yeotop implements AutowriterInterface{
 	private DefaultHttpClient httpclient;
 	
 	private String domainUrl;
@@ -43,7 +42,7 @@ public class Autowriter {
 	/**
 	 * 생성자
 	 */
-	public Autowriter(){
+	public Yeotop(){
 		httpclient = new DefaultHttpClient();
 
 		httpclient.setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy() {
@@ -69,7 +68,7 @@ public class Autowriter {
 		try {
 			setCookie(autowriteInfo);
 			
-			if ( loginJson(autowriteInfo) ) {
+			if ( login(autowriteInfo) ) {
 				writeBoard(autowriteInfo);
 			} else {
 				// login 100회 반복.
@@ -109,35 +108,28 @@ public class Autowriter {
 	}
 
 	
-    public boolean loginJson(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
+    public boolean login(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
     	
     	try {
 			SiteEntity siteInfo = autowriteInfo.getSiteEntity();
 			String loginUrl = siteInfo.getLogin_url();
 			HttpPost httpost = new HttpPost(loginUrl);
 	
-			List<NameValuePair> nvps = new ArrayList<NameValuePair>();			
-			
-			JSONObject json = new JSONObject();
-			json.put("u_id", "edge0117");
-			json.put("password", "ai0105");
-//			json.put("u_id", siteInfo.getSite_id());
-//			json.put("password", siteInfo.getSite_passwd());
-			
-			nvps.add(new BasicNameValuePair("p", json.toString()));
-	
-			httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
-			
+			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+            // 회원타입
+            // 1: 일반회원, 2 : 업소회원
+            nvps.add(new BasicNameValuePair("mb_type", "2"));
+            nvps.add(new BasicNameValuePair("mb_id", siteInfo.getSite_id()));
+	        nvps.add(new BasicNameValuePair("mb_password", siteInfo.getSite_passwd()));
+//	        nvps.add(new BasicNameValuePair("mb_id", "qnvudtmxk"));
+//	        nvps.add(new BasicNameValuePair("mb_password", "!qnvudtmxk"));
+	        
+	        httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
+
 			HttpResponse response = httpclient.execute(httpost);
 			HttpEntity entity = response.getEntity();
 			
 			String responseBody = parseResponse(entity);
-			
-			if ( responseBody.contains("권한이 없습니다") ) {
-				throw new Exception("권한이 없습니다");
-			} else {
-				System.out.println(responseBody);
-			}
 			
 			System.out.println("Login form get: " + response.getStatusLine());
 			EntityUtils.consume(entity);
@@ -165,7 +157,8 @@ public class Autowriter {
 				
 		HttpPost httpost = new HttpPost(writeUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, "EUC-KR"));
+        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
 		
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
@@ -174,28 +167,47 @@ public class Autowriter {
 		
 		System.out.println(responseBody);
 		
-		if ( responseBody.contains("권한이 없습니다") ) {
-			throw new Exception("권한이 없습니다");
-		} else {
-			System.out.println(responseBody);
-		}
-
 		System.out.println("Post logon cookies:");
 	}
-
-	private static List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
+    
+    
+	public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
-		nvps.add(new BasicNameValuePair("title", autowriteInfo.getTitle()));
-		nvps.add(new BasicNameValuePair("content", autowriteInfo.getContent()));
-		nvps.add(new BasicNameValuePair("category", "030100"));
-		nvps.add(new BasicNameValuePair("region", "인부천"));
+		// 제목
+//		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
+		String subjectStr = autowriteInfo.getTitle();
+		nvps.add(new BasicNameValuePair("wr_subject", subjectStr));
+		
+		// 내용
+//		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
+		String contentStr = autowriteInfo.getContent();
+		nvps.add(new BasicNameValuePair("wr_content", contentStr));
+		
+		// 카테고리
+		// board30 : 업소홍보1 - 오피, 기타. 
+		// board55 : 창작, 유머
+		nvps.add(new BasicNameValuePair("bo_table", "board55"));
+		
+		// 모름
+		nvps.add(new BasicNameValuePair("wr_trackback", "4"));
+
+		// 모름
+		nvps.add(new BasicNameValuePair("html", "html1"));
+		
+		// 형식구분
+		// A: 일반형식, B : 자유형식
+		nvps.add(new BasicNameValuePair("wr_2", "B"));
+		
+		// 분류
+		// 오피스텔(강남), 오피스텔(비강남), 기타
+		nvps.add(new BasicNameValuePair("ca_name", "오피스텔(비강남)"));
 		
 		return nvps;
 	}
 
 
-	private String parseResponse(HttpEntity entity) throws Exception {
+	public String parseResponse(HttpEntity entity) throws Exception {
 		EofSensorInputStream content = (EofSensorInputStream) entity.getContent();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(content));
 		String curr = null;
@@ -213,5 +225,10 @@ public class Autowriter {
 		}
 		
 		return sb.toString();
+	}
+
+	@Override
+	public void shutdownHttpConnection() throws Exception {
+		httpclient.getConnectionManager().shutdown();
 	}
 }

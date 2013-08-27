@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.autowrite.common.config.Constant;
 import com.autowrite.common.framework.dao.AutowriteDao;
 import com.autowrite.common.framework.dao.ContentsDao;
 import com.autowrite.common.framework.dao.SiteDao;
@@ -16,7 +17,7 @@ import com.autowrite.common.framework.entity.AutowriteListEntity;
 import com.autowrite.common.framework.entity.BoardEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 import com.autowrite.common.framework.entity.SiteParameterEntity;
-import com.autowrite.service.Autowriter;
+import com.autowrite.service.AutowriterInterface;
 
 @Component
 public class AutowriteService extends CommonService{
@@ -225,9 +226,54 @@ public class AutowriteService extends CommonService{
 		}
 		
 		if ( "Y".equals(successYn) ) {
-			Autowriter autowriter = new Autowriter();
+			String serviceClassName = siteInfo.getService_class_name();
+			String serviceFullClassName = Constant.AUTOWRITE_SERVICE_PACKAGE + "." + serviceClassName;
+			
+			if ( serviceClassName == null ){
+				successYn = "N";
+				responseContent = siteInfo.getSite_name() + "사이트의 클래스 명을 설정해야 함.";
+			}
+			
+			Class c;
+			Object obj = null;
+			
 			try {
-				autowriter.executeHttpConnection(autowriteInfo);
+				c = Class.forName(serviceFullClassName);
+				obj = c.newInstance();
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+				successYn = "N";
+				responseContent = serviceFullClassName + " 클래스 없음.";
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+				successYn = "N";
+				responseContent = serviceFullClassName + " 클래스 초기화 실패.";
+			} catch (IllegalAccessException e) {
+				successYn = "N";
+				responseContent = serviceFullClassName + " 클래스 접근 실패.";
+			}
+			
+			AutowriterInterface autowriter = (AutowriterInterface)obj;
+			
+			System.out.println("AUTOWRITE CLASS NAME : " + serviceFullClassName);
+			
+			try {
+				autowriter.setCookie(autowriteInfo);
+				
+				if ( autowriter.login(autowriteInfo) ) {
+					autowriter.writeBoard(autowriteInfo);
+				} else {
+					successYn = "N";
+					responseContent = "로그인 실패.";
+					// login 100회 반복.
+//					for ( int ii = 0 ; ii < 100 ; ii ++ ) {
+//						if ( loginJson(autowriteInfo) ){
+//							writeBoard(autowriteInfo);
+//							break;
+//						}
+//					}
+				}
+				
 			} catch (Exception e) {
 				successYn = "N";
 				responseContent = e.getMessage();

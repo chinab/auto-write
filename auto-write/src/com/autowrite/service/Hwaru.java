@@ -1,6 +1,5 @@
 package com.autowrite.service;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,7 +33,7 @@ import org.apache.http.util.EntityUtils;
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 
-public class Autowriter {
+public class Hwaru implements AutowriterInterface{
 	private DefaultHttpClient httpclient;
 	
 	private String domainUrl;
@@ -43,7 +42,7 @@ public class Autowriter {
 	/**
 	 * 생성자
 	 */
-	public Autowriter(){
+	public Hwaru(){
 		httpclient = new DefaultHttpClient();
 
 		httpclient.setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy() {
@@ -69,7 +68,7 @@ public class Autowriter {
 		try {
 			setCookie(autowriteInfo);
 			
-			if ( loginJson(autowriteInfo) ) {
+			if ( login(autowriteInfo) ) {
 				writeBoard(autowriteInfo);
 			} else {
 				// login 100회 반복.
@@ -109,7 +108,7 @@ public class Autowriter {
 	}
 
 	
-    public boolean loginJson(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
+    public boolean login(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
     	
     	try {
 			SiteEntity siteInfo = autowriteInfo.getSiteEntity();
@@ -119,10 +118,10 @@ public class Autowriter {
 			List<NameValuePair> nvps = new ArrayList<NameValuePair>();			
 			
 			JSONObject json = new JSONObject();
-			json.put("u_id", "edge0117");
-			json.put("password", "ai0105");
-//			json.put("u_id", siteInfo.getSite_id());
-//			json.put("password", siteInfo.getSite_passwd());
+//			json.put("u_id", "edge0117");
+//			json.put("password", "ai0105");
+			json.put("u_id", siteInfo.getSite_id());
+			json.put("password", siteInfo.getSite_passwd());
 			
 			nvps.add(new BasicNameValuePair("p", json.toString()));
 	
@@ -183,7 +182,7 @@ public class Autowriter {
 		System.out.println("Post logon cookies:");
 	}
 
-	private static List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
+	public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		nvps.add(new BasicNameValuePair("title", autowriteInfo.getTitle()));
@@ -195,7 +194,7 @@ public class Autowriter {
 	}
 
 
-	private String parseResponse(HttpEntity entity) throws Exception {
+	public String parseResponse(HttpEntity entity) throws Exception {
 		EofSensorInputStream content = (EofSensorInputStream) entity.getContent();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(content));
 		String curr = null;
@@ -213,5 +212,10 @@ public class Autowriter {
 		}
 		
 		return sb.toString();
+	}
+
+	@Override
+	public void shutdownHttpConnection() throws Exception {
+		httpclient.getConnectionManager().shutdown();
 	}
 }

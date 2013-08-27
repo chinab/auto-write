@@ -124,4 +124,8 @@ public class Constant {
 	public static final String LOGIN_CATEOGRY = "LOGIN";
 	public static final String LOGOUT_CATEOGRY = "LOGOUT";
 	
+	
+	
+	public static final String AUTOWRITE_SERVICE_PACKAGE = "com.autowrite.service";
+	
 }

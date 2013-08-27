@@ -25,7 +25,11 @@ CREATE  TABLE `site_master` (
   `modify_type` VARCHAR(255) NULL ,
 
   `delete_type` VARCHAR(255) NULL ,
-
+  
+  `service_class_name` VARCHAR(4000) NULL ,
+  
+  `site_encoding` VARCHAR(255) NULL ,
+  
   `writer_seq_id` BIGINT NULL ,
 
   `writer_id` VARCHAR(45) NULL ,

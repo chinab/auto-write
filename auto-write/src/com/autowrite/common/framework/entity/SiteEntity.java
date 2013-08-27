@@ -27,6 +27,9 @@ public class SiteEntity extends CommonEntity{
 	private String writer_id;
 	private String write_datetime;
 	
+	private String service_class_name;
+	private String site_encoding;
+	
 	private Map loginParam;
 	private Map writeParam;
 	private Map modifyParam;
@@ -145,6 +148,18 @@ public class SiteEntity extends CommonEntity{
 	}
 	public void setWrite_datetime(String write_datetime) {
 		this.write_datetime = write_datetime;
+	}
+	public String getService_class_name() {
+		return service_class_name;
+	}
+	public void setService_class_name(String service_class_name) {
+		this.service_class_name = service_class_name;
+	}
+	public String getSite_encoding() {
+		return site_encoding;
+	}
+	public void setSite_encoding(String site_encoding) {
+		this.site_encoding = site_encoding;
 	}
 	public Map getLoginParam() {
 		return loginParam;

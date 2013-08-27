@@ -41,7 +41,11 @@
 			return false;
 		}
 		
-		frm.action = "siteInfoWrite.do";
+		if ( frm.seqId.value.length > 0 ) {
+			frm.action = "siteInfoUpdate.do";
+		} else {
+			frm.action = "siteInfoWrite.do";
+		}
 		frm.method = "post";
 		
 		frm.submit();
@@ -53,6 +57,8 @@
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
 <form name="writeForm">
+	<input type="hidden" name="seqId" value="<%=siteEntity.nvl(siteEntity.getSeq_id())%>"/>
+	
 <table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
@@ -120,6 +126,29 @@
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
 									<input name="sitePasswdKey" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getSite_passwd_key())%>">
+								</td>
+								<td class="subject">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>서비스 클래스명</b></td>
+								<td><img src="images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="serviceClassName" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getService_class_name())%>">
+								</td>
+								<td class="subject">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>인코딩</b></td>
+								<td><img src="images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<select name="siteEncoding" class="s_id" style="width: 150px;">
+										<option value="UTF-8" <%="UTF-8".equals(siteEntity.getSite_encoding())?"selected=\"selected\"":""%>>UTF-8</option>
+										<option value="EUC-KR" <%="EUC-KR".equals(siteEntity.getSite_encoding())?"selected=\"selected\"":""%>>EUC-KR</option>
+									</select>
 								</td>
 								<td class="subject">
 									

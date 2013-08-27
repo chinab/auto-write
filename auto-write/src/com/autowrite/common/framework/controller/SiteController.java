@@ -166,6 +166,8 @@ public class SiteController extends CommonController{
 			param.put("WRITE_TYPE", req.getParameter("writeType"));
 			param.put("MODIFY_TYPE", req.getParameter("modifyType"));
 			param.put("DELETE_TYPE", req.getParameter("deleteType"));
+			param.put("SERVICE_CLASS_NAME", req.getParameter("serviceClassName"));
+			param.put("SITE_ENCODING", req.getParameter("siteEncoding"));
 			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
 			param.put("WRITER_ID", userInfo.getId());
 			param.put("WRITER_IP", req.getRemoteAddr());
@@ -227,8 +229,8 @@ public class SiteController extends CommonController{
 	}
 	
 	
-	@RequestMapping("/siteInfoModify.do")
-	public ModelAndView siteInfoModify(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+	@RequestMapping("/siteInfoUpdate.do")
+	public ModelAndView siteInfoUpdate(String p, HttpServletRequest req, ServletResponse res) throws Exception {
 		Map param = new HashMap();
 		
 		HttpSession httpSession = req.getSession(true);
@@ -250,6 +252,8 @@ public class SiteController extends CommonController{
 			param.put("WRITE_TYPE", req.getParameter("writeType"));
 			param.put("MODIFY_TYPE", req.getParameter("modifyType"));
 			param.put("DELETE_TYPE", req.getParameter("deleteType"));
+			param.put("SERVICE_CLASS_NAME", req.getParameter("serviceClassName"));
+			param.put("SITE_ENCODING", req.getParameter("siteEncoding"));
 			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
 			param.put("WRITER_ID", userInfo.getId());
 			param.put("WRITER_IP", req.getRemoteAddr());
