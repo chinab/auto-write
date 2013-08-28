@@ -440,5 +440,25 @@
 			M.SEQ_ID = P.MASTER_SEQ_ID
 			AND P.SEQ_ID = #SITE_SEQ_ID#
 	</statement>
-	
+		
+	<statement id="autowrite.master.delete" parameterClass="java.util.HashMap">
+		delete from
+			AUTOWRITE_MASTER
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+		
+	<statement id="autowrite.site.delete" parameterClass="java.util.HashMap">
+		delete from
+			AUTOWRITE_SITE
+		where
+			AUTOWRITE_MASTER_SEQ_ID = #SEQ_ID#
+	</statement>
+		
+	<statement id="autowrite.log.delete" parameterClass="java.util.HashMap">
+		delete from
+			AUTOWRITE_LOG
+		where
+			AUTOWRITE_MASTER_SEQ_ID = #SEQ_ID#
+	</statement>
 </sqlMap>

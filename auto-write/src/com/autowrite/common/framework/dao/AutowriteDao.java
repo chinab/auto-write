@@ -26,4 +26,10 @@ public interface AutowriteDao {
 	public abstract List<AutowriteEntity> listAutowriteLog(Map param);
 
 	public abstract AutowriteEntity getAutowriteInfo(Map param);
+
+	public abstract void deleteAutowriteMaster(Map param);
+	
+	public abstract void deleteAutowriteSite(Map param);
+	
+	public abstract void deleteAutowriteLog(Map param);
 }

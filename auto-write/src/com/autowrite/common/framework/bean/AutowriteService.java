@@ -286,13 +286,21 @@ public class AutowriteService extends CommonService{
 	}
 
 
+	public void deleteAutowrite(HttpServletRequest req, Map param) {
+		setCondition(param);
+		
+		autowriteDao.deleteAutowriteMaster(param);
+		
+		autowriteDao.deleteAutowriteSite(param);
+		
+		autowriteDao.deleteAutowriteLog(param);
+	}
+	
+	
 	public AutowriteListEntity modifyAutowrite(HttpServletRequest req, Map param) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-
-	
+	}	
 	
 //	public AutowriteListEntity modifyAutowrite(HttpServletRequest req, Map param) throws Exception {
 //		String menuCode = param.get("category").toString();

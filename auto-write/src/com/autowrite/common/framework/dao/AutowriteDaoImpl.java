@@ -87,4 +87,22 @@ public class AutowriteDaoImpl implements AutowriteDao {
 	public AutowriteEntity getAutowriteInfo(Map param) {
 		return (AutowriteEntity) sqlHelper.queryForObject("autowrite.info.read", param);
 	}
+
+
+	@Override
+	public void deleteAutowriteMaster(Map param) {
+		sqlHelper.delete("autowrite.master.delete", param);
+	}
+	
+	
+	@Override
+	public void deleteAutowriteSite(Map param) {
+		sqlHelper.delete("autowrite.site.delete", param);
+	}
+	
+	
+	@Override
+	public void deleteAutowriteLog(Map param) {
+		sqlHelper.delete("autowrite.log.delete", param);
+	}
 }

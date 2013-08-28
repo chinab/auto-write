@@ -24,8 +24,38 @@
 <!--탑메뉴-->
 <jsp:include page="../include/topMenu.jsp" flush="false" />
 
+<script>
+	function deleteContents(){
+		var frm = document.listForm;
+		
+		var checkedCount = 0;
+		
+		for ( var ii = 0 ; ii < frm.selectedSeqId.length ; ii ++ ) {
+			if ( frm.selectedSeqId[ii].checked == true ){
+				checkedCount ++;
+			}
+		}
+		
+		if ( checkedCount == 0 ) {
+			alert("대상을 선택 해 주세요.");
+			return;
+		} else {
+			if ( !confirm("선택한 대상을 삭제하시겠습니까?") ){
+				return;
+			}
+			
+			frm.action = "autowriteDelete.do";
+			frm.method = "post";
+			frm.submit();
+		}
+	}
+</script>
+
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
+<form name="listForm">
+	<input type="hidden" name="jsp" value=""/>
+
 <table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
@@ -69,7 +99,7 @@
 									AutowriteEntity autowriteEntity = autowriteMasterList.get(ii);
 							%>
 							<tr>
-								<td><input type=checkbox value=''></td>
+								<td><input name="selectedSeqId" type="checkbox" value="<%=autowriteEntity.getSeq_id()%>"></td>
 								<td><%=autowriteEntity.getSeq_id()%></td>
 								<td>
 									<a href="autowriteSiteList.do?jsp=autowrite/autowriteSiteList&autowriteMasterSeqid=<%=autowriteEntity.getSeq_id()%>">
@@ -87,13 +117,13 @@
 
 						</tbody>
 					</table>
-
-
-
+					
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
 						<input class="in_btn" type="button" value="재실행" OnClick="popup_check();" class="input_gr">
 						&nbsp;&nbsp;
-						<input class="in_btnc" type="button" value="뒤로가기" OnClick="history.back();" class="input_gr">
+						<input class="in_btnc2" type="button" value="뒤로가기" OnClick="history.back();" class="input_gr">
+						&nbsp;&nbsp;
+						<input class="in_btnc" type="button" value="삭제" OnClick="deleteContents();" class="input_gr">
 					</div>
 				</div>
 
@@ -104,7 +134,7 @@
 
 	</tr>
 </table>
-
+</form>
 
 <!--푸터-->
 <jsp:include page="../include/footer.jsp" flush="false" />

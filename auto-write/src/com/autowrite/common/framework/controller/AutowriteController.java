@@ -218,4 +218,28 @@ public class AutowriteController extends CommonController{
 		
 		return model;
 	}
+	
+	@RequestMapping("/autowriteDelete.do")
+	public ModelAndView autowriteDelete(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+		
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		String[] seqIdArray = req.getParameterValues("selectedSeqId");
+		
+		for ( int ii = 0 ; ii < seqIdArray.length ; ii ++ ) {
+			param.put("SEQ_ID", seqIdArray[ii]);
+			
+			autowriteService.deleteAutowrite(req, param);
+		}
+		
+		String redirectUrl = "autowriteMasterList.do?jsp=autowrite/autowriteMasterList";
+		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
+		
+		return model;
+	}
 }
