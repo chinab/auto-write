@@ -52,7 +52,9 @@ CREATE  TABLE `site_parameter` (
   `p_key` VARCHAR(255) NULL ,
 
   `p_value` VARCHAR(255) NULL ,
-
+  
+  `user_seq_id` VARCHAR(255) NULL ,
+  
   PRIMARY KEY (`seq_id`) )
 
 COMMENT = '사이트별 파라미터 설정';
