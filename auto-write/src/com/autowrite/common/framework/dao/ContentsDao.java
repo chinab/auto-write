@@ -10,6 +10,8 @@ import com.autowrite.common.framework.entity.PaymentMasterEntity;
 public interface ContentsDao {
 
 	public abstract void writePrivateContents(Map param);
+
+	public abstract void modifyPrivateContents(Map param);
 	
 	public abstract List<BoardEntity> listPrivateContents(Map param);
 
@@ -21,5 +23,5 @@ public interface ContentsDao {
 
 	public abstract BoardEntity contentsView(Map param);
 
-	
+	public abstract void deletePrivateContents(Map param);
 }

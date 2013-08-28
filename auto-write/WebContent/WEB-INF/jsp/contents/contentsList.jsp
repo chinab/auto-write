@@ -42,34 +42,76 @@
 		
 		location.href = hrefStr;
 	}
+	
+	function modifyContents(){
+		var frm = document.listForm;
+		
+		var checkedCount = 0;
+		var seqId;
+		
+		for ( var ii = 0 ; ii < frm.selectedSeqId.length ; ii ++ ) {
+			if ( frm.selectedSeqId[ii].checked == true ){
+				seqId = frm.selectedSeqId[ii].value;
+				checkedCount ++;
+			}
+		}
+		
+		if ( checkedCount == 0 ) {
+			alert("대상을 선택 해 주세요.");
+			return;
+		} else if ( checkedCount > 1 ) {
+			alert("하나만 선택 해 주세요.");
+			return;
+		} else {
+			var hrefStr = "contentsView.do?jsp=contents/contentsWrite";
+			hrefStr += "&seqId=" + seqId;
+			
+			location.href = hrefStr;
+		}
+	}
+	
+	function deleteContents(){
+		var frm = document.listForm;
+		
+		var checkedCount = 0;
+		
+		for ( var ii = 0 ; ii < frm.selectedSeqId.length ; ii ++ ) {
+			if ( frm.selectedSeqId[ii].checked == true ){
+				checkedCount ++;
+			}
+		}
+		
+		if ( checkedCount == 0 ) {
+			alert("대상을 선택 해 주세요.");
+			return;
+		} else {
+			if ( !confirm("선택한 대상을 삭제하시겠습니까?") ){
+				return;
+			}
+			
+			frm.action = "contentsDelete.do";
+			frm.method = "post";
+			frm.submit();
+		}
+	}
 </script>
 
 
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
-<table cellpadding="0" cellspacing="0" border="0" width="1000"
-	align="center" style="margin-top: 30px;">
+<form name="listForm">
+	<input type="hidden" name="jsp" value=""/>
+
+<table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
-		<td width="220" valign="top">
-
-			<ul class="L_Menus" style="">
-				<li class="Menu_Title">본문설정
-				<li>
-				<li class="Menu_tex"><a href="contentsList.do?jsp=contents/contentsList" onfocus="blur()">본문리스트</a>
-				<li>
-				<li class="Menu_tex"><a href="jspView.do?jsp=contents/contentsWrite" onfocus="blur()">본문등록</a>
-				<li>
-			</ul>
-		</td>
-
-
+		<jsp:include page="../include/leftContents.jsp" flush="false" />
+		
 		<!--우측컨-->
 		<td width="800" valign="top">
 			<div style="margin-left: 30px; width: 750px;">
 
-				<div
-					style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">본문설정 > 본문 리스트</div>
+				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">본문설정 > 본문 리스트</div>
 				<div style="width: 100%; margin-top: 30px;">
 					<img src="images/title_dot.gif"/>
 					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">본문 리스트</span>
@@ -112,7 +154,7 @@
 									BoardEntity contentsEntity = contentsList.get(ii);
 							%>
 							<tr>
-								<td><input type=checkbox value=''></td>
+								<td><input name="selectedSeqId" type="checkbox" value="<%=contentsEntity.getSeq_id()%>"></td>
 								<td><%= startSequence-- %></td>
 								<td>
 									<a href="javascript:readContents('<%=contentsEntity.getSeq_id()%>');">
@@ -134,9 +176,9 @@
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
 						<input class="in_btn" type="button" value="등록" OnClick="location.href='jspView.do?jsp=contents/contentsWrite';" class="input_gr">
 						&nbsp;&nbsp;
-						<input class="in_btnc2" type="button" value="수정" OnClick="history.back();" class="input_gr">
+						<input class="in_btnc2" type="button" value="수정" OnClick="modifyContents();" class="input_gr">
 						&nbsp;&nbsp;
-						<input class="in_btnc" type="button" value="삭제" OnClick="history.back();" class="input_gr">
+						<input class="in_btnc" type="button" value="삭제" OnClick="deleteContents();" class="input_gr">
 
 					</div>
 				</div>
@@ -148,7 +190,7 @@
 
 	</tr>
 </table>
-
+</form>
 
 <!--푸터-->
 <jsp:include page="../include/footer.jsp" flush="false" />

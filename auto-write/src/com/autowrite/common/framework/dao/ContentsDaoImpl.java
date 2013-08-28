@@ -49,9 +49,27 @@ public class ContentsDaoImpl implements ContentsDao {
 		}
 	}
 
+
+	@Override
+	public void modifyPrivateContents(Map param) {
+		try {
+			sqlHelper.insert("contents.private.modify", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
 	@Override
 	public BoardEntity contentsView(Map param) {
 		return (BoardEntity) sqlHelper.queryForObject("contents.private.select", param);
+	}
+
+
+	@Override
+	public void deletePrivateContents(Map param) {
+		sqlHelper.delete("contents.private.delete", param);
 	}
 	
 }

@@ -92,9 +92,19 @@ public class ContentsService extends CommonService{
 	
 	
 	
-	public BoardListEntity modifyContents(HttpServletRequest req, Map param) {
-		// TODO Auto-generated method stub
-		return null;
+	public BoardListEntity modifyContents(HttpServletRequest req, Map param) throws Exception {
+		setCondition(param);
+		
+		contentsDao.modifyPrivateContents(param);
+		
+		return listPrivateContents(param);
+	}
+
+
+	public void deleteContents(HttpServletRequest req, Map param) {
+		setCondition(param);
+		
+		contentsDao.deletePrivateContents(param);
 	}
 
 

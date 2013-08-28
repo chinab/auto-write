@@ -69,19 +69,8 @@
 <table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
-		<td width="220" valign="top">
-
-			<ul class="L_Menus" style="">
-				<li class="Menu_Title">본문설정
-				<li>
-				<li class="Menu_tex"><a href="contentsList.do?jsp=contents/contentsList" onfocus="blur()">본문리스트</a>
-				<li>
-				<li class="Menu_tex"><a href="jspView.do?jsp=contents/contentsWrite" onfocus="blur()">본문등록</a>
-				<li>
-			</ul>
-		</td>
-
-
+		<jsp:include page="../include/leftContents.jsp" flush="false" />
+		
 		<!--우측컨-->
 		<td width="800" valign="top">
 			<div style="margin-left: 30px; width: 750px;">

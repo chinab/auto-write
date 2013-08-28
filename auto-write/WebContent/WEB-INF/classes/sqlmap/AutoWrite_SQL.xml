@@ -258,6 +258,14 @@
 	</statement>
 	
 	
+	<statement id="contents.private.delete" parameterClass="java.util.HashMap">
+		delete from
+			CONTENTS_MASTER
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
 	<insert id="autowrite.master.write" parameterClass="java.util.HashMap" >
 	    <![CDATA[
 	        insert into AUTOWRITE_MASTER (
