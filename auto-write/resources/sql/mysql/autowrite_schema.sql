@@ -72,6 +72,8 @@ CREATE  TABLE `site_private` (
   
   `site_passwd` VARCHAR(255) NULL ,
   
+  `use_yn` VARCHAR(10) NULL ,
+  
   `writer_seq_id` BIGINT NULL ,
 
   `writer_id` VARCHAR(45) NULL ,

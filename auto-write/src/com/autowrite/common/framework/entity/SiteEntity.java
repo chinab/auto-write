@@ -35,6 +35,8 @@ public class SiteEntity extends CommonEntity{
 	private Map modifyParam;
 	private Map deleteParam;
 	
+	private String use_yn;
+	
 	public String getSeq_id() {
 		return seq_id;
 	}
@@ -184,6 +186,12 @@ public class SiteEntity extends CommonEntity{
 	}
 	public void setDeleteParam(Map deleteParam) {
 		this.deleteParam = deleteParam;
+	}
+	public String getUse_yn() {
+		return use_yn;
+	}
+	public void setUse_yn(String use_yn) {
+		this.use_yn = use_yn;
 	}
 	
 }

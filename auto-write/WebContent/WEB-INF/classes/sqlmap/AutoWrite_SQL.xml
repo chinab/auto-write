@@ -26,7 +26,7 @@
 	<statement id="site.private.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
 		select @RNUM:=0, Q.* from (
 			select
-				SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+				SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, USE_YN, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
 			from
 				SITE_PRIVATE
 			where
@@ -85,9 +85,12 @@
 	
 	<statement id="site.private.write" parameterClass="java.util.HashMap">
 		insert into SITE_PRIVATE (
-			MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
+			MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, USE_YN, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
 		) values (
-			#MASTER_SEQ_ID#, #DOMAIN#, #SITE_NAME#, #SITE_ID#, #SITE_PASSWD#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
+			#MASTER_SEQ_ID#, 
+			(select DOMAIN from SITE_MASTER where SEQ_ID = #MASTER_SEQ_ID#), 
+			(select SITE_NAME from SITE_MASTER where SEQ_ID = #MASTER_SEQ_ID#), 
+			#SITE_ID#, #SITE_PASSWD#, #USE_YN#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
 		)
 	</statement>
 	
@@ -112,10 +115,12 @@
 			SITE_PRIVATE
 		set
 			MASTER_SEQ_ID = #MASTER_SEQ_ID#, 
-			DOMAIN = #DOMAIN#, 
-			SITE_NAME = #SITE_NAME#, 
+			DOMAIN = (select DOMAIN from SITE_MASTER where SEQ_ID = #MASTER_SEQ_ID#), 
+			SITE_NAME = (select SITE_NAME from SITE_MASTER where SEQ_ID = #MASTER_SEQ_ID#), 
+			SITE_ID = (select SITE_ID from SITE_MASTER where SEQ_ID = #MASTER_SEQ_ID#), 
 			SITE_ID = #SITE_ID#, 
 			SITE_PASSWD = #SITE_PASSWD#, 
+			USE_YN = #USE_YN#, 
 			WRITER_SEQ_ID = #WRITER_SEQ_ID#, 
 			WRITER_ID = #WRITER_ID#
 		where
@@ -150,7 +155,7 @@
 	
 	<statement id="site.private.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
 		select
-			SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
+			SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, USE_YN, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
 		from
 			SITE_PRIVATE
 		where

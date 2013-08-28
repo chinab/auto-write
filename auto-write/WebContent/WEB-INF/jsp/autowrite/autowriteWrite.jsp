@@ -143,11 +143,18 @@
 								<td class="subject">
 									<%
 										List<SiteEntity> siteEntityList = autowriteEntity.getSiteEntityList();
-									
+										
+										String checkedStr = "";
+										
 										for ( int ii = 0 ; ii < siteEntityList.size() ;  ii++ ){
 											SiteEntity siteEntity = siteEntityList.get(ii);
+											if ( "Y".equals(siteEntity.getUse_yn()) ) {
+												checkedStr = "checked=\"checked\"";
+											} else {
+												checkedStr = "";
+											}
 									%>
-										<input type="checkbox" name="siteSeqIdList" value="<%=siteEntity.getSeq_id()%>" checked="checked">
+										<input type="checkbox" name="siteSeqIdList" value="<%=siteEntity.getSeq_id()%>" <%=checkedStr%>>
 										<%=siteEntity.getSite_name()%>
 										&nbsp;&nbsp;&nbsp;&nbsp;
 									<%

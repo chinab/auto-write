@@ -64,6 +64,7 @@
 							<col width="70" />
 							<col width="70" />
 							<col width="/" />
+							<col width="70" />
 							<col width="150" />
 							<col width="100" />
 						</colgroup>
@@ -73,6 +74,7 @@
 								<th>선택</th>
 								<th>순번</th>
 								<th>사이트명</th>
+								<th>사용여부</th>
 								<th>도메인</th>
 								<th>등록일</th>
 							</tr>
@@ -100,6 +102,7 @@
 										<%=siteEntity.getSite_name()%>
 									</a>
 								</td>
+								<td><%=siteEntity.getUse_yn()%></td>
 								<td><%=siteEntity.getDomain()%></td>
 								<td><%=siteEntity.getWriteBoardDateTime(siteEntity.getWrite_datetime())%></td>
 							</tr>

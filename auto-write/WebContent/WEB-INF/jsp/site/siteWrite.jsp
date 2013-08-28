@@ -35,14 +35,14 @@
 	function siteWrite(){
 		var frm = document.writeForm;
 		
-		if(frm.siteName.value.length == 0) {
-			alert("사이트 이름을 입력하세요.");
+		if(frm.siteId.value.length == 0) {
+			alert("사이트 아이디를 입력하세요.");
 			frm.siteName.focus();
 			
 			return false;
 		}
-		if(frm.siteDomain.value.length == 0) {
-			alert("사이트 도메인을 입력하세요.");
+		if(frm.sitePasswd.value.length == 0) {
+			alert("사이트 패스워드를 입력하세요.");
 			frm.siteDomain.focus();
 			
 			return false;
@@ -102,7 +102,7 @@
 								<td class="subject5">&nbsp;&nbsp;<b>연계사이트</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<select name="masterSeqId"  style="width: 150px;">
+									<select name="masterSeqId" style="width: 150px;">
 										<option> === 선택하세요 ===</option>
 									<%
 										if ( siteList != null ) {
@@ -129,24 +129,13 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="subject5">&nbsp;&nbsp;<b>사이트이름</b></td>
+								<td class="subject5">&nbsp;&nbsp;<b>사용여부</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="siteName" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getSite_name())%>">
-									&nbsp;
-									<b>사이트 이름을 입력하세요.</b>
-								</td>
-								<td class="subject">
-									<b> ex) 네이버</b>
-								</td>
-							</tr>
-							<tr>
-								<td class="subject5">&nbsp;&nbsp;<b>도메인</b></td>
-								<td><img src="images/board_line.gif" width="1" height="22" /></td>
-								<td class="subject">
-									<input name="siteDomain" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getDomain())%>">
-									&nbsp;
-									<b>사이트 주소(URL)를 입력하세요.</b>
+									<select name="useYn" style="width: 150px;">
+										<option value="Y" <%="Y".equals(siteEntity.getUse_yn())?"selected=\"selected\"":""%>>사용</option>
+										<option value="N" <%="N".equals(siteEntity.getUse_yn())?"selected=\"selected\"":""%>>미사용</option>
+									</select>
 								</td>
 								<td class="subject">
 									<b> ex) www.naver.com</b>
