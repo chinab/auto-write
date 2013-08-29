@@ -33,35 +33,12 @@ import org.apache.http.util.EntityUtils;
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 
-public class Sexbam implements AutowriterInterface{
-	private DefaultHttpClient httpclient;
-	
-	private String domainUrl;
-	private List<Cookie> cookies;
-	
+public class Sexbam extends AutowriterCommon {
 	/**
 	 * 생성자
 	 */
 	public Sexbam(){
-		httpclient = new DefaultHttpClient();
-
-		httpclient.setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy() {
-			@Override
-			public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
-				long keepAlive = super.getKeepAliveDuration(response, context);
-				if (keepAlive == -1) {
-					keepAlive = 5000;
-				}
-				return keepAlive;
-			}
-		});
-
-		httpclient.removeRequestInterceptorByClass(RequestUserAgent.class);
-		httpclient.addRequestInterceptor(new HttpRequestInterceptor() {
-			public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
-				request.setHeader(HTTP.USER_AGENT, "My-own-client");
-			}
-		});
+		super();
 	}
 	
     public void executeHttpConnection(AutowriteEntity autowriteInfo) throws Exception {
@@ -88,26 +65,6 @@ public class Sexbam implements AutowriterInterface{
 		}
 	}
 
-    public void setCookie(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, Exception {
-		domainUrl = autowriteInfo.getSiteEntity().getDomain();
-		
-		if ( !domainUrl.startsWith("http://") ){
-			domainUrl = "http://" + domainUrl;
-		}
-		
-		HttpGet httpget = new HttpGet(domainUrl);
-
-		HttpResponse response = httpclient.execute(httpget);
-		HttpEntity entity = response.getEntity();
-
-		System.out.println("Login form get: " + response.getStatusLine());
-		EntityUtils.consume(entity);
-
-		System.out.println("Initial set of cookies:");
-		cookies = httpclient.getCookieStore().getCookies();
-	}
-
-	
     public boolean login(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
     	
     	try {
@@ -170,7 +127,7 @@ public class Sexbam implements AutowriterInterface{
 				
 		HttpPost httpost = new HttpPost(writeUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, "EUC-KR"));
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
         httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
 		
 		HttpResponse response = httpclient.execute(httpost);
@@ -190,58 +147,32 @@ public class Sexbam implements AutowriterInterface{
 		// 제목
 //		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
 		String subjectStr = autowriteInfo.getTitle();
-		nvps.add(new BasicNameValuePair("wr_subject", subjectStr));
+		nvps.add(new BasicNameValuePair("title", subjectStr));
 		
 		// 내용
 //		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
 		String contentStr = autowriteInfo.getContent();
-		nvps.add(new BasicNameValuePair("wr_content", contentStr));
-		
-		// 카테고리
-		// board30 : 업소홍보1 - 오피, 기타. 
-		// board55 : 창작, 유머
-		nvps.add(new BasicNameValuePair("bo_table", "board55"));
-		
-		// 모름
-		nvps.add(new BasicNameValuePair("wr_trackback", "4"));
-
-		// 모름
-		nvps.add(new BasicNameValuePair("html", "html1"));
-		
-		// 형식구분
-		// A: 일반형식, B : 자유형식
-		nvps.add(new BasicNameValuePair("wr_2", "B"));
+		nvps.add(new BasicNameValuePair("content", contentStr));
 		
 		// 분류
-		// 오피스텔(강남), 오피스텔(비강남), 기타
-		nvps.add(new BasicNameValuePair("ca_name", "오피스텔(비강남)"));
+		// 1465403 : 짤방
+		// 1465427 : 동영상
+		nvps.add(new BasicNameValuePair("category_srl", "1465403"));
+		
+		nvps.add(new BasicNameValuePair("error_return_url", "/index.php?mid=so01&amp;act=dispBoardWrite"));
+		nvps.add(new BasicNameValuePair("act", "procBoardInsertDocument"));
+		nvps.add(new BasicNameValuePair("vid", ""));
+		
+		// so01 : 자유게시판
+		// so03 : 놀이터
+		nvps.add(new BasicNameValuePair("mid", "so03"));
+		
+		nvps.add(new BasicNameValuePair("module", "board"));
+		nvps.add(new BasicNameValuePair("status", "PUBLIC"));
+		nvps.add(new BasicNameValuePair("comment_status", "ALLOW"));
+		nvps.add(new BasicNameValuePair("allow_trackback", "Y"));
 		
 		return nvps;
 	}
 
-
-	public String parseResponse(HttpEntity entity) throws Exception {
-		EofSensorInputStream content = (EofSensorInputStream) entity.getContent();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-		String curr = null;
-		
-		StringBuffer sb = new StringBuffer();
-		
-		try {
-			while((curr = reader.readLine()) != null ){
-				sb.append(curr + "\n");
-			}
-		} catch ( Exception e ) {
-			throw e;
-		} finally {
-			content.close();
-		}
-		
-		return sb.toString();
-	}
-
-	@Override
-	public void shutdownHttpConnection() throws Exception {
-		httpclient.getConnectionManager().shutdown();
-	}
 }

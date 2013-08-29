@@ -33,80 +33,13 @@ import org.apache.http.util.EntityUtils;
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 
-public class Hwaru implements AutowriterInterface{
-	private DefaultHttpClient httpclient;
-	
-	private String domainUrl;
-	private List<Cookie> cookies;
-	
+public class Hwaru extends AutowriterCommon {
 	/**
 	 * 생성자
 	 */
 	public Hwaru(){
-		httpclient = new DefaultHttpClient();
-
-		httpclient.setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy() {
-			@Override
-			public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
-				long keepAlive = super.getKeepAliveDuration(response, context);
-				if (keepAlive == -1) {
-					keepAlive = 5000;
-				}
-				return keepAlive;
-			}
-		});
-
-		httpclient.removeRequestInterceptorByClass(RequestUserAgent.class);
-		httpclient.addRequestInterceptor(new HttpRequestInterceptor() {
-			public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
-				request.setHeader(HTTP.USER_AGENT, "My-own-client");
-			}
-		});
+		super();
 	}
-	
-    public void executeHttpConnection(AutowriteEntity autowriteInfo) throws Exception {
-		try {
-			setCookie(autowriteInfo);
-			
-			if ( login(autowriteInfo) ) {
-				writeBoard(autowriteInfo);
-			} else {
-				// login 100회 반복.
-//				for ( int ii = 0 ; ii < 100 ; ii ++ ) {
-//					if ( loginJson(autowriteInfo) ){
-//						writeBoard(autowriteInfo);
-//						break;
-//					}
-//				}
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			httpclient.getConnectionManager().shutdown();
-		}
-	}
-
-    public void setCookie(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, Exception {
-		domainUrl = autowriteInfo.getSiteEntity().getDomain();
-		
-		if ( !domainUrl.startsWith("http://") ){
-			domainUrl = "http://" + domainUrl;
-		}
-		
-		HttpGet httpget = new HttpGet(domainUrl);
-
-		HttpResponse response = httpclient.execute(httpget);
-		HttpEntity entity = response.getEntity();
-
-		System.out.println("Login form get: " + response.getStatusLine());
-		EntityUtils.consume(entity);
-
-		System.out.println("Initial set of cookies:");
-		cookies = httpclient.getCookieStore().getCookies();
-	}
-
 	
     public boolean login(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
     	
@@ -191,31 +124,5 @@ public class Hwaru implements AutowriterInterface{
 		nvps.add(new BasicNameValuePair("region", "인부천"));
 		
 		return nvps;
-	}
-
-
-	public String parseResponse(HttpEntity entity) throws Exception {
-		EofSensorInputStream content = (EofSensorInputStream) entity.getContent();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-		String curr = null;
-		
-		StringBuffer sb = new StringBuffer();
-		
-		try {
-			while((curr = reader.readLine()) != null ){
-				sb.append(curr + "\n");
-			}
-		} catch ( Exception e ) {
-			throw e;
-		} finally {
-			content.close();
-		}
-		
-		return sb.toString();
-	}
-
-	@Override
-	public void shutdownHttpConnection() throws Exception {
-		httpclient.getConnectionManager().shutdown();
 	}
 }

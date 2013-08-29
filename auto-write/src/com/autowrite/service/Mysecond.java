@@ -2,6 +2,7 @@ package com.autowrite.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +19,11 @@ import org.apache.http.util.EntityUtils;
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 
-public class Yeotop extends AutowriterCommon {
+public class Mysecond extends AutowriterCommon {
 	/**
 	 * 생성자
 	 */
-	public Yeotop(){
+	public Mysecond(){
 		super();
 	}
 	
@@ -76,7 +77,7 @@ public class Yeotop extends AutowriterCommon {
 				
 		HttpPost httpost = new HttpPost(writeUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, "EUC-KR"));
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
         httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
 		
 		HttpResponse response = httpclient.execute(httpost);
@@ -94,19 +95,25 @@ public class Yeotop extends AutowriterCommon {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		// 제목
-//		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
-		String subjectStr = autowriteInfo.getTitle();
+		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
+//		String subjectStr = autowriteInfo.getTitle();
+		URLEncoder.encode(subjectStr);
 		nvps.add(new BasicNameValuePair("wr_subject", subjectStr));
 		
 		// 내용
-//		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
-		String contentStr = autowriteInfo.getContent();
+		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
+//		String contentStr = autowriteInfo.getContent();
+		URLEncoder.encode(contentStr);
 		nvps.add(new BasicNameValuePair("wr_content", contentStr));
 		
 		// 카테고리
-		// board30 : 업소홍보1 - 오피, 기타. 
-		// board55 : 창작, 유머
-		nvps.add(new BasicNameValuePair("bo_table", "board55"));
+		// 
+		// S15 : TEST
+		nvps.add(new BasicNameValuePair("bo_table", "S15"));
+		
+		// 지역
+		// 서울, 인천, 경기, 충청, 경상, 전라, 강원, 제주
+		nvps.add(new BasicNameValuePair("ca_name", "서울"));
 		
 		// 모름
 		nvps.add(new BasicNameValuePair("wr_trackback", "4"));
