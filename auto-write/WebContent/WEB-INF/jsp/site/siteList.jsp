@@ -74,7 +74,7 @@
 								<th>선택</th>
 								<th>순번</th>
 								<th>사이트명</th>
-								<th>사용여부</th>
+								<th>기본선택</th>
 								<th>도메인</th>
 								<th>등록일</th>
 							</tr>
@@ -102,7 +102,7 @@
 										<%=siteEntity.getSite_name()%>
 									</a>
 								</td>
-								<td><%=siteEntity.getUse_yn()%></td>
+								<td><%="Y".equals(siteEntity.getUse_yn())?"선택":""%></td>
 								<td><%=siteEntity.getDomain()%></td>
 								<td><%=siteEntity.getWriteBoardDateTime(siteEntity.getWrite_datetime())%></td>
 							</tr>

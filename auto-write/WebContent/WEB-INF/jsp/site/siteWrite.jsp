@@ -129,12 +129,12 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="subject5">&nbsp;&nbsp;<b>사용여부</b></td>
+								<td class="subject5">&nbsp;&nbsp;<b>기본선택여부</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
 									<select name="useYn" style="width: 150px;">
-										<option value="Y" <%="Y".equals(siteEntity.getUse_yn())?"selected=\"selected\"":""%>>사용</option>
-										<option value="N" <%="N".equals(siteEntity.getUse_yn())?"selected=\"selected\"":""%>>미사용</option>
+										<option value="Y" <%="Y".equals(siteEntity.getUse_yn())?"selected=\"selected\"":""%>>기본선택</option>
+										<option value="N" <%="N".equals(siteEntity.getUse_yn())?"selected=\"selected\"":""%>>미선택</option>
 									</select>
 								</td>
 								<td class="subject">

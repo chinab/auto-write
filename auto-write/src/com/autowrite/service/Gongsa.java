@@ -74,7 +74,7 @@ public class Gongsa extends AutowriterCommon {
 				
 		HttpPost httpost = new HttpPost(writeUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, "EUC-KR"));
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, "UTF-8"));
         httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
 		
 		HttpResponse response = httpclient.execute(httpost);
@@ -94,13 +94,15 @@ public class Gongsa extends AutowriterCommon {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		// 제목
-		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
+		String subjectStr = new String("test");
+//		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
 //		String subjectStr = autowriteInfo.getTitle();
 //		URLEncoder.encode(subjectStr);
 		nvps.add(new BasicNameValuePair("bd_title", subjectStr));
 		
 		// 내용
-		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
+		String contentStr = new String("test");
+//		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
 //		String contentStr = autowriteInfo.getContent();
 //		URLEncoder.encode(contentStr);
 		nvps.add(new BasicNameValuePair("bd_content", contentStr));
