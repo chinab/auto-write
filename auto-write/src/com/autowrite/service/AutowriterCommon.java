@@ -97,7 +97,22 @@ public abstract class AutowriterCommon implements AutowriterInterface{
 		
 		return sb.toString();
 	}
-
+	
+	
+	public static void printResponseEuckr(HttpEntity entity) throws IOException, UnsupportedEncodingException {
+		EofSensorInputStream content = (EofSensorInputStream) entity.getContent();
+		byte[] buffer = new byte[1024] ;
+		int readCnt = 0;
+		long conLen = entity.getContentLength();
+		
+		String responseHtml = null;
+		while((readCnt = content.read(buffer)) != -1 ){
+        		responseHtml = new String(buffer, 0, readCnt, "EUC-KR");
+			System.out.print(responseHtml);
+		}
+	}
+	
+	
     @Override
 	public void shutdownHttpConnection() throws Exception {
 		httpclient.getConnectionManager().shutdown();
