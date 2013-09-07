@@ -63,6 +63,7 @@
 							<col width="/" />
 							<col width="150" />
 							<col width="100" />
+							<col width="100" />
 						</colgroup>
 						<tbody>
 
@@ -71,6 +72,7 @@
 								<th>순번</th>
 								<th>사이트명</th>
 								<th>도메인</th>
+								<th>Encoding</th>
 								<th>등록일</th>
 							</tr>
 							
@@ -97,7 +99,12 @@
 										<%=siteEntity.getSite_name()%>
 									</a>
 								</td>
-								<td><%=siteEntity.getDomain()%></td>
+								<td>
+									<a href="http://<%=siteEntity.getDomain()%>" target="_blank">
+										<%=siteEntity.getDomain()%>
+									</a>
+								</td>
+								<td><%=siteEntity.getSite_encoding()%></td>
 								<td><%=siteEntity.getWriteBoardDateTime(siteEntity.getWrite_datetime())%></td>
 							</tr>
 							<%

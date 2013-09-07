@@ -41,7 +41,7 @@ public class Gongsa extends AutowriterCommon {
 //	        nvps.add(new BasicNameValuePair("mb_id", "qnvudtmxk"));
 //	        nvps.add(new BasicNameValuePair("mb_password", "!qnvudtmxk"));
 	        
-	        httpost.setEntity(new UrlEncodedFormEntity(nvps, "EUC-KR"));
+	        httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 
 			HttpResponse response = httpclient.execute(httpost);
 			HttpEntity entity = response.getEntity();
@@ -74,7 +74,7 @@ public class Gongsa extends AutowriterCommon {
 				
 		HttpPost httpost = new HttpPost(writeUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, "UTF-8"));
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
         httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
 		
 		HttpResponse response = httpclient.execute(httpost);

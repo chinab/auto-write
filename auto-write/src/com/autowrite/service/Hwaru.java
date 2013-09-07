@@ -58,7 +58,7 @@ public class Hwaru extends AutowriterCommon {
 			
 			nvps.add(new BasicNameValuePair("p", json.toString()));
 	
-			httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
+			httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 			
 			HttpResponse response = httpclient.execute(httpost);
 			HttpEntity entity = response.getEntity();
@@ -97,7 +97,7 @@ public class Hwaru extends AutowriterCommon {
 				
 		HttpPost httpost = new HttpPost(writeUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
 		
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();

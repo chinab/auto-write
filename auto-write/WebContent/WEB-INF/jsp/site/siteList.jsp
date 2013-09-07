@@ -94,7 +94,7 @@
 								for ( int ii = 0 ; ii < siteList.size() ; ii ++ ) {
 									SiteEntity siteEntity = siteList.get(ii);
 							%>
-							<tr onClick="location.href='siteRead.do?jsp=site/siteWrite&seqId=<%=siteEntity.getSeq_id()%>'" >
+							<tr>
 								<td><input type=checkbox value=''></td>
 								<td><%= startSequence-- %></td>
 								<td>
@@ -103,7 +103,11 @@
 									</a>
 								</td>
 								<td><%="Y".equals(siteEntity.getUse_yn())?"선택":""%></td>
-								<td><%=siteEntity.getDomain()%></td>
+								<td>
+									<a href="http://<%=siteEntity.getDomain()%>" target="_blank">
+										<%=siteEntity.getDomain()%>
+									</a>
+								</td>
 								<td><%=siteEntity.getWriteBoardDateTime(siteEntity.getWrite_datetime())%></td>
 							</tr>
 							<%

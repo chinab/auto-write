@@ -65,6 +65,8 @@ public abstract class AutowriterCommon implements AutowriterInterface{
 			domainUrl = "http://" + domainUrl;
 		}
 		
+		System.out.println("[" + domainUrl + "]");
+		
 		HttpGet httpget = new HttpGet(domainUrl);
 
 		HttpResponse response = httpclient.execute(httpget);

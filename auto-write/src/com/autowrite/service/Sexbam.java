@@ -78,7 +78,7 @@ public class Sexbam extends AutowriterCommon {
 //	        nvps.add(new BasicNameValuePair("user_id", "kshrabbit"));
 //	        nvps.add(new BasicNameValuePair("password", "!lim0301"));
 	        
-	        httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
+	        httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 
 			HttpResponse response = httpclient.execute(httpost);
 			HttpEntity entity = response.getEntity();
@@ -94,7 +94,7 @@ public class Sexbam extends AutowriterCommon {
             nvps.add(new BasicNameValuePair("user_id", "kshrabbit"));
 	        nvps.add(new BasicNameValuePair("password", "!lim0301"));
 	        
-	        httpost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
+	        httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 
 			HttpResponse response2 = httpclient.execute(httpost);
 			HttpEntity entity2 = response2.getEntity();
@@ -127,7 +127,7 @@ public class Sexbam extends AutowriterCommon {
 				
 		HttpPost httpost = new HttpPost(writeUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, Consts.UTF_8));
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
         httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
 		
 		HttpResponse response = httpclient.execute(httpost);

@@ -136,9 +136,11 @@
 										<option value="Y" <%="Y".equals(siteEntity.getUse_yn())?"selected=\"selected\"":""%>>기본선택</option>
 										<option value="N" <%="N".equals(siteEntity.getUse_yn())?"selected=\"selected\"":""%>>미선택</option>
 									</select>
+									&nbsp;&nbsp;
+									<b>자동등록 시 체크박스에 체크가 됩니다.</b>
 								</td>
 								<td class="subject">
-									<b> ex) www.naver.com</b>
+									
 								</td>
 							</tr>
 							<tr>
