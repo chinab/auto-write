@@ -25,6 +25,7 @@ import org.apache.http.protocol.RequestUserAgent;
 import org.apache.http.util.EntityUtils;
 
 import com.autowrite.common.framework.entity.AutowriteEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
 
 public abstract class AutowriterCommon implements AutowriterInterface{
 	protected DefaultHttpClient httpclient;
@@ -154,9 +155,35 @@ public abstract class AutowriterCommon implements AutowriterInterface{
 	@Override
 	public abstract List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo);
 	
-	protected String wrapCdata(String data){
+	@Override
+	public String wrapCdata(String data){
 		String returnStr = "<![CDATA[" + data +"]]>";
 		return returnStr;
+	}
+	
+	@Override
+	public String getFullUrl(SiteEntity siteInfo, String url){
+		String fullUrl  = null;
+		
+		if ( url.startsWith("http://") ){
+			fullUrl = url;
+		} else {
+			if ( domainUrl == null || domainUrl.length() == 0 ){
+				domainUrl = siteInfo.getDomain();
+				
+				if ( !domainUrl.startsWith("http://") ){
+					domainUrl = "http://" + domainUrl;
+				}
+			}
+			
+			if (url.startsWith("/")){
+				fullUrl = domainUrl + url;
+			} else {
+				fullUrl = domainUrl + "/" + url;
+			}
+		}
+		
+		return fullUrl;
 	}
 	
 }

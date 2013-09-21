@@ -9,6 +9,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 
 import com.autowrite.common.framework.entity.AutowriteEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
 
 public interface AutowriterInterface {
 	
@@ -25,4 +26,8 @@ public interface AutowriterInterface {
 	public abstract List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo);
 	
 	public abstract String parseResponse(HttpEntity entity) throws Exception;
+
+	public abstract String wrapCdata(String data);
+
+	public abstract String getFullUrl(SiteEntity siteInfo, String url);
 }

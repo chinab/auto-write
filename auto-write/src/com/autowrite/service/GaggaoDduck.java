@@ -69,7 +69,8 @@ public class GaggaoDduck extends AutowriterCommon {
     	
     	try {
 			SiteEntity siteInfo = autowriteInfo.getSiteEntity();
-			String loginUrl = siteInfo.getLogin_url();
+			String loginUrl = getFullUrl(siteInfo, siteInfo.getLogin_url());
+			
 			HttpPost httpost = new HttpPost(loginUrl);
 	
 			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
@@ -103,7 +104,8 @@ public class GaggaoDduck extends AutowriterCommon {
 
 
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
-		String writeUrl = autowriteInfo.getSiteEntity().getWrite_url(); 
+    	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
 				
 		HttpPost httpost = new HttpPost(writeUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
