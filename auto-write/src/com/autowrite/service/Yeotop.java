@@ -107,7 +107,7 @@ public class Yeotop extends AutowriterCommon {
 		// 카테고리
 		// board30 : 업소홍보1 - 오피, 기타. 
 		// board55 : 창작, 유머
-		nvps.add(new BasicNameValuePair("bo_table", "board55"));
+		nvps.add(new BasicNameValuePair("bo_table", "board30"));
 		
 		// 모름
 		nvps.add(new BasicNameValuePair("wr_trackback", "4"));

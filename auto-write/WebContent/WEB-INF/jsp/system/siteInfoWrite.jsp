@@ -158,7 +158,8 @@
 								<td class="subject5">&nbsp;&nbsp;<b>LOGIN URL</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="loginUrl" class="s_id" type="text" size="255" style="width: 400px;" value="<%=siteEntity.nvl(siteEntity.getLogin_url())%>">
+									<b>http://<%=siteEntity.nvl(siteEntity.getDomain())%>/</b>
+									<input name="loginUrl" class="s_id" type="text" size="200" style="width: 200px;" value="<%=siteEntity.nvl(siteEntity.getLogin_url())%>">
 								</td>
 								<td class="subject">
 									<select name="loginType">
@@ -171,7 +172,8 @@
 								<td class="subject5">&nbsp;&nbsp;<b>WRITE URL</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="writeUrl" class="s_id" type="text" size="255" style="width: 400px;" value="<%=siteEntity.nvl(siteEntity.getWrite_url())%>">
+									<b>http://<%=siteEntity.nvl(siteEntity.getDomain())%>/</b>
+									<input name="writeUrl" class="s_id" type="text" size="200" style="width: 200px;" value="<%=siteEntity.nvl(siteEntity.getWrite_url())%>">
 								</td>
 								<td class="subject">
 									<select name="writeType">
@@ -184,7 +186,8 @@
 								<td class="subject5">&nbsp;&nbsp;<b>MODIFY URL</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="modifyUrl" class="s_id" type="text" size="255" style="width: 400px;" value="<%=siteEntity.nvl(siteEntity.getModify_url())%>">
+									<b>http://<%=siteEntity.nvl(siteEntity.getDomain())%>/</b>
+									<input name="modifyUrl" class="s_id" type="text" size="200" style="width: 200px;" value="<%=siteEntity.nvl(siteEntity.getModify_url())%>">
 								</td>
 								<td class="subject">
 									<select name="modifyType">
@@ -197,7 +200,8 @@
 								<td class="subject5">&nbsp;&nbsp;<b>DELETE URL</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="deleteUrl" class="s_id" type="text" size="255" style="width: 400px;" value="<%=siteEntity.nvl(siteEntity.getDelete_url())%>">
+									<b>http://<%=siteEntity.nvl(siteEntity.getDomain())%>/</b>
+									<input name="deleteUrl" class="s_id" type="text" size="200" style="width: 200px;" value="<%=siteEntity.nvl(siteEntity.getDelete_url())%>">
 								</td>
 								<td class="subject">
 									<select name="deleteType">
