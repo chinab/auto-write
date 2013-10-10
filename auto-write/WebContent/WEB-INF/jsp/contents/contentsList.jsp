@@ -158,7 +158,7 @@
 								<td><%= startSequence-- %></td>
 								<td>
 									<a href="javascript:readContents('<%=contentsEntity.getSeq_id()%>');">
-										<%=contentsEntity.getTitle()%>
+										<%=contentsEntity.getContents_name()%>
 									</a>
 								</td>
 								<td><%=contentsEntity.getWriteBoardDateTime()%></td>
