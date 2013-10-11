@@ -96,25 +96,25 @@ public class Mysecond extends AutowriterCommon {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		// 제목
-		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
-//		String subjectStr = autowriteInfo.getTitle();
+		String subjectStr = autowriteInfo.getTitle();
 		URLEncoder.encode(subjectStr);
 		nvps.add(new BasicNameValuePair("wr_subject", subjectStr));
 		
 		// 내용
-		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
-//		String contentStr = autowriteInfo.getContent();
+		String contentStr = autowriteInfo.getContent();
 		URLEncoder.encode(contentStr);
 		nvps.add(new BasicNameValuePair("wr_content", contentStr));
 		
 		// 카테고리
 		// 
 		// S15 : TEST
-		nvps.add(new BasicNameValuePair("bo_table", "S15"));
+		// S22 : 출근부
+		nvps.add(new BasicNameValuePair("bo_table", "S22"));
 		
 		// 지역
 		// 서울, 인천, 경기, 충청, 경상, 전라, 강원, 제주
-		nvps.add(new BasicNameValuePair("ca_name", "서울"));
+		nvps.add(new BasicNameValuePair("ca_name", "인천"));
+		nvps.add(new BasicNameValuePair("sca", "인천"));
 		
 		// 모름
 		nvps.add(new BasicNameValuePair("wr_trackback", "4"));
