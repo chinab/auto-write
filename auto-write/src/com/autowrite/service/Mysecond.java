@@ -41,8 +41,6 @@ public class Mysecond extends AutowriterCommon {
             nvps.add(new BasicNameValuePair("mb_type", "2"));
             nvps.add(new BasicNameValuePair("mb_id", siteInfo.getSite_id()));
 	        nvps.add(new BasicNameValuePair("mb_password", siteInfo.getSite_passwd()));
-//	        nvps.add(new BasicNameValuePair("mb_id", "qnvudtmxk"));
-//	        nvps.add(new BasicNameValuePair("mb_password", "!qnvudtmxk"));
 	        
 	        httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 
@@ -73,6 +71,9 @@ public class Mysecond extends AutowriterCommon {
 
     @Override
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	// 사이트 별 특성. 하나밖에 못 올리므로 기존 글을 지워야 함.
+    	deleteBoard(autowriteInfo);
+    	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
 				
@@ -87,11 +88,59 @@ public class Mysecond extends AutowriterCommon {
 		String responseBody = parseResponse(entity);
 		
 		System.out.println(responseBody);
-		
-		System.out.println("Post logon cookies:");
 	}
     
-    @Override
+    private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	String paramName = "wr_id=";
+    	String keyStr = "부평 스타";
+    	
+    	String contentKey = null;
+    	
+    	try {
+			contentKey = readBoardKey(autowriteInfo, paramName, keyStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+    	
+    	if ( contentKey == null ) {
+    		throw new Exception(keyStr + " 이 들어간 문장을 찾을 수 없습니다.");
+    	} else {
+    		String deleteUrl = "http://mysecond8.net/bbs/delete.php?bo_table=S22&wr_id=" + contentKey;
+        	
+    		System.out.println("deleteUrl:" + deleteUrl);
+    		
+        	HttpPost httpost = new HttpPost(deleteUrl);
+    		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+    		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+            httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+            
+            HttpResponse response = httpclient.execute(httpost);            
+            HttpEntity entity = response.getEntity();
+            
+            httpost.releaseConnection();
+        }
+	}
+    
+    private String readBoardKey(AutowriteEntity autowriteInfo,String paramName,String keyStr) throws Exception {
+    	String listUrl = "http://mysecond8.net/bbs/board.php?bo_table=S22";
+    	
+    	HttpPost httpost = new HttpPost(listUrl);
+		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+		
+		HttpResponse response = httpclient.execute(httpost);
+		HttpEntity entity = response.getEntity();
+    	
+    	String contentKey = getContentKey(entity, paramName, keyStr);
+    	
+    	httpost.releaseConnection();
+    	
+    	return contentKey;
+	}
+
+	@Override
 	public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
@@ -106,8 +155,6 @@ public class Mysecond extends AutowriterCommon {
 		nvps.add(new BasicNameValuePair("wr_content", contentStr));
 		
 		// 카테고리
-		// 
-		// S15 : TEST
 		// S22 : 출근부
 		nvps.add(new BasicNameValuePair("bo_table", "S22"));
 		

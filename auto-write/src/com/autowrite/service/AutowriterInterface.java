@@ -30,4 +30,6 @@ public interface AutowriterInterface {
 	public abstract String wrapCdata(String data);
 
 	public abstract String getFullUrl(SiteEntity siteInfo, String url);
+
+	public abstract String getContentKey(HttpEntity entity, String paramName, String keyStr) throws Exception;
 }
