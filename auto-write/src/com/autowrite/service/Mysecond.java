@@ -126,10 +126,6 @@ public class Mysecond extends AutowriterCommon {
 		// A: 일반형식, B : 자유형식
 		nvps.add(new BasicNameValuePair("wr_2", "B"));
 		
-		// 분류
-		// 오피스텔(강남), 오피스텔(비강남), 기타
-		nvps.add(new BasicNameValuePair("ca_name", "오피스텔(비강남)"));
-		
 		return nvps;
 	}
 }
