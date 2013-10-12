@@ -75,8 +75,6 @@ public class Ggoja extends AutowriterCommon {
 			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
             nvps.add(new BasicNameValuePair("mb_id", siteInfo.getSite_id()));
 	        nvps.add(new BasicNameValuePair("mb_password", siteInfo.getSite_passwd()));
-//	        nvps.add(new BasicNameValuePair("user_id", "kshrabbit"));
-//	        nvps.add(new BasicNameValuePair("password", "!lim0301"));
 	        
             httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 
@@ -103,6 +101,9 @@ public class Ggoja extends AutowriterCommon {
 
 
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	// 사이트 별 특성. 하나밖에 못 올리므로 기존 글을 지워야 함.
+    	deleteBoard(autowriteInfo);
+    	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
 				
@@ -119,17 +120,60 @@ public class Ggoja extends AutowriterCommon {
 		System.out.println("Post logon cookies:");
 	}
     
+    private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	String paramName = "wr_id=";
+    	String keyStr = "부평 스타";
+    	
+    	String contentKey = null;
+    	
+    	try {
+			contentKey = readBoardKey(autowriteInfo, paramName, keyStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+    	
+    	String deleteUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/bbs/delete.php?bo_table=lineup2_10&wr_id=" + contentKey;
+    	
+		System.out.println("deleteUrl:" + deleteUrl);
+		
+    	HttpPost httpost = new HttpPost(deleteUrl);
+		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+        
+        HttpResponse response = httpclient.execute(httpost);            
+        HttpEntity entity = response.getEntity();
+        
+        httpost.releaseConnection();
+	}
+    
+    private String readBoardKey(AutowriteEntity autowriteInfo, String paramName, String keyStr) throws Exception {
+    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/bbs/board.php?bo_table=lineup2_10";
+    	
+    	HttpPost httpost = new HttpPost(listUrl);
+		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+		
+		HttpResponse response = httpclient.execute(httpost);
+		HttpEntity entity = response.getEntity();
+    	
+    	String contentKey = getContentKey(autowriteInfo, entity, paramName, keyStr);
+    	
+    	httpost.releaseConnection();
+    	
+    	return contentKey;
+	}
     
 	public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		// 제목
-//		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
 		String subjectStr = autowriteInfo.getTitle();
 		nvps.add(new BasicNameValuePair("wr_subject", subjectStr));
 		
 		// 내용
-//		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
 		String contentStr = autowriteInfo.getContent();
 		nvps.add(new BasicNameValuePair("wr_content", contentStr));
 		

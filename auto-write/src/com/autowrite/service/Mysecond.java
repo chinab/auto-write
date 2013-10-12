@@ -103,27 +103,23 @@ public class Mysecond extends AutowriterCommon {
 			throw e;
 		}
     	
-    	if ( contentKey == null ) {
-    		throw new Exception(keyStr + " 이 들어간 문장을 찾을 수 없습니다.");
-    	} else {
-    		String deleteUrl = "http://mysecond8.net/bbs/delete.php?bo_table=S22&wr_id=" + contentKey;
-        	
-    		System.out.println("deleteUrl:" + deleteUrl);
-    		
-        	HttpPost httpost = new HttpPost(deleteUrl);
-    		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-    		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
-            httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
-            
-            HttpResponse response = httpclient.execute(httpost);            
-            HttpEntity entity = response.getEntity();
-            
-            httpost.releaseConnection();
-        }
+    	String deleteUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/bbs/delete.php?bo_table=S22&wr_id=" + contentKey;
+    	
+		System.out.println("deleteUrl:" + deleteUrl);
+		
+    	HttpPost httpost = new HttpPost(deleteUrl);
+		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+        
+        HttpResponse response = httpclient.execute(httpost);            
+        HttpEntity entity = response.getEntity();
+        
+        httpost.releaseConnection();
 	}
     
-    private String readBoardKey(AutowriteEntity autowriteInfo,String paramName,String keyStr) throws Exception {
-    	String listUrl = "http://mysecond8.net/bbs/board.php?bo_table=S22";
+    private String readBoardKey(AutowriteEntity autowriteInfo, String paramName, String keyStr) throws Exception {
+    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/bbs/board.php?bo_table=S22";
     	
     	HttpPost httpost = new HttpPost(listUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
@@ -133,7 +129,7 @@ public class Mysecond extends AutowriterCommon {
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
     	
-    	String contentKey = getContentKey(entity, paramName, keyStr);
+    	String contentKey = getContentKey(autowriteInfo, entity, paramName, keyStr);
     	
     	httpost.releaseConnection();
     	

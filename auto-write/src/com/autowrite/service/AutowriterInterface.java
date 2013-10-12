@@ -31,5 +31,5 @@ public interface AutowriterInterface {
 
 	public abstract String getFullUrl(SiteEntity siteInfo, String url);
 
-	public abstract String getContentKey(HttpEntity entity, String paramName, String keyStr) throws Exception;
+	public abstract String getContentKey(AutowriteEntity autowriteInfo, HttpEntity entity, String paramName, String keyStr) throws Exception;
 }

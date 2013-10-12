@@ -187,9 +187,9 @@ public abstract class AutowriterCommon implements AutowriterInterface{
 	}
 	
 	@Override
-	public String getContentKey(HttpEntity entity, String paramName, String keyStr) throws Exception {
+	public String getContentKey(AutowriteEntity autowriteInfo, HttpEntity entity, String paramName, String keyStr) throws Exception {
 		EofSensorInputStream content = (EofSensorInputStream) entity.getContent();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(content, autowriteInfo.getSiteEntity().getSite_encoding()));
 		String curr = null;
 		String contentKey = null;
 		
