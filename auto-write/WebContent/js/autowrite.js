@@ -75,7 +75,6 @@
 	
 	function changeAllChecked(paramName){
 		var checkAllValue = document.getElementsByName("checkAll")[0].checked;
-		alert(checkAllValue);
 		
 		if ( document.getElementsByName(paramName).length == undefined ) {
 			return;
