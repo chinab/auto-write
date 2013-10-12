@@ -73,5 +73,17 @@
 		//]]
 	}
 	
-
+	function changeAllChecked(paramName){
+		var checkAllValue = document.getElementsByName("checkAll")[0].checked;
+		alert(checkAllValue);
+		
+		if ( document.getElementsByName(paramName).length == undefined ) {
+			return;
+		} else {
+			for (var ii = 0 ; ii < document.getElementsByName(paramName).length ; ii ++ ){
+				document.getElementsByName(paramName)[ii].checked = checkAllValue;
+			}
+		}
+			
+	}
 	
