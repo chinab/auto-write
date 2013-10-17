@@ -115,9 +115,11 @@ public class Opwa extends AutowriterCommon {
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
 
-		printResponseEuckr(entity);
+//		printResponseEuckr(entity);
 		
-		System.out.println("Post logon cookies:");
+		String responseStr = parseResponse(entity);
+		
+		System.out.println("After write : " + responseStr);
 	}
     
     private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {

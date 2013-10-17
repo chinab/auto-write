@@ -75,8 +75,6 @@ public class Mansuda extends AutowriterCommon {
 			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
             nvps.add(new BasicNameValuePair("mb_id", siteInfo.getSite_id()));
 	        nvps.add(new BasicNameValuePair("mb_password", siteInfo.getSite_passwd()));
-//	        nvps.add(new BasicNameValuePair("user_id", "kshrabbit"));
-//	        nvps.add(new BasicNameValuePair("password", "!lim0301"));
 	        
             httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 
@@ -103,6 +101,9 @@ public class Mansuda extends AutowriterCommon {
 
 
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	// 사이트 별 특성. 하나밖에 못 올리므로 기존 글을 지워야 함.
+    	deleteBoard(autowriteInfo);
+    	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
 				
@@ -114,32 +115,92 @@ public class Mansuda extends AutowriterCommon {
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
 
-		printResponseEuckr(entity);
+//		printResponseEuckr(entity);
 		
-		System.out.println("Post logon cookies:");
+		String responseStr = parseResponse(entity);
+		
+		System.out.println("After write : " + responseStr);
 	}
     
+    private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	String paramName = "wr_id=";
+    	String keyStr = "인천 엣지";
+    	// TODO : 키워드 디비화
+    	
+    	String contentKey = null;
+    	
+    	try {
+			contentKey = readBoardKey(autowriteInfo, paramName, keyStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+    	
+    	String deleteUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/bbs/delete.php?bo_table=15_16&wr_id=" + contentKey;
+    	
+		System.out.println("deleteUrl:" + deleteUrl);
+		
+    	HttpPost httpost = new HttpPost(deleteUrl);
+		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+        
+        HttpResponse response = httpclient.execute(httpost);            
+        HttpEntity entity = response.getEntity();
+        
+        httpost.releaseConnection();
+	}
+    
+    private String readBoardKey(AutowriteEntity autowriteInfo, String paramName, String keyStr) throws Exception {
+    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/bbs/board.php?bo_table=15_16";
+    	
+    	HttpPost httpost = new HttpPost(listUrl);
+		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+		
+		HttpResponse response = httpclient.execute(httpost);
+		HttpEntity entity = response.getEntity();
+    	
+    	String contentKey = getContentKey(autowriteInfo, entity, paramName, keyStr);
+    	
+    	httpost.releaseConnection();
+    	
+    	return contentKey;
+	}
     
 	public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		// 제목
-//		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
 		String subjectStr = autowriteInfo.getTitle();
 		nvps.add(new BasicNameValuePair("wr_subject", subjectStr));
 		
 		// 내용
-//		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
 		String contentStr = autowriteInfo.getContent();
 		nvps.add(new BasicNameValuePair("wr_content", contentStr));
 		
 		// 카테고리
-		// c_qna : qna
-		// 
-		nvps.add(new BasicNameValuePair("bo_table", "12_13"));
+		nvps.add(new BasicNameValuePair("bo_table", "15_16"));
 		
-		// 모름
+		// html 형식
 		nvps.add(new BasicNameValuePair("html", "html1"));
+		
+		
+		// 제목글꼴
+		// 굴림, 돋움, 바탕, 궁서
+		nvps.add(new BasicNameValuePair("wr_subject_font", "돋움"));
+		
+		
+		// wr_subject_color
+		// #000000:검정
+		// #ff9900:주황
+		// #b3a14d:노랑
+		// #3cb371:초록
+		// #0033ff:파랑
+		// #000099:남색
+		// #9900cc:보라
+		nvps.add(new BasicNameValuePair("wr_subject_color", "#0033ff"));
 		
 		// 분류
 		// 
