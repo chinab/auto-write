@@ -92,6 +92,7 @@ public class Mysecond extends AutowriterCommon {
     
     private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
     	String paramName = "wr_id=";
+    	// TODO : 키워드 디비화
     	String keyStr = "부평 스타";
     	
     	String contentKey = null;

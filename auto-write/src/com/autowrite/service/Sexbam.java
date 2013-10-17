@@ -75,8 +75,6 @@ public class Sexbam extends AutowriterCommon {
 			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
             nvps.add(new BasicNameValuePair("user_id", siteInfo.getSite_id()));
 	        nvps.add(new BasicNameValuePair("password", siteInfo.getSite_passwd()));
-//	        nvps.add(new BasicNameValuePair("user_id", "kshrabbit"));
-//	        nvps.add(new BasicNameValuePair("password", "!lim0301"));
 	        
 	        httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 
@@ -91,8 +89,8 @@ public class Sexbam extends AutowriterCommon {
             nvps.add(new BasicNameValuePair("ruleset", "@login"));
             nvps.add(new BasicNameValuePair("error_return_url", "/index.php?mid=login"));
             nvps.add(new BasicNameValuePair("success_return_url", "/index.php?mid=login"));
-            nvps.add(new BasicNameValuePair("user_id", "kshrabbit"));
-	        nvps.add(new BasicNameValuePair("password", "!lim0301"));
+            nvps.add(new BasicNameValuePair("user_id", siteInfo.getSite_id()));
+	        nvps.add(new BasicNameValuePair("password", siteInfo.getSite_passwd()));
 	        
 	        httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 
@@ -123,6 +121,9 @@ public class Sexbam extends AutowriterCommon {
 
 
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	// delete URL
+    	// http://www.opgaja14.com/index.php?mid=s2_3&category=203497&document_srl=8604384&act=procBoardDeleteDocument
+    	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
 				

@@ -194,15 +194,29 @@ public abstract class AutowriterCommon implements AutowriterInterface{
 		String contentKey = null;
 		
 		try {
+			
+			System.out.println("============= parse response =============");
+			
 			while((curr = reader.readLine()) != null ){
 				if ( curr.contains(keyStr) ){
-					contentKey = curr.substring(curr.indexOf(paramName), curr.indexOf(keyStr));
-					
-					contentKey = contentKey.substring(paramName.length(), contentKey.indexOf("\""));
-					
-					System.out.println("contentKey = [" + contentKey + "]");
-							
-					return contentKey;
+					System.out.println(curr);
+					try {
+						contentKey = curr.substring(curr.indexOf(paramName), curr.indexOf(keyStr));
+						
+						contentKey = contentKey.substring(paramName.length(), contentKey.indexOf("\""));
+						
+						if ( contentKey.contains("&amp;") ) {
+							contentKey = contentKey.substring(0, contentKey.indexOf("&amp;"));
+						}
+						
+						System.out.println("contentKey = [" + contentKey + "]");
+						
+						if ( contentKey!= null ){
+							return contentKey;
+						}
+					} catch ( StringIndexOutOfBoundsException e ) {
+						System.out.println(curr);
+					} 
 				}
 			}
 		} catch ( Exception e ) {

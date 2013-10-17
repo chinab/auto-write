@@ -123,6 +123,7 @@ public class Ggoja extends AutowriterCommon {
     private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
     	String paramName = "wr_id=";
     	String keyStr = "부평 스타";
+    	// TODO : 키워드 디비화
     	
     	String contentKey = null;
     	
