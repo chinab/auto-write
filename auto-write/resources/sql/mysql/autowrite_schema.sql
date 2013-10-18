@@ -70,9 +70,11 @@ CREATE  TABLE `site_private` (
 
   `site_name` VARCHAR(255) NULL ,
   
-  `site_private` VARCHAR(255) NULL ,
+  `site_id` VARCHAR(255) NULL ,
   
   `site_passwd` VARCHAR(255) NULL ,
+  
+  `site_keyword` VARCHAR(4000) NULL ,
   
   `use_yn` VARCHAR(10) NULL ,
   
