@@ -76,6 +76,12 @@ CREATE  TABLE `site_private` (
   
   `site_keyword` VARCHAR(4000) NULL ,
   
+  `site_category` VARCHAR(255) NULL ,
+  
+  `site_region` VARCHAR(255) NULL ,
+  
+  `site_sub_region` VARCHAR(255) NULL ,
+  
   `use_yn` VARCHAR(10) NULL ,
   
   `writer_seq_id` BIGINT NULL ,

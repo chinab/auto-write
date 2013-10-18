@@ -13,6 +13,11 @@ public class SiteEntity extends CommonEntity{
 	private String site_id_key;
 	private String site_passwd_key;
 	
+	private String site_keyword;
+	private String site_category;
+	private String site_region;
+	private String site_sub_region;
+	
 	private String login_url;
 	private String write_url;
 	private String modify_url;
@@ -84,6 +89,30 @@ public class SiteEntity extends CommonEntity{
 	}
 	public void setSite_passwd_key(String site_passwd_key) {
 		this.site_passwd_key = site_passwd_key;
+	}
+	public String getSite_keyword() {
+		return site_keyword;
+	}
+	public void setSite_keyword(String site_keyword) {
+		this.site_keyword = site_keyword;
+	}
+	public String getSite_category() {
+		return site_category;
+	}
+	public void setSite_category(String site_category) {
+		this.site_category = site_category;
+	}
+	public String getSite_region() {
+		return site_region;
+	}
+	public void setSite_region(String site_region) {
+		this.site_region = site_region;
+	}
+	public String getSite_sub_region() {
+		return site_sub_region;
+	}
+	public void setSite_sub_region(String site_sub_region) {
+		this.site_sub_region = site_sub_region;
 	}
 	public String getLogin_url() {
 		return login_url;

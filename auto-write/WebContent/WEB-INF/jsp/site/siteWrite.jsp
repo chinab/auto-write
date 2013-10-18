@@ -149,7 +149,7 @@
 								<td class="subject">
 									<input name="siteId" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getSite_id())%>">
 									&nbsp;
-									<b>해당 사이트의 사용자 ID를 입력하세요.</b>
+									<b>해당 사이트의 사용자 ID</b>
 								</td>
 								<td class="subject">
 									
@@ -161,13 +161,61 @@
 								<td class="subject">
 									<input name="sitePasswd" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getSite_passwd())%>">
 									&nbsp;
-									<b>해당 사이트의 패스워드를 입력하세요.</b>
+									<b>해당 사이트의 사용자 패스워드</b>
 								</td>
 								<td class="subject">
 									
 								</td>
 							</tr>
-
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>KEYWORD</b></td>
+								<td><img src="images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="siteKeyword" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getSite_keyword())%>">
+									&nbsp;
+									<b>제목에 표기되는 [지역 업소명]</b>
+								</td>
+								<td class="subject">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>CATEGORY</b></td>
+								<td><img src="images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="siteCategory" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getSite_category())%>">
+									&nbsp;
+									<b>해당 사이트의 대분류 키</b>
+								</td>
+								<td class="subject">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>REGION</b></td>
+								<td><img src="images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="siteRegion" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getSite_region())%>">
+									&nbsp;
+									<b>해당 사이트의 사용자 지역</b>
+								</td>
+								<td class="subject">
+									
+								</td>
+							</tr>
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>ID</b></td>
+								<td><img src="images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="siteSubRegion" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getSite_sub_region())%>">
+									&nbsp;
+									<b>해당 사이트의 사용자 상세지역.</b>
+								</td>
+								<td class="subject">
+									
+								</td>
+							</tr>
+							
 						</tbody>
 					</table>
 
