@@ -23,7 +23,7 @@ public interface AutowriterInterface {
 	
 	public void writeBoard(AutowriteEntity autowriteInfo) throws Exception;
 	
-	public abstract List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo);
+	public abstract List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) throws Exception;
 	
 	public abstract String parseResponse(HttpEntity entity) throws Exception;
 

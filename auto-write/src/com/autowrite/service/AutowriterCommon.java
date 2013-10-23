@@ -153,7 +153,7 @@ public abstract class AutowriterCommon implements AutowriterInterface{
 	public abstract void writeBoard(AutowriteEntity autowriteInfo) throws Exception;
 
 	@Override
-	public abstract List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo);
+	public abstract List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) throws Exception;
 	
 	@Override
 	public String wrapCdata(String data){

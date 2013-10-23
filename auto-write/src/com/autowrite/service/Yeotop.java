@@ -40,8 +40,6 @@ public class Yeotop extends AutowriterCommon {
             nvps.add(new BasicNameValuePair("mb_type", "2"));
             nvps.add(new BasicNameValuePair("mb_id", siteInfo.getSite_id()));
 	        nvps.add(new BasicNameValuePair("mb_password", siteInfo.getSite_passwd()));
-//	        nvps.add(new BasicNameValuePair("mb_id", "qnvudtmxk"));
-//	        nvps.add(new BasicNameValuePair("mb_password", "!qnvudtmxk"));
 	        
 	        httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 

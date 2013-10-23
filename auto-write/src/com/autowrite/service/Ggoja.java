@@ -122,8 +122,13 @@ public class Ggoja extends AutowriterCommon {
     
     private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
     	String paramName = "wr_id=";
-    	String keyStr = "부평 스타";
-    	// TODO : 키워드 디비화
+    	
+    	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String keyStr = siteInfo.getSite_keyword();
+    	
+    	if ( keyStr == null || keyStr.trim().length() == 0 ) {
+    		throw new Exception("사이트 키워드를 설정하세요.");
+    	}
     	
     	String contentKey = null;
     	

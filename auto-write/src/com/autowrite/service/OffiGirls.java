@@ -75,8 +75,6 @@ public class OffiGirls extends AutowriterCommon {
 			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
             nvps.add(new BasicNameValuePair("mb_id", siteInfo.getSite_id()));
 	        nvps.add(new BasicNameValuePair("mb_pass", siteInfo.getSite_passwd()));
-//	        nvps.add(new BasicNameValuePair("user_id", "kshrabbit1"));
-//	        nvps.add(new BasicNameValuePair("password", "!lim0301"));
 	        
 	        nvps.add(new BasicNameValuePair("form_mode", "member_login_ok"));
             nvps.add(new BasicNameValuePair("ret_url", "/main/"));

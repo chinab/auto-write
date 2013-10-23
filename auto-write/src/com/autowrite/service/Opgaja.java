@@ -123,18 +123,21 @@ public class Opgaja extends AutowriterCommon {
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
 
-		String responseBody = parseResponse(entity);
-		
+//		String responseBody = parseResponse(entity);
+//		
 //		System.out.println(responseBody);
-		
-		System.out.println("Post logon cookies:");
 	}
     
     
     private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
     	String paramName = "document_srl=";
-    	// TODO : 키워드 디비화
-    	String keyStr = "부평 스타";
+    	
+    	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String keyStr = siteInfo.getSite_keyword();
+    	
+    	if ( keyStr == null || keyStr.trim().length() == 0 ) {
+    		throw new Exception("사이트 키워드를 설정하세요.");
+    	}
     	
     	String contentKey = null;
     	
@@ -167,37 +170,15 @@ public class Opgaja extends AutowriterCommon {
     	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=s2_3&category=203497";
     	
     	HttpPost httpost = new HttpPost(listUrl);
-//		List<NameValuePair> nvps = setNvpsParams(autowriteInfo);
-//		httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
-//        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
-//		HttpResponse response = httpclient.execute(httpost);
-//		HttpEntity entity = response.getEntity();
-//		httpost.releaseConnection();
-		
-//		HttpPost httpost = new HttpPost("http://www.opgaja14.com/index.php?mid=s2_3&category=203497");
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
 		
 		String contentKey = getContentKey(autowriteInfo, entity, paramName, keyStr);
-		
-//        HttpPost httpost2 = new HttpPost(listUrl);
-//		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-//		httpost2.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
-//        httpost2.setHeader("Content-Type", "application/x-www-form-urlencoded;");
-//        HttpResponse response2 = httpclient.execute(httpost2);            
-//        HttpEntity entity2 = response2.getEntity();
-//        String responseBody2 = parseResponse(entity2);
-//		System.out.println(responseBody2);
-//        httpost2.releaseConnection();
-//    	
-//    	String contentKey = getContentKey(autowriteInfo, entity2, paramName, keyStr);
-//    	
-//    	httpost2.releaseConnection();
     	
     	return contentKey;
 	}
     
-    public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
+    public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) throws Exception {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		// 제목
@@ -211,6 +192,14 @@ public class Opgaja extends AutowriterCommon {
 		String contentStr = autowriteInfo.getContent();
 		nvps.add(new BasicNameValuePair("content", contentStr));
 		
+
+    	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String regionStr = siteInfo.getSite_region();
+    	
+    	if ( regionStr == null || regionStr.trim().length() == 0 ) {
+    		throw new Exception("사이트 대분류(category_srl)를 설정하세요.");
+    	}
+    	
 		// TODO : 지역분류 DB화
 		// 분류
 		// 203502 : 인천
@@ -225,12 +214,12 @@ public class Opgaja extends AutowriterCommon {
 		// 3920392: 시화
 		// 203504 : 평택
 		// 8505551 : 광명
-		nvps.add(new BasicNameValuePair("category_srl", "203497"));
+//    	nvps.add(new BasicNameValuePair("category_srl", "203497"));
+    	nvps.add(new BasicNameValuePair("category_srl", regionStr));
 		
 		// 게시판 분류
 		// s2_3 : 업소 라인업 
 		nvps.add(new BasicNameValuePair("mid", "s2_3"));
-		nvps.add(new BasicNameValuePair("category_srl", "203497"));
 				
 		nvps.add(new BasicNameValuePair("act", "procBoardInsertDocument"));
 		
