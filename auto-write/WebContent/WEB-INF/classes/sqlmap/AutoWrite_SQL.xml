@@ -216,6 +216,95 @@
 	</statement>
 	
 	
+	<statement id="site.category.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					SITE_CATEGORY
+				where
+					1=1
+					<isNotNull prepend="and" removeFirstPrepend="true" property="MASTER_SEQ_ID">
+						MASTER_SEQ_ID = #MASTER_SEQ_ID#
+					</isNotNull>
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="MASTER_SEQ_ID">
+					MASTER_SEQ_ID = #MASTER_SEQ_ID#
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="site.category.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteCategoryEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, MASTER_SEQ_ID, CATEGORY_TYPE, CATEGORY_NAME, CATEGORY_VALUE, USE_YN, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+			from
+				SITE_CATEGORY
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="MASTER_SEQ_ID">
+					MASTER_SEQ_ID = #MASTER_SEQ_ID#
+				</isNotNull>
+			order by
+				WRITE_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="MASTER_SEQ_ID">
+				MASTER_SEQ_ID = #MASTER_SEQ_ID#
+			</isNotNull>
+	</statement>
+	
+	
+	<statement id="site.category.write" parameterClass="java.util.HashMap">
+		insert into SITE_CATEGORY (
+			MASTER_SEQ_ID, CATEGORY_TYPE, CATEGORY_NAME, CATEGORY_VALUE, USE_YN, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+		) values (
+			#MASTER_SEQ_ID#, #CATEGORY_TYPE#, #CATEGORY_NAME#, #CATEGORY_VALUE#, #USE_YN#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
+		)
+	</statement>
+	
+	
+	<statement id="site.category.update" parameterClass="java.util.HashMap">
+		update
+			SITE_CATEGORY
+		set
+			MASTER_SEQ_ID = #MASTER_SEQ_ID#, 
+			CATEGORY_TYPE = #CATEGORY_TYPE#, 
+			CATEGORY_NAME = #CATEGORY_NAME#, 
+			CATEGORY_VALUE = #CATEGORY_VALUE#, 
+			USE_YN = #USE_YN#, 
+			WRITER_SEQ_ID = #WRITER_SEQ_ID#, 
+			WRITER_ID = #WRITER_ID#
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="site.category.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteCategoryEntity">
+		select
+			SEQ_ID, MASTER_SEQ_ID, CATEGORY_TYPE, CATEGORY_NAME, CATEGORY_VALUE, USE_YN, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+		from
+			SITE_CATEGORY
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="site.category.delete" parameterClass="java.util.HashMap">
+		delete from
+			SITE_CATEGORY
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
 	<statement id="contents.private.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
 		select count(1) from (
 			select @RNUM:=0, Q.* from (

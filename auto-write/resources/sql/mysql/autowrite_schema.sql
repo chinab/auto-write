@@ -96,6 +96,32 @@ COMMENT = '개인별 사이트 설정';
 
 
 
+CREATE  TABLE `site_category` (
+
+  `seq_id` BIGINT NOT NULL AUTO_INCREMENT ,
+
+  `master_seq_id` BIGINT NULL ,
+
+  `category_type` VARCHAR(255) NULL ,
+
+  `category_name` VARCHAR(4000) NULL ,
+  
+  `category_value` VARCHAR(4000) NULL ,
+  
+  `use_yn` VARCHAR(10) NULL ,
+  
+  `writer_seq_id` BIGINT NULL ,
+
+  `writer_id` VARCHAR(45) NULL ,
+
+  `write_datetime` DATETIME NULL ,
+
+  PRIMARY KEY (`seq_id`) )
+
+COMMENT = '사이트 분류 설정';
+
+
+
 CREATE  TABLE `contents_master` (
 
   `seq_id` BIGINT NOT NULL AUTO_INCREMENT ,
