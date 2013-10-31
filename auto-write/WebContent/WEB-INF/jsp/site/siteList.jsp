@@ -71,7 +71,7 @@
 						<tbody>
 
 							<tr>
-								<th>선택</th>
+								<th><input name="checkAll" type="checkbox" onClick="javascript:changeAllChecked('selectedSeqId');"></th>
 								<th>순번</th>
 								<th>사이트명</th>
 								<th>기본선택</th>
@@ -95,8 +95,7 @@
 									SiteEntity siteEntity = siteList.get(ii);
 							%>
 							<tr>
-								<td><input type=checkbox value=''></td>
-								<td><%= startSequence-- %></td>
+								<td><input name="selectedSeqId" type="checkbox" value="<%=siteEntity.getSeq_id()%>"></td><td><%= startSequence-- %></td>
 								<td>
 									<a href="siteRead.do?jsp=site/siteWrite&seqId=<%=siteEntity.getSeq_id()%>">
 										<%=siteEntity.getSite_name()%>

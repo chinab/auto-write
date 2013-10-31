@@ -131,7 +131,7 @@
 						<tbody>
 
 							<tr>
-								<th>선택</th>
+								<th><input name="checkAll" type="checkbox" onClick="javascript:changeAllChecked('selectedSeqId');"></th>
 								<th>순번</th>
 								<th>제목</th>
 								<th>등록일</th>
