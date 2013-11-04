@@ -119,14 +119,18 @@ public class Sexbam extends AutowriterCommon {
 		return true;
 	}
 
-
+   
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
     	// delete URL
-    	// http://www.opgaja14.com/index.php?mid=s2_3&category=203497&document_srl=8604384&act=procBoardDeleteDocument
+    	// http://uuubam.com/index.php?mid=10444580&category=203497&document_srl=10444652&act=procBoardDeleteDocument
+    	deleteBoard(autowriteInfo);
     	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
-				
+		
+    	System.out.println("============== writeUrl:" + writeUrl);
+    	
+    	
 		HttpPost httpost = new HttpPost(writeUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
 		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
@@ -135,31 +139,98 @@ public class Sexbam extends AutowriterCommon {
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
 
-		String responseBody = parseResponse(entity);
-		
-		System.out.println(responseBody);
-		
-		System.out.println("Post logon cookies:");
+//		String responseBody = parseResponse(entity);
+//		
+//		System.out.println(responseBody);
 	}
     
+    
+    private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	String paramName = "document_srl=";
+    	
+    	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String keyStr = siteInfo.getSite_keyword();
+    	
+    	if ( keyStr == null || keyStr.trim().length() == 0 ) {
+    		throw new Exception("사이트 키워드를 설정하세요.");
+    	}
+    	
+    	String contentKey = null;
+    	
+    	try {
+			contentKey = readBoardKey(autowriteInfo, paramName, keyStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+    	
+    	String deleteUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=sschop3&category=203497&act=procBoardDeleteDocument&document_srl=" + contentKey;
+    	
+		System.out.println("DELETE URL:" + deleteUrl);
+		
+		HttpPost httpost = new HttpPost(deleteUrl);
+//		List<NameValuePair> nvps = setNvpsParams(autowriteInfo);
+//		httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
+//        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+        
+        HttpResponse response = httpclient.execute(httpost);            
+//        HttpEntity entity = response.getEntity();
+//        String responseBody = parseResponse(entity);
+//		System.out.println(responseBody);
+        httpost.releaseConnection();
+	}
+    
+    
+    private String readBoardKey(AutowriteEntity autowriteInfo, String paramName, String keyStr) throws Exception {
+    	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String categoryStr = siteInfo.getSite_category();
+    	
+    	if ( categoryStr == null || categoryStr.trim().length() == 0 ) {
+    		throw new Exception("지역 설정이 필요합니다. 관리자에게 문의하세요.");
+    	}
+    	
+    	// http://uuubam.com/index.php?mid=sschop3&category=2828355
+//    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=sschop3&category=2828355";
+    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=sschop3&category=" + categoryStr;
+    	
+    	System.out.println("LIST URL:" + listUrl);
+    	
+    	HttpPost httpost = new HttpPost(listUrl);
+		HttpResponse response = httpclient.execute(httpost);
+		HttpEntity entity = response.getEntity();
+		
+		String contentKey = getContentKey(autowriteInfo, entity, paramName, keyStr);
+    	
+    	return contentKey;
+	}
     
 	public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		// 제목
-//		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
 		String subjectStr = autowriteInfo.getTitle();
 		nvps.add(new BasicNameValuePair("title", subjectStr));
 		
 		// 내용
-//		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
 		String contentStr = autowriteInfo.getContent();
 		nvps.add(new BasicNameValuePair("content", contentStr));
 		
 		// 분류
 		// 1465403 : 짤방
 		// 1465427 : 동영상
-		nvps.add(new BasicNameValuePair("category_srl", "1465403"));
+		nvps.add(new BasicNameValuePair("category_srl", "2828355"));
+		
+		nvps.add(new BasicNameValuePair("category", "2828355"));
+		//nvps.add(new BasicNameValuePair("document_srl", "9436029"));
+		
+		nvps.add(new BasicNameValuePair("extra_vars1", "부평 스타"));					//업소 이름
+		nvps.add(new BasicNameValuePair("extra_vars2", "인천 부평"));					//지역
+		nvps.add(new BasicNameValuePair("extra_vars3", "010-2174-6572"));			//전화번호
+		nvps.add(new BasicNameValuePair("extra_vars4", "오피"));						//업종
+		nvps.add(new BasicNameValuePair("extra_vars5", "PM 12:00 ~ AM 05:00"));		//영업시간 및 예약안내
+		nvps.add(new BasicNameValuePair("extra_vars6", "130,000 + @"));				//가격 및 기타정보
+		nvps.add(new BasicNameValuePair("extra_vars7", "부평역 도보 5분"));			//오시는길
+		nvps.add(new BasicNameValuePair("extra_vars8", ""));
 		
 		nvps.add(new BasicNameValuePair("error_return_url", "/index.php?mid=so01&amp;act=dispBoardWrite"));
 		nvps.add(new BasicNameValuePair("act", "procBoardInsertDocument"));
@@ -167,7 +238,8 @@ public class Sexbam extends AutowriterCommon {
 		
 		// so01 : 자유게시판
 		// so03 : 놀이터
-		nvps.add(new BasicNameValuePair("mid", "so03"));
+		// sschop3 : 오피
+		nvps.add(new BasicNameValuePair("mid", "sschop3"));
 		
 		nvps.add(new BasicNameValuePair("module", "board"));
 		nvps.add(new BasicNameValuePair("status", "PUBLIC"));

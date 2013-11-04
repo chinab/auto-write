@@ -47,6 +47,8 @@ public class UserEntity {
 	
 	List<UserClassEntity> userClassList;
 	
+	List<UserBusinessEntity> userBusinessList;
+	
 	private ConditionEntity conditionInfo;
 	
 	public String getSeq_id() {
@@ -495,6 +497,12 @@ public class UserEntity {
 		}
 	}
 	
+	public List<UserBusinessEntity> getUserBusinessList() {
+		return userBusinessList;
+	}
+	public void setUserBusinessList(List<UserBusinessEntity> userBusinessList) {
+		this.userBusinessList = userBusinessList;
+	}
 	public ConditionEntity getConditionInfo() {
 		return conditionInfo;
 	}
