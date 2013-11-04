@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.autowrite.common.framework.dao.SiteCategoryDao;
 import com.autowrite.common.framework.dao.SiteDao;
+import com.autowrite.common.framework.entity.SiteCategoryEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 import com.autowrite.common.framework.entity.SiteListEntity;
 
@@ -20,7 +22,10 @@ public class SiteService extends CommonService{
 	
 	@Autowired
 	SiteDao siteDao;
-
+	
+	@Autowired
+	SiteCategoryDao siteCategoryDao;
+	
 	public SiteService() {
 	}
 
@@ -139,7 +144,12 @@ public class SiteService extends CommonService{
 	public SiteEntity readPrivateSite(HttpServletRequest req, Map param) throws Exception {
 		setCondition(param);
 		
-		return siteDao.readPrivateSite(param);
+		SiteEntity siteEntity = siteDao.readPrivateSite(param);
+		param.put("MASTER_SEQ_ID", siteEntity.getMaster_seq_id());
+		List<SiteCategoryEntity> siteCategoryList = siteCategoryDao.listCategory(param);
+		siteEntity.setSiteCategoryList(siteCategoryList);
+		
+		return siteEntity;
 	}
 	
 	

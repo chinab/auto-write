@@ -6,6 +6,7 @@
 <%@ page import="com.autowrite.common.framework.entity.UserEntity"%>
 <%@ page import="com.autowrite.common.framework.entity.SiteEntity"%>
 <%@ page import="com.autowrite.common.framework.entity.SiteListEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.SiteCategoryEntity"%>
 
 <%
 	SiteEntity siteEntity = (SiteEntity) request.getAttribute("SiteEntity");
@@ -183,7 +184,38 @@
 								<td class="subject5">&nbsp;&nbsp;<b>CATEGORY</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
+								<%
+									List<SiteCategoryEntity> siteCategoryList = siteEntity.getSiteCategoryList();
+									if ( siteCategoryList != null && siteCategoryList.size() > 0 ){
+								%>
+									<select name="siteCategory" style="width: 150px;">
+								<%
+										String selectedStr = "";
+								
+										for ( int ii = 0 ; ii < siteCategoryList.size() ; ii ++ ) {
+											SiteCategoryEntity siteCategoryEntity = siteCategoryList.get(ii);
+											
+											if ( (siteEntity.nvl(siteEntity.getSite_category())).equals(siteCategoryEntity.getCategory_value()) ) {
+												selectedStr = " selected=\"selected\"";
+											} else {
+												selectedStr = "";
+											}
+											
+											if ( "R".equals(siteCategoryEntity.getCategory_type()) ) {
+								%>
+										<option value="<%=siteCategoryEntity.getCategory_value()%>"<%=selectedStr%>><%=siteCategoryEntity.getCategory_name()%></option>
+								<%
+											}
+										}	
+								%>	
+									</select>
+								<%
+									} else {
+								%>
 									<input name="siteCategory" class="s_id" type="text" size="65" style="width: 150px;" value="<%=siteEntity.nvl(siteEntity.getSite_category())%>">
+								<%
+									}
+								%>
 									&nbsp;
 									<b>해당 사이트의 대분류 키</b>
 								</td>

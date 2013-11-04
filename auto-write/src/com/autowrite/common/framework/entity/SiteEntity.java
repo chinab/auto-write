@@ -1,8 +1,11 @@
 package com.autowrite.common.framework.entity;
 
+import java.util.List;
 import java.util.Map;
 
 public class SiteEntity extends CommonEntity{
+	private List<SiteCategoryEntity> siteCategoryList;
+	
 	private String seq_id;
 	private String master_seq_id;
 	private String domain;
@@ -42,6 +45,12 @@ public class SiteEntity extends CommonEntity{
 	
 	private String use_yn;
 	
+	public List<SiteCategoryEntity> getSiteCategoryList() {
+		return siteCategoryList;
+	}
+	public void setSiteCategoryList(List<SiteCategoryEntity> siteCategoryList) {
+		this.siteCategoryList = siteCategoryList;
+	}
 	public String getSeq_id() {
 		return seq_id;
 	}
