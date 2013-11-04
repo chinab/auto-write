@@ -372,6 +372,81 @@
 	</statement>
 	
 	
+	<statement id="individual.business.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					U_INFO_BUSINESS
+				where
+					USER_SEQ_ID = #USER_SEQ_ID#
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="individual.business.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.UserBusinessEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, USER_SEQ_ID, BUSINESS_NAME, BUSINESS_REGION
+				, BUSINESS_TEL, BUSINESS_CATEGORY, BUSINESS_TIME
+				, BUSINESS_PRICE, BUSINESS_ADDRESS, WRITE_DATETIME
+			from
+				U_INFO_BUSINESS
+			where
+				USER_SEQ_ID = #USER_SEQ_ID#
+			order by
+				WRITE_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+	
+	<statement id="individual.business.write" parameterClass="java.util.HashMap">
+		insert into U_INFO_BUSINESS (
+			SEQ_ID, USER_SEQ_ID, BUSINESS_NAME, BUSINESS_REGION
+				, BUSINESS_TEL, BUSINESS_CATEGORY, BUSINESS_TIME
+				, BUSINESS_PRICE, BUSINESS_ADDRESS, WRITE_DATETIME
+		) values (
+			#SEQ_ID#, #USER_SEQ_ID#, #BUSINESS_NAME#, #BUSINESS_REGION#
+				, #BUSINESS_TEL#, #BUSINESS_CATEGORY#, #BUSINESS_TIME#
+				, #BUSINESS_PRICE#, #BUSINESS_ADDRESS#, sysdate()
+		)
+	</statement>
+	
+	
+	<statement id="individual.business.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.UserBusinessEntity">
+		select
+			SEQ_ID, USER_SEQ_ID, BUSINESS_NAME, BUSINESS_REGION
+				, BUSINESS_TEL, BUSINESS_CATEGORY, BUSINESS_TIME
+				, BUSINESS_PRICE, BUSINESS_ADDRESS, WRITE_DATETIME
+		from
+			U_INFO_BUSINESS
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="individual.business.delete" parameterClass="java.util.HashMap">
+		delete from
+			U_INFO_BUSINESS
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
 	<insert id="autowrite.master.write" parameterClass="java.util.HashMap" >
 	    <![CDATA[
 	        insert into AUTOWRITE_MASTER (

@@ -12,10 +12,10 @@ public class UserBusinessListEntity extends PageListWrapper {
 		pageSize = 20;
 	}
 
-	public List<UserBusinessEntity> getSiteList() {
+	public List<UserBusinessEntity> getBusinessList() {
 		return businessList;
 	}
-	public void setSiteList(List<UserBusinessEntity> businessList) {
+	public void setBusinessList(List<UserBusinessEntity> businessList) {
 		this.businessList = businessList;
 	}
 	

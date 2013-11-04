@@ -11,12 +11,14 @@ import org.springframework.stereotype.Component;
 import com.autowrite.common.config.Constant;
 import com.autowrite.common.framework.dao.AutowriteDao;
 import com.autowrite.common.framework.dao.ContentsDao;
+import com.autowrite.common.framework.dao.IndividualDao;
 import com.autowrite.common.framework.dao.SiteDao;
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.AutowriteListEntity;
 import com.autowrite.common.framework.entity.BoardEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 import com.autowrite.common.framework.entity.SiteParameterEntity;
+import com.autowrite.common.framework.entity.UserBusinessEntity;
 import com.autowrite.service.AutowriterInterface;
 
 @Component
@@ -30,6 +32,9 @@ public class AutowriteService extends CommonService{
 
 	@Autowired
 	ContentsDao contentsDao;
+
+	@Autowired
+	IndividualDao individualDao;
 
 	public AutowriteService() {
 	}
@@ -188,6 +193,10 @@ public class AutowriteService extends CommonService{
 		autowriteInfo.setTitle(param.get("TITLE").toString());
 		autowriteInfo.setContent(param.get("CONTENT").toString());
 //		autowriteDao.getAutowriteInfo(param);
+		
+		// 섹밤 업소정보 세팅.
+		List<UserBusinessEntity> userBusinessInfo = individualDao.listBusinessInfo(param);
+		autowriteInfo.setUserBusinessEntityList(userBusinessInfo);
 		
 		SiteEntity siteInfo = siteDao.getAutowriteSiteInfo(param);
 		

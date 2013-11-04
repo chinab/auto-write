@@ -3,21 +3,21 @@
 <%@ page import="java.util.List, java.net.URLEncoder"%>
 <%@ page import="java.util.Map, java.util.Iterator, java.util.HashMap"%>
 <%@ page import="com.autowrite.common.framework.entity.UserEntity"%>
-<%@ page import="com.autowrite.common.framework.entity.SiteEntity"%>
-<%@ page import="com.autowrite.common.framework.entity.SiteListEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.UserBusinessEntity"%>
+<%@ page import="com.autowrite.common.framework.entity.UserBusinessListEntity"%>
 <%@ page import="com.autowrite.common.framework.entity.ConditionEntity"%>
 
 <%
-	List<SiteEntity> siteList = null;
+	List<UserBusinessEntity> businessInfoList = null;
 	
-	if ( request.getAttribute("SiteList") != null ){
-		siteList = (List<SiteEntity>) request.getAttribute("SiteList");
+	if ( request.getAttribute("UserBusinessList") != null ){
+		businessInfoList = (List<UserBusinessEntity>) request.getAttribute("UserBusinessList");
 	}
 	
-	SiteListEntity siteListEntity = (SiteListEntity) request.getAttribute("SiteListEntity");
+	UserBusinessListEntity businessListEntity = (UserBusinessListEntity) request.getAttribute("UserBusinessListEntity");
 	
-	String searchKey = siteListEntity.writeSearchKey();
-	String searchValue = siteListEntity.writeSearchValue();
+	String searchKey = businessListEntity.writeSearchKey();
+	String searchValue = businessListEntity.writeSearchValue();
 %>
 
 <html>
@@ -34,7 +34,7 @@
 
 <script>
 	function readContents(seqId){
-		var hrefStr = "contentsView.do?jsp=contents/contentsWrite";
+		var hrefStr = "businessInfoView.do?jsp=individual/businessInfoWrite";
 		hrefStr += "&seqId=" + seqId;
 		
 		location.href = hrefStr;
@@ -60,7 +60,7 @@
 			alert("하나만 선택 해 주세요.");
 			return;
 		} else {
-			var hrefStr = "contentsView.do?jsp=contents/contentsWrite";
+			var hrefStr = "businessInfoRead.do?jsp=individual/businessInfoWrite";
 			hrefStr += "&seqId=" + seqId;
 			
 			location.href = hrefStr;
@@ -86,7 +86,7 @@
 				return;
 			}
 			
-			frm.action = "contentsDelete.do";
+			frm.action = "businessInfoDelete.do";
 			frm.method = "post";
 			frm.submit();
 		}
@@ -96,7 +96,7 @@
 <body>
 	<form name="listForm" method="post">
 		<input type="hidden" name="seqId" value=""/>
-		<input type="hidden" name="pageNum" value="<%=siteListEntity.getPageNum()%>"/>
+		<input type="hidden" name="pageNum" value="<%=businessListEntity.getPageNum()%>"/>
 		
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
@@ -111,10 +111,10 @@
 			<div style="margin-left: 30px; width: 750px;">
 
 				<div
-					style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">사이트 설정 > 사이트리스트</div>
+					style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">개인설정 > 업소정보 리스트</div>
 				<div style="width: 100%; margin-top: 30px;">
 					<img src="images/title_dot.gif">
-					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">사이트리스트</span>
+					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">업소정보 리스트</span>
 				</div>
 
 				<div style="margin-top: 5px;">
@@ -134,15 +134,15 @@
 							<tr>
 								<th><input name="checkAll" type="checkbox" onClick="javascript:changeAllChecked('selectedSeqId');"></th>
 								<th>순번</th>
-								<th>사이트명</th>
-								<th>기본선택</th>
-								<th>도메인</th>
+								<th>업소명</th>
+								<th>지역</th>
+								<th>업종</th>
 								<th>등록일</th>
 							</tr>
 							
 							<!--글 목록 시작-->
 							<%
-								if ( siteList.size() == 0 ) {
+								if ( businessInfoList.size() == 0 ) {
 									out.println("<tr><td colspan='5'><b>글이 없습니다</b></td></tr>");
 								}
 							%>
@@ -150,25 +150,21 @@
 								String regionStr = "";
 								String facilityNameStr = "";
 								
-								long startSequence = siteListEntity.getStartSequenceNumber();
+								long startSequence = businessListEntity.getStartSequenceNumber();
 								
-								for ( int ii = 0 ; ii < siteList.size() ; ii ++ ) {
-									SiteEntity siteEntity = siteList.get(ii);
+								for ( int ii = 0 ; ii < businessInfoList.size() ; ii ++ ) {
+									UserBusinessEntity userBusinessEntity = businessInfoList.get(ii);
 							%>
 							<tr>
-								<td><input name="selectedSeqId" type="checkbox" value="<%=siteEntity.getSeq_id()%>"></td><td><%= startSequence-- %></td>
+								<td><input name="selectedSeqId" type="checkbox" value="<%=userBusinessEntity.getSeq_id()%>"></td><td><%= startSequence-- %></td>
 								<td>
-									<a href="siteRead.do?jsp=site/siteWrite&seqId=<%=siteEntity.getSeq_id()%>">
-										<%=siteEntity.getSite_name()%>
+									<a href="businessInfoRead.do?jsp=individual/businessInfoWrite&seqId=<%=userBusinessEntity.getSeq_id()%>">
+										<%=userBusinessEntity.getBusiness_name()%>
 									</a>
 								</td>
-								<td><%="Y".equals(siteEntity.getUse_yn())?"선택":""%></td>
-								<td>
-									<a href="http://<%=siteEntity.getDomain()%>" target="_blank">
-										<%=siteEntity.getDomain()%>
-									</a>
-								</td>
-								<td><%=siteEntity.getWriteBoardDateTime(siteEntity.getWrite_datetime())%></td>
+								<td><%=userBusinessEntity.getBusiness_region()%></td>
+								<td><%=userBusinessEntity.getBusiness_category()%></td>
+								<td><%=userBusinessEntity.getWriteBoardDateTime(userBusinessEntity.getWrite_datetime())%></td>
 							</tr>
 							<%
 								}
@@ -182,13 +178,11 @@
 						<input class="in_btnc2" type="button" value="수정" OnClick="modifyContents();" class="input_gr">
 						&nbsp;&nbsp;
 						<input class="in_btnc" type="button" value="삭제" OnClick="deleteContents();" class="input_gr">
-						&nbsp;&nbsp;
-						<input class="in_btnc" type="button" value="삭제" OnClick="alert('working');" class="input_gr">
 					</div>
 					
 					<!--페이지링크-->
 					<div class="paging">
-						<%=siteListEntity.getPagination("listSite", null, siteListEntity.getPageNum())%>
+						<%=businessListEntity.getPagination("listSite", null, businessListEntity.getPageNum())%>
 					</div>
 				</div>
 

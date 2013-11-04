@@ -32,6 +32,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
+import com.autowrite.common.framework.entity.UserBusinessEntity;
 
 public class Sexbam extends AutowriterCommon {
 	/**
@@ -122,8 +123,9 @@ public class Sexbam extends AutowriterCommon {
    
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
     	// delete URL
-    	// http://uuubam.com/index.php?mid=10444580&category=203497&document_srl=10444652&act=procBoardDeleteDocument
-    	deleteBoard(autowriteInfo);
+    	// http://uuubam.com/index.php?mid=10444580&category=203497&document_srl=9436029&act=procBoardDeleteDocument
+    	String contentKey = deleteBoard(autowriteInfo);
+    	autowriteInfo.setContentKey(contentKey);
     	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
@@ -145,7 +147,7 @@ public class Sexbam extends AutowriterCommon {
 	}
     
     
-    private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
+    private String deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
     	String paramName = "document_srl=";
     	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
@@ -168,16 +170,18 @@ public class Sexbam extends AutowriterCommon {
     	
 		System.out.println("DELETE URL:" + deleteUrl);
 		
-		HttpPost httpost = new HttpPost(deleteUrl);
-//		List<NameValuePair> nvps = setNvpsParams(autowriteInfo);
-//		httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
-//        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+//		HttpPost httpost = new HttpPost(deleteUrl);
+////		List<NameValuePair> nvps = setNvpsParams(autowriteInfo);
+////		httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
+////        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+//        
+//        HttpResponse response = httpclient.execute(httpost);            
+////        HttpEntity entity = response.getEntity();
+////        String responseBody = parseResponse(entity);
+////		System.out.println(responseBody);
+//        httpost.releaseConnection();
         
-        HttpResponse response = httpclient.execute(httpost);            
-//        HttpEntity entity = response.getEntity();
-//        String responseBody = parseResponse(entity);
-//		System.out.println(responseBody);
-        httpost.releaseConnection();
+        return contentKey;
 	}
     
     
@@ -221,16 +225,9 @@ public class Sexbam extends AutowriterCommon {
 		nvps.add(new BasicNameValuePair("category_srl", "2828355"));
 		
 		nvps.add(new BasicNameValuePair("category", "2828355"));
-		//nvps.add(new BasicNameValuePair("document_srl", "9436029"));
 		
-		nvps.add(new BasicNameValuePair("extra_vars1", "부평 스타"));					//업소 이름
-		nvps.add(new BasicNameValuePair("extra_vars2", "인천 부평"));					//지역
-		nvps.add(new BasicNameValuePair("extra_vars3", "010-2174-6572"));			//전화번호
-		nvps.add(new BasicNameValuePair("extra_vars4", "오피"));						//업종
-		nvps.add(new BasicNameValuePair("extra_vars5", "PM 12:00 ~ AM 05:00"));		//영업시간 및 예약안내
-		nvps.add(new BasicNameValuePair("extra_vars6", "130,000 + @"));				//가격 및 기타정보
-		nvps.add(new BasicNameValuePair("extra_vars7", "부평역 도보 5분"));			//오시는길
-		nvps.add(new BasicNameValuePair("extra_vars8", ""));
+		// 삭제, 수정시 글의 키
+		nvps.add(new BasicNameValuePair("document_srl", autowriteInfo.getContentKey()));
 		
 		nvps.add(new BasicNameValuePair("error_return_url", "/index.php?mid=so01&amp;act=dispBoardWrite"));
 		nvps.add(new BasicNameValuePair("act", "procBoardInsertDocument"));
@@ -245,6 +242,24 @@ public class Sexbam extends AutowriterCommon {
 		nvps.add(new BasicNameValuePair("status", "PUBLIC"));
 		nvps.add(new BasicNameValuePair("comment_status", "ALLOW"));
 		nvps.add(new BasicNameValuePair("allow_trackback", "Y"));
+		
+		// 업소 정보
+		List<UserBusinessEntity> userBusinessInfoList = autowriteInfo.getUserBusinessEntityList();
+		
+		if ( userBusinessInfoList != null && userBusinessInfoList.size() > 0 ){
+			// TODO : 한 아이디당 여러 업소를 등록 할 경우 필요.
+			// 현재는 한 업소정보만 등록하도록 유도할것.
+			UserBusinessEntity userBusinessEntity = userBusinessInfoList.get(0);
+			
+			nvps.add(new BasicNameValuePair("extra_vars1", userBusinessEntity.getBusiness_name()));					//업소 이름
+			nvps.add(new BasicNameValuePair("extra_vars2", userBusinessEntity.getBusiness_region()));				//지역
+			nvps.add(new BasicNameValuePair("extra_vars3", userBusinessEntity.getBusiness_tel()));					//전화번호
+			nvps.add(new BasicNameValuePair("extra_vars4", userBusinessEntity.getBusiness_category()));				//업종
+			nvps.add(new BasicNameValuePair("extra_vars5", userBusinessEntity.getBusiness_time()));					//영업시간 및 예약안내
+			nvps.add(new BasicNameValuePair("extra_vars6", userBusinessEntity.getBusiness_price()));				//가격 및 기타정보
+			nvps.add(new BasicNameValuePair("extra_vars7", userBusinessEntity.getBusiness_address()));				//오시는길
+			nvps.add(new BasicNameValuePair("extra_vars8", ""));
+		}
 		
 		return nvps;
 	}

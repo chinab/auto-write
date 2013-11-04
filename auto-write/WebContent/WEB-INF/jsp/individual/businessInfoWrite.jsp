@@ -17,7 +17,7 @@
 	UserBusinessListEntity businessListEntity = (UserBusinessListEntity) request.getAttribute("UserBusinessList");
 	List<UserBusinessEntity> businessList = null;
 	if ( businessListEntity != null ) {
-		businessList = businessListEntity.getSiteList();
+		businessList = businessListEntity.getBusinessList();
 	}
 %>
 
@@ -89,7 +89,7 @@
 								<td class="subject5">&nbsp;&nbsp;<b>상호</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="siteId" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_name())%>">
+									<input name="businessName" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_name())%>">
 									&nbsp;
 									<b></b>
 								</td>
@@ -101,7 +101,7 @@
 								<td class="subject5">&nbsp;&nbsp;<b>지역</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="sitePasswd" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_region())%>">
+									<input name="businessRegion" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_region())%>">
 									&nbsp;
 									<b></b>
 								</td>
@@ -113,7 +113,7 @@
 								<td class="subject5">&nbsp;&nbsp;<b>전화번호</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="siteKeyword" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_tel())%>">
+									<input name="businessTel" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_tel())%>">
 									&nbsp;
 									<b></b>
 								</td>
@@ -125,7 +125,7 @@
 								<td class="subject5">&nbsp;&nbsp;<b>업종</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="siteCategory" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_category())%>">
+									<input name="businessCategory" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_category())%>">
 									&nbsp;
 									<b></b>
 								</td>
@@ -137,7 +137,7 @@
 								<td class="subject5">&nbsp;&nbsp;<b>영업시간</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="siteRegion" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_time())%>">
+									<input name="businessTime" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_time())%>">
 									&nbsp;
 									<b></b>
 								</td>
@@ -149,7 +149,7 @@
 								<td class="subject5">&nbsp;&nbsp;<b>가격</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="siteSubRegion" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_price())%>">
+									<input name="businessPrice" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_price())%>">
 									&nbsp;
 									<b></b>
 								</td>
@@ -160,7 +160,7 @@
 								<td class="subject5">&nbsp;&nbsp;<b>오시는 길</b></td>
 								<td><img src="images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
-									<input name="siteSubRegion" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_address())%>">
+									<input name="businessAddress" class="s_id" type="text" size="65" style="width: 350px;" value="<%=businessEntity.nvl(businessEntity.getBusiness_address())%>">
 									&nbsp;
 									<b></b>
 								</td>

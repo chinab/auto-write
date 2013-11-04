@@ -1,6 +1,5 @@
 package com.autowrite.common.framework.entity;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class AutowriteEntity extends CommonEntity {
@@ -37,6 +36,11 @@ public class AutowriteEntity extends CommonEntity {
 	// for http autowrite
 	private SiteEntity siteEntity;
 	
+	// for http business information parameters
+	private List<UserBusinessEntity> userBusinessEntityList;
+	
+	// board key for modifing or deleting board contents of each site.
+	private String contentKey;
 	
 	public List<BoardEntity> getContentsEntityList() {
 		return contentsEntityList;
@@ -175,5 +179,17 @@ public class AutowriteEntity extends CommonEntity {
 	}
 	public void setSiteEntity(SiteEntity siteEntity) {
 		this.siteEntity = siteEntity;
+	}
+	public List<UserBusinessEntity> getUserBusinessEntityList() {
+		return userBusinessEntityList;
+	}
+	public void setUserBusinessEntityList(List<UserBusinessEntity> userBusinessEntityList) {
+		this.userBusinessEntityList = userBusinessEntityList;
+	}
+	public String getContentKey() {
+		return contentKey;
+	}
+	public void setContentKey(String contentKey) {
+		this.contentKey = contentKey;
 	}
 }
