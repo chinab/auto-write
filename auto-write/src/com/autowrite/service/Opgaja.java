@@ -166,8 +166,16 @@ public class Opgaja extends AutowriterCommon {
     
     
     private String readBoardKey(AutowriteEntity autowriteInfo, String paramName, String keyStr) throws Exception {
+    	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String categoryStr = siteInfo.getSite_category();
+    	
+    	if ( categoryStr == null || categoryStr.trim().length() == 0 ) {
+    		throw new Exception("사이트 대분류(category_srl)를 설정하세요.");
+    	}
+    	
     	// http://www.opgaja14.com/index.php?mid=s2_3&category=203497
-    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=s2_3&category=203497";
+//    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=s2_3&category=203497";
+    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=s2_3&category=" + categoryStr;
     	
     	HttpPost httpost = new HttpPost(listUrl);
 		HttpResponse response = httpclient.execute(httpost);
@@ -194,13 +202,12 @@ public class Opgaja extends AutowriterCommon {
 		
 
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
-    	String regionStr = siteInfo.getSite_region();
+    	String categoryStr = siteInfo.getSite_category();
     	
-    	if ( regionStr == null || regionStr.trim().length() == 0 ) {
+    	if ( categoryStr == null || categoryStr.trim().length() == 0 ) {
     		throw new Exception("사이트 대분류(category_srl)를 설정하세요.");
     	}
     	
-		// TODO : 지역분류 DB화
 		// 분류
 		// 203502 : 인천
 		// 203497 : 부평
@@ -215,8 +222,10 @@ public class Opgaja extends AutowriterCommon {
 		// 203504 : 평택
 		// 8505551 : 광명
 //    	nvps.add(new BasicNameValuePair("category_srl", "203497"));
-    	nvps.add(new BasicNameValuePair("category_srl", regionStr));
+    	nvps.add(new BasicNameValuePair("category_srl", categoryStr));
 		
+    	System.out.println("categoryStr:" + categoryStr);
+    	
 		// 게시판 분류
 		// s2_3 : 업소 라인업 
 		nvps.add(new BasicNameValuePair("mid", "s2_3"));
