@@ -8,6 +8,7 @@ import org.springframework.orm.ibatis.SqlMapClientTemplate;
 import org.springframework.stereotype.Component;
 
 import com.autowrite.common.framework.entity.AutowriteEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
 
 @Component
 public class AutowriteDaoImpl implements AutowriteDao {
@@ -104,5 +105,17 @@ public class AutowriteDaoImpl implements AutowriteDao {
 	@Override
 	public void deleteAutowriteLog(Map param) {
 		sqlHelper.delete("autowrite.log.delete", param);
+	}
+	
+	
+	@Override
+	public AutowriteEntity getRestoredAutowrite(Map param) {
+		return (AutowriteEntity) sqlHelper.queryForObject("autowrite.info.restored.read", param);
+	}
+
+
+	@Override
+	public List<String> getSiteSeqIdList(Map param) {
+		return (List<String>) sqlHelper.queryForList("autowrite.site.seqid.list", param);
 	}
 }

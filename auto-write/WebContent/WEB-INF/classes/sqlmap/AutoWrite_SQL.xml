@@ -567,6 +567,16 @@
 	</statement>
 	
 	
+	<statement id="autowrite.site.seqid.list" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select
+			SITE_SEQ_ID
+		from
+			AUTOWRITE_SITE
+		where
+			AUTOWRITE_MASTER_SEQ_ID = #AUTOWRITE_MASTER_SEQ_ID#
+	</statement>
+	
+	
 	<statement id="autowrite.log.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
 		select count(1) from (
 			select @RNUM:=0, Q.* from (
@@ -623,6 +633,17 @@
 			M.SEQ_ID = P.MASTER_SEQ_ID
 			AND P.SEQ_ID = #SITE_SEQ_ID#
 	</statement>
+	
+	
+	<statement id="autowrite.info.restored.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AutowriteEntity">
+		select
+			SEQ_ID, CONTENTS_SEQ_ID, TITLE, CONTENT, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+		from
+			AUTOWRITE_MASTER
+		where
+			SEQ_ID = #AUTOWRITE_MASTER_SEQ_ID#
+	</statement>
+	
 		
 	<statement id="autowrite.master.delete" parameterClass="java.util.HashMap">
 		delete from

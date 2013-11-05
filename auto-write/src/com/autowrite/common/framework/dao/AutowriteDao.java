@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.autowrite.common.framework.entity.AutowriteEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
 
 public interface AutowriteDao {
 
@@ -32,4 +33,8 @@ public interface AutowriteDao {
 	public abstract void deleteAutowriteSite(Map param);
 	
 	public abstract void deleteAutowriteLog(Map param);
+
+	public abstract AutowriteEntity getRestoredAutowrite(Map param);
+
+	public abstract List<String> getSiteSeqIdList(Map param);
 }

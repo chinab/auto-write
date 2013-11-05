@@ -93,10 +93,10 @@ img {border:0}
 
 
 /* 버튼 */
-.in_btn {background-color:#ffffff; border:solid 1px #cccccc; width:100px; height:23px; padding-top:4px;}
-.in_btnc {background-color:#4993d5; border:solid 1px #cccccc; width:100px; height:23px; padding-top:4px; color:#ffffff;}
-.in_btnc2 {background-color:#e0f6bc; border:solid 1px #cccccc; width:100px; height:23px; padding-top:4px; color:#666666;}
-.in_btnc1 {background-color:#e0f6bc; border:solid 1px #cccccc; width:100px; height:20px; padding-top:2px; color:#666666;}
+.in_btn {background-color:#ffffff; border:solid 1px #cccccc; width:100px; height:23px; padding-top:4px; cursor:hand;}
+.in_btnc {background-color:#4993d5; border:solid 1px #cccccc; width:100px; height:23px; padding-top:4px; color:#ffffff; cursor:hand;}
+.in_btnc2 {background-color:#e0f6bc; border:solid 1px #cccccc; width:100px; height:23px; padding-top:4px; color:#666666; cursor:hand;}
+.in_btnc1 {background-color:#e0f6bc; border:solid 1px #cccccc; width:100px; height:20px; padding-top:2px; color:#666666; cursor:hand;}
 
 
 

@@ -25,6 +25,33 @@
 <jsp:include page="../include/topMenu.jsp" flush="false" />
 
 <script>
+	function rewrite(){
+		var frm = document.listForm;
+		
+		var checkedCount = 0;
+		var seqId;
+		
+		for ( var ii = 0 ; ii < frm.selectedSeqId.length ; ii ++ ) {
+			if ( frm.selectedSeqId[ii].checked == true ){
+				seqId = frm.selectedSeqId[ii].value;
+				checkedCount ++;
+			}
+		}
+		
+		if ( checkedCount == 0 ) {
+			alert("대상을 선택 해 주세요.");
+			return;
+		} else if ( checkedCount > 1 ) {
+			alert("하나만 선택 해 주세요.");
+			return;
+		} else {
+			var hrefStr = "autowriteRewrite.do?jsp=autowrite/autowriteMasterList";
+			hrefStr += "&seqId=" + seqId;
+			
+			location.href = hrefStr;
+		}
+	}
+	
 	function deleteContents(){
 		var frm = document.listForm;
 		
@@ -119,11 +146,11 @@
 					</table>
 					
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="재실행" OnClick="popup_check();" class="input_gr">
+						<input class="in_btn" type="button" value="재실행" OnClick="rewrite();">
 						&nbsp;&nbsp;
-						<input class="in_btnc2" type="button" value="뒤로가기" OnClick="history.back();" class="input_gr">
+						<input class="in_btnc2" type="button" value="뒤로가기" OnClick="history.back();">
 						&nbsp;&nbsp;
-						<input class="in_btnc" type="button" value="삭제" OnClick="deleteContents();" class="input_gr">
+						<input class="in_btnc" type="button" value="삭제" OnClick="deleteContents();">
 					</div>
 				</div>
 

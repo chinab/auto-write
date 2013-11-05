@@ -1,5 +1,6 @@
 package com.autowrite.common.framework.bean;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -157,11 +158,47 @@ public class AutowriteService extends CommonService{
 	}
 
 
+	/**
+	 * autowrite 실행.
+	 * @param req
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
 	public AutowriteListEntity writePrivateAutowrite(HttpServletRequest req, Map param) throws Exception {
 		setCondition(param);
 		
 		String[] siteSeqidArray = req.getParameterValues("siteSeqIdList");
 		
+		siteLoop(param, siteSeqidArray);
+		
+		return listAutowriteMaster(param);
+	}
+
+
+	/**
+	 * autowrite 재실행 
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	public AutowriteListEntity writePrivateAutowrite(Map param) throws Exception {
+		setCondition(param);
+		
+		List<String> siteSeqIdList = autowriteDao.getSiteSeqIdList(param);
+		
+		siteLoop(param, siteSeqIdList);
+		
+		return listAutowriteMaster(param);
+	}
+
+
+	/**
+	 * 각 사이트별로 executeHttpConnection 실행.
+	 * @param param
+	 * @param siteSeqidArray
+	 */
+	private void siteLoop(Map param, String[] siteSeqidArray) {
 		Long autowriteMasterSeqId = autowriteDao.writeAutowriteMaster(param);
 		param.put("AUTOWRITE_MASTER_SEQ_ID", autowriteMasterSeqId);
 		
@@ -178,10 +215,32 @@ public class AutowriteService extends CommonService{
 			
 			autowriteDao.writeAutowriteLog(param);
 		}
-		
-		return listAutowriteMaster(param);
 	}
 	
+	
+	/**
+	 * 각 사이트별로 executeHttpConnection 실행.
+	 * @param param
+	 * @param siteSeqidArray
+	 */
+	private void siteLoop(Map param, List<String> siteSeqIdList) {
+		Long autowriteMasterSeqId = autowriteDao.writeAutowriteMaster(param);
+		param.put("AUTOWRITE_MASTER_SEQ_ID", autowriteMasterSeqId);
+		
+		for ( int ii = 0 ; ii < siteSeqIdList.size() ; ii ++ ) {
+			param.put("SITE_SEQ_ID", siteSeqIdList.get(ii));
+			
+			executeHttpConnection(param);
+			
+			param.put("TRY_COUNT", 1);
+			
+			Long autowriteSiteSeqId = autowriteDao.writeAutowriteSite(param);
+			
+			param.put("AUTOWRITE_SITE_SEQ_ID", autowriteSiteSeqId);
+			
+			autowriteDao.writeAutowriteLog(param);
+		}
+	}
 	
 	
 	private void executeHttpConnection(Map param) {
@@ -295,6 +354,20 @@ public class AutowriteService extends CommonService{
 	}
 
 
+	/**
+	 * 재실행 시 seq_id로 기존에 저장 된 autowrite_master 테이블의 title, content를 가져옴.
+	 * @param param
+	 * @return
+	 */
+	public AutowriteEntity getRestoredAutowriteEntity(Map param) {
+		setCondition(param);
+		
+		AutowriteEntity autowriteEntity = autowriteDao.getRestoredAutowrite(param);
+		
+		return autowriteEntity;
+	}
+
+
 	public void deleteAutowrite(HttpServletRequest req, Map param) {
 		setCondition(param);
 		
@@ -309,7 +382,7 @@ public class AutowriteService extends CommonService{
 	public AutowriteListEntity modifyAutowrite(HttpServletRequest req, Map param) {
 		// TODO Auto-generated method stub
 		return null;
-	}	
+	}
 	
 //	public AutowriteListEntity modifyAutowrite(HttpServletRequest req, Map param) throws Exception {
 //		String menuCode = param.get("category").toString();

@@ -25,6 +25,7 @@ import com.autowrite.common.framework.bean.AutowriteService;
 import com.autowrite.common.framework.dao.UserDao;
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.AutowriteListEntity;
+import com.autowrite.common.framework.entity.SiteEntity;
 import com.autowrite.common.framework.entity.UserEntity;
 
 @Controller
@@ -218,6 +219,52 @@ public class AutowriteController extends CommonController{
 		
 		return model;
 	}
+	
+	
+	/**
+	 * autowrite 재실행.
+	 * @param jsp
+	 * @param req
+	 * @param e
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/autowriteRewrite.do")
+	public ModelAndView autowriteRewrite(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+		Map param;
+		param = new HashMap();
+		param.put("Code", "S");
+		param.put("Text", "Success");
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		if ( userInfo != null ) {
+			param.put("AUTOWRITE_MASTER_SEQ_ID", req.getParameter("seqId"));
+			
+			AutowriteEntity autowriteEntity = autowriteService.getRestoredAutowriteEntity(param);
+			
+			param.put("TITLE", autowriteEntity.getTitle());
+			param.put("CONTENT", autowriteEntity.getContent());
+			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
+			param.put("WRITER_ID", userInfo.getId());
+			param.put("WRITER_IP", req.getRemoteAddr());
+			param.put("WRITE_DATETIME", req.getParameter("write_datetime"));
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+		AutowriteListEntity autowriteListEntity = autowriteService.writePrivateAutowrite(param);
+		List<AutowriteEntity> autowriteList = autowriteListEntity.getAutowriteList();
+		
+		String redirectUrl = "autowriteMasterList.do?jsp=autowrite/autowriteMasterList";
+		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
+		
+		return model;
+	}
+	
 	
 	@RequestMapping("/autowriteDelete.do")
 	public ModelAndView autowriteDelete(String p, HttpServletRequest req, ServletResponse res) throws Exception {
