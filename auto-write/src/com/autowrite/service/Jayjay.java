@@ -270,6 +270,11 @@ public class Jayjay extends AutowriterCommon {
 			}
 		}
 		
+		// 개놈들 오타..ㅡ.ㅡㅋ
+		if ( token.equals("여덞") ){
+			return 8;
+		}
+		
 		return 0;
 	}
 	
