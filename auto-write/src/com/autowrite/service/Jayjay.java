@@ -137,7 +137,6 @@ public class Jayjay extends AutowriterCommon {
 		
 		// 내용
 		String contentStr = autowriteInfo.getContent();
-		nvps.add(new BasicNameValuePair("tx_up_contents", contentStr));
 		nvps.add(new BasicNameValuePair("up_contents", contentStr));
 		
 		// 업소명
@@ -167,37 +166,11 @@ public class Jayjay extends AutowriterCommon {
 		}
 		nvps.add(new BasicNameValuePair("wr_key", wr_key));
 		
-		
-		// 카테고리
-		nvps.add(new BasicNameValuePair("bo_table", "lineup2_10"));
-		
-		// html 형식
-		nvps.add(new BasicNameValuePair("html", "html1"));
-		
 		// 오토점프 여부
 		nvps.add(new BasicNameValuePair("autoJump", "Y"));
 		
 		// 오토점프 시간
 		nvps.add(new BasicNameValuePair("timeChoice", "120"));
-		
-		// 제목글꼴
-		// 굴림, 돋움, 바탕, 궁서
-		nvps.add(new BasicNameValuePair("wr_subject_font", "돋움"));
-		
-		
-		// wr_subject_color
-		// #000000:검정
-		// #ff9900:주황
-		// #b3a14d:노랑
-		// #3cb371:초록
-		// #0033ff:파랑
-		// #000099:남색
-		// #9900cc:보라
-		nvps.add(new BasicNameValuePair("wr_subject_color", "#0033ff"));
-		
-		// 분류
-		// 
-		nvps.add(new BasicNameValuePair("ca_name", ""));
 		
 		return nvps;
 	}
