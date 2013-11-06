@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import net.sf.json.JSONObject;
 
@@ -107,12 +108,12 @@ public class Jayjay extends AutowriterCommon {
 
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
     	// 사이트 별 특성. 하나밖에 못 올리므로 기존 글을 지워야 함.
-    	deleteBoard(autowriteInfo);
+//    	deleteBoard(autowriteInfo);
     	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
-    	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
-				
-		HttpPost httpost = new HttpPost(writeUrl);
+    	String modifyUrl = getFullUrl(siteInfo, siteInfo.getModify_url()); 
+    	
+		HttpPost httpost = new HttpPost(modifyUrl);
 		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
 		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
         httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
@@ -120,68 +121,52 @@ public class Jayjay extends AutowriterCommon {
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
 
-		printResponseEuckr(entity);
+//		printResponseEuckr(entity);
 		
-		System.out.println("Post logon cookies:");
+		String responseStr = parseResponse(entity);
+		
+		System.out.println("After write : " + responseStr);
 	}
     
-    private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
-    	String paramName = "wr_id=";
-    	String keyStr = "부평 스타";
-    	// TODO : 키워드 디비화
-    	
-    	String contentKey = null;
-    	
-    	try {
-			contentKey = readBoardKey(autowriteInfo, paramName, keyStr);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-    	
-    	String deleteUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/bbs/delete.php?bo_table=lineup2_10&wr_id=" + contentKey;
-    	
-		System.out.println("deleteUrl:" + deleteUrl);
-		
-    	HttpPost httpost = new HttpPost(deleteUrl);
-		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
-        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
-        
-        HttpResponse response = httpclient.execute(httpost);            
-        HttpEntity entity = response.getEntity();
-        
-        httpost.releaseConnection();
-	}
-    
-    private String readBoardKey(AutowriteEntity autowriteInfo, String paramName, String keyStr) throws Exception {
-    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/bbs/board.php?bo_table=lineup2_10";
-    	
-    	HttpPost httpost = new HttpPost(listUrl);
-		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
-		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
-        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
-		
-		HttpResponse response = httpclient.execute(httpost);
-		HttpEntity entity = response.getEntity();
-    	
-    	String contentKey = getContentKey(autowriteInfo, entity, paramName, keyStr);
-    	
-    	httpost.releaseConnection();
-    	
-    	return contentKey;
-	}
-    
-	public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
+    public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) throws Exception {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		// 제목
 		String subjectStr = autowriteInfo.getTitle();
-		nvps.add(new BasicNameValuePair("wr_subject", subjectStr));
+		nvps.add(new BasicNameValuePair("IS_Subject", subjectStr));
 		
 		// 내용
 		String contentStr = autowriteInfo.getContent();
-		nvps.add(new BasicNameValuePair("wr_content", contentStr));
+		nvps.add(new BasicNameValuePair("tx_up_contents", contentStr));
+		nvps.add(new BasicNameValuePair("up_contents", contentStr));
+		
+		// 업소명
+		nvps.add(new BasicNameValuePair("up_name", "[인천-엣지]"));
+		
+		// 업소명
+		nvps.add(new BasicNameValuePair("add1", "인천 계양구 계산동"));
+		nvps.add(new BasicNameValuePair("add2", "126.72451021728524"));
+		nvps.add(new BasicNameValuePair("add3", "37.54286079631704"));
+		
+		// 업소위치
+		nvps.add(new BasicNameValuePair("up_addr", "인천 계산동 계양구청 도보5분거리"));
+		
+		// 연락처
+		nvps.add(new BasicNameValuePair("up_person", "인천엣지실장"));
+		
+		// 담당자
+		nvps.add(new BasicNameValuePair("up_tel", "010-4636-8473"));
+		
+		// 자동등록 방지 키
+		String wr_key = null;
+		try {
+			wr_key = extractBanAutowriteDigit(autowriteInfo, "wr_key");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("자동등록 방지 키 추출 실패");
+		}
+		nvps.add(new BasicNameValuePair("wr_key", wr_key));
+		
 		
 		// 카테고리
 		nvps.add(new BasicNameValuePair("bo_table", "lineup2_10"));
@@ -189,6 +174,11 @@ public class Jayjay extends AutowriterCommon {
 		// html 형식
 		nvps.add(new BasicNameValuePair("html", "html1"));
 		
+		// 오토점프 여부
+		nvps.add(new BasicNameValuePair("autoJump", "Y"));
+		
+		// 오토점프 시간
+		nvps.add(new BasicNameValuePair("timeChoice", "120"));
 		
 		// 제목글꼴
 		// 굴림, 돋움, 바탕, 궁서
@@ -211,5 +201,107 @@ public class Jayjay extends AutowriterCommon {
 		
 		return nvps;
 	}
+	
+    private String extractBanAutowriteDigit(AutowriteEntity autowriteInfo, String keyStr) throws Exception {
+    	String modifyUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/establish/shop_write.php";
+    	
+    	HttpPost httpost = new HttpPost(modifyUrl);
+//		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+//		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+//        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+		
+		HttpResponse response = httpclient.execute(httpost);
+		HttpEntity entity = response.getEntity();
+    	
+    	String banAutowriteDigit = getBanAutowriteDigit(autowriteInfo, entity, keyStr);
+    	
+    	int resultDigit = calculateKorDigit(banAutowriteDigit);
+    	
+    	httpost.releaseConnection();
+    	
+    	return resultDigit+"";
+	}
+    
+    
+	private String getBanAutowriteDigit(AutowriteEntity autowriteInfo, HttpEntity entity, String keyStr) throws Exception {
+		EofSensorInputStream content = (EofSensorInputStream) entity.getContent();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(content, autowriteInfo.getSiteEntity().getSite_encoding()));
+		String beforeLine = null;
+		String curr = null;
+		String contentKey = null;
+		
+		try {
+			
+			System.out.println("============= parse response =============");
+			
+			while((curr = reader.readLine()) != null ){
+				if ( curr.contains(keyStr) ){
+					System.out.println(beforeLine);
+					System.out.println(curr);
+					try {
+						contentKey = beforeLine;
+						while ( contentKey.contains("<") ){
+							contentKey = contentKey.substring(contentKey.indexOf("+") - 1, contentKey.length() );
+							contentKey = contentKey.substring(0, contentKey.indexOf("<") );
+						}
+						
+						
+						System.out.println("contentKey = [" + contentKey + "]");
+						
+						if ( contentKey!= null ){
+							return contentKey;
+						}
+					} catch ( StringIndexOutOfBoundsException e ) {
+						System.out.println(curr);
+					} 
+				}
+				beforeLine = curr;
+			}
+			
+		} catch ( Exception e ) {
+			throw e;
+		} finally {
+			content.close();
+		}
+		
+		return null;
+	}
+    
+	private int calculateKorDigit(String testStr) {
+		StringTokenizer st = new StringTokenizer(testStr, "+");
+		
+		int digitSum = 0;
+		while ( st.hasMoreTokens() ) {
+			String token = st.nextToken();
+			int tempDigit = 0;
+			
+			try {
+				tempDigit = new Integer(token);
+			} catch (NumberFormatException nfe) {
+				tempDigit = getDigitFromKor(token); 
+			}
+			System.out.println(tempDigit);
+			
+			digitSum = digitSum + tempDigit;
+		}
+		
+		System.out.println(digitSum);
+		
+		return digitSum;
+	}
+
+	private static int getDigitFromKor(String token) {
+		for ( int ii = 0 ; ii < 9 ; ii ++ ){
+			if ( token.equals(kor1[ii]) || token.equals(kor2[ii])){
+				return ii + 1;
+			}
+		}
+		
+		return 0;
+	}
+	
+	private static String[] kor1 = {"하나", "둘", "셋", "넷", "다섯", "여섯", "일곱", "여덟", "아홉"};
+	private static String[] kor2 = {"일", "이", "삼", "사", "오", "육", "칠", "팔", "구"};
+	
 
 }

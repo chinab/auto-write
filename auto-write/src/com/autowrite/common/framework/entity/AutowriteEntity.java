@@ -147,6 +147,13 @@ public class AutowriteEntity extends CommonEntity {
 	public String getSuccess_yn() {
 		return success_yn;
 	}
+	public String getSuccess_yn_kor() {
+		if ( "Y".equals(success_yn) ){
+			return "성공";
+		} else {
+			return "실패";
+		}
+	}
 	public void setSuccess_yn(String success_yn) {
 		this.success_yn = success_yn;
 	}

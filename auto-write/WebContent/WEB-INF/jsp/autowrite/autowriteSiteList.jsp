@@ -76,7 +76,7 @@
 									</a>
 								</td>
 								<td><%=autowriteEntity.getTry_datetime()%></td>
-								<td><%=autowriteEntity.getSuccess_yn()%></td>
+								<td><%=autowriteEntity.getSuccess_yn_kor()%></td>
 								<td><%=autowriteEntity.getTry_count()%></td>
 								<td><%=autowriteEntity.getResponse_content()%></td>
 							</tr>

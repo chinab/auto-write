@@ -1,19 +1,33 @@
 package com.autowrite.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.json.JSONObject;
+
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.EofSensorInputStream;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.RequestUserAgent;
 import org.apache.http.util.EntityUtils;
 
 import com.autowrite.common.framework.entity.AutowriteEntity;
@@ -27,7 +41,30 @@ public class Gongsa extends AutowriterCommon {
 		super();
 	}
 	
-    @Override
+    public void executeHttpConnection(AutowriteEntity autowriteInfo) throws Exception {
+		try {
+			setCookie(autowriteInfo);
+			
+			if ( login(autowriteInfo) ) {
+//				writeBoard(autowriteInfo);
+			} else {
+				// login 100회 반복.
+//				for ( int ii = 0 ; ii < 100 ; ii ++ ) {
+//					if ( loginJson(autowriteInfo) ){
+//						writeBoard(autowriteInfo);
+//						break;
+//					}
+//				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			httpclient.getConnectionManager().shutdown();
+		}
+	}
+
     public boolean login(AutowriteEntity autowriteInfo) throws IOException, ClientProtocolException, UnsupportedEncodingException {
     	
     	try {
@@ -36,19 +73,13 @@ public class Gongsa extends AutowriterCommon {
 			HttpPost httpost = new HttpPost(loginUrl);
 	
 			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-            nvps.add(new BasicNameValuePair("userID", siteInfo.getSite_id()));
+			nvps.add(new BasicNameValuePair("userID", siteInfo.getSite_id()));
 	        nvps.add(new BasicNameValuePair("userPass", siteInfo.getSite_passwd()));
-//	        nvps.add(new BasicNameValuePair("mb_id", "qnvudtmxk"));
-//	        nvps.add(new BasicNameValuePair("mb_password", "!qnvudtmxk"));
 	        
-	        httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
+            httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
 
 			HttpResponse response = httpclient.execute(httpost);
 			HttpEntity entity = response.getEntity();
-			
-			String responseBody = parseResponse(entity);
-			
-			System.out.println("Login form get: " + response.getStatusLine());
 			EntityUtils.consume(entity);
 	
 			System.out.println("Post logon cookies:");
@@ -68,8 +99,11 @@ public class Gongsa extends AutowriterCommon {
 		return true;
 	}
 
-    @Override
+
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	// 사이트 별 특성. 하나밖에 못 올리므로 기존 글을 지워야 함.
+    	deleteBoard(autowriteInfo);
+    	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
 				
@@ -81,55 +115,102 @@ public class Gongsa extends AutowriterCommon {
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
 
-//		String responseBody = parseResponse(entity);
-//		
-//		System.out.println(responseBody);
-		
 		printResponseEuckr(entity);
 		
 		System.out.println("Post logon cookies:");
 	}
     
-    @Override
+    private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
+    	String paramName = "wr_id=";
+    	
+    	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String keyStr = siteInfo.getSite_keyword();
+    	keyStr = "인천 엣지";
+    	
+    	if ( keyStr == null || keyStr.trim().length() == 0 ) {
+    		throw new Exception("사이트 키워드를 설정하세요.");
+    	}
+    	
+    	String contentKey = null;
+    	
+    	try {
+			contentKey = readBoardKey(autowriteInfo, paramName, keyStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+    	
+    	String deleteUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/bbs/delete.php?id=lineup&wr_id=" + contentKey;
+    	
+		System.out.println("deleteUrl:" + deleteUrl);
+		
+    	HttpPost httpost = new HttpPost(deleteUrl);
+//		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+//		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+//        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+//        
+//        HttpResponse response = httpclient.execute(httpost);            
+//        HttpEntity entity = response.getEntity();
+        
+        httpost.releaseConnection();
+	}
+    
+    private String readBoardKey(AutowriteEntity autowriteInfo, String paramName, String keyStr) throws Exception {
+    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/web/board/list.php?id=lineup";
+    	
+    	HttpPost httpost = new HttpPost(listUrl);
+		List<NameValuePair> nvps2 = setNvpsParams(autowriteInfo);
+		httpost.setEntity(new UrlEncodedFormEntity(nvps2, autowriteInfo.getSiteEntity().getSite_encoding()));
+        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+		
+		HttpResponse response = httpclient.execute(httpost);
+		HttpEntity entity = response.getEntity();
+    	
+    	String contentKey = getContentKey(autowriteInfo, entity, paramName, keyStr);
+    	
+    	httpost.releaseConnection();
+    	
+    	return contentKey;
+	}
+    
 	public List<NameValuePair> setNvpsParams(AutowriteEntity autowriteInfo) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		
 		// 제목
-		String subjectStr = new String("test");
-//		String subjectStr = new String("인천부평스타 오픈 준비중입니다.");
-//		String subjectStr = autowriteInfo.getTitle();
-//		URLEncoder.encode(subjectStr);
-		nvps.add(new BasicNameValuePair("bd_title", subjectStr));
+		String subjectStr = autowriteInfo.getTitle();
+		nvps.add(new BasicNameValuePair("wr_subject", subjectStr));
 		
 		// 내용
-		String contentStr = new String("test");
-//		String contentStr = new String(" 9월 10일에 찾아뵙도록 하겠습니다.");
-//		String contentStr = autowriteInfo.getContent();
-//		URLEncoder.encode(contentStr);
-		nvps.add(new BasicNameValuePair("bd_content", contentStr));
-		
-		nvps.add(new BasicNameValuePair("bd_noBr", "0"));
+		String contentStr = autowriteInfo.getContent();
+		nvps.add(new BasicNameValuePair("wr_content", contentStr));
 		
 		// 카테고리
-		// 03 : 업소클레임
-		// 04 : 선수찾기
-		nvps.add(new BasicNameValuePair("ca_no", "4"));
+		nvps.add(new BasicNameValuePair("bo_table", "lineup2_10"));
 		
-		nvps.add(new BasicNameValuePair("mode", "write_ok"));
-		nvps.add(new BasicNameValuePair("url_back", "list.phpid=qna"));
-		nvps.add(new BasicNameValuePair("id", "qna"));
-		nvps.add(new BasicNameValuePair("p", "1"));
-		nvps.add(new BasicNameValuePair("or", "bd_regDate"));
-		nvps.add(new BasicNameValuePair("al", "desc"));
-		nvps.add(new BasicNameValuePair("no", ""));
-		nvps.add(new BasicNameValuePair("ca_no", ""));
-		nvps.add(new BasicNameValuePair("ca", ""));
-		nvps.add(new BasicNameValuePair("sv", ""));
-		nvps.add(new BasicNameValuePair("st", ""));
-		nvps.add(new BasicNameValuePair("sc", ""));
-		nvps.add(new BasicNameValuePair("sn", ""));
+		// html 형식
+		nvps.add(new BasicNameValuePair("html", "html1"));
 		
+		
+		// 제목글꼴
+		// 굴림, 돋움, 바탕, 궁서
+		nvps.add(new BasicNameValuePair("wr_subject_font", "돋움"));
+		
+		
+		// wr_subject_color
+		// #000000:검정
+		// #ff9900:주황
+		// #b3a14d:노랑
+		// #3cb371:초록
+		// #0033ff:파랑
+		// #000099:남색
+		// #9900cc:보라
+		nvps.add(new BasicNameValuePair("wr_subject_color", "#0033ff"));
+		
+		// 분류
+		// 
+		nvps.add(new BasicNameValuePair("ca_name", ""));
 		
 		return nvps;
 	}
+
 }
