@@ -167,10 +167,10 @@ public class Jayjay extends AutowriterCommon {
 		nvps.add(new BasicNameValuePair("wr_key", wr_key));
 		
 		// 오토점프 여부
-		nvps.add(new BasicNameValuePair("autoJump", "Y"));
+		nvps.add(new BasicNameValuePair("autoJump", "N"));
 		
 		// 오토점프 시간
-		nvps.add(new BasicNameValuePair("timeChoice", "120"));
+		nvps.add(new BasicNameValuePair("timeChoice", "240"));
 		
 		return nvps;
 	}
