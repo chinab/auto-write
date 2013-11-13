@@ -22,6 +22,7 @@
 <script src="js/ajax.js"></script>
 <script src="js/json2.js"></script>
 <script src="js/autowrite.js"></script>
+<script src="js/codeflexCalendar.js"></script>
 
 
 

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
 <%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.Calendar"%>
 <%@ page import="java.util.List, java.net.URLEncoder"%>
 <%@ page import="java.util.Map, java.util.Iterator, java.util.HashMap"%>
 <%@ page import="com.autowrite.common.framework.entity.UserEntity"%>
@@ -16,6 +17,7 @@
 	}
 	
 	String selectedContent = "";
+	String selectedReserveType = "";
 	String selectedTitle = "";
 	String selectedContentSeqId = "";
 	if ( autowriteEntity.getSelectedContentsEntity() != null ) {
@@ -24,6 +26,16 @@
 		selectedContentSeqId = autowriteEntity.getSelectedContentsEntity().getSeq_id();
 	}
 	
+	Calendar calendar = Calendar.getInstance();
+	
+	String reserveStartDate = "";
+	String reserveEndDate = "";
+	
+	reserveStartDate = "" + calendar.get(Calendar.YEAR);
+	reserveStartDate += "" + (calendar.get(Calendar.MONTH) + 1);
+	reserveStartDate += "" + calendar.get(Calendar.DAY_OF_MONTH);
+	
+	reserveEndDate = reserveStartDate;
 %>
 
 <html>
@@ -65,7 +77,7 @@
 	function changeContents(){
 		var frm = document.writeForm;
 		
-		var locStr = "autowriteWriteForm.do?jsp=autowrite/autowriteWrite&contentsSeqId=" + frm.contentsSeqId.value;
+		var locStr = "autowriteWriteForm.do?jsp=autowrite/autowriteReserveWrite&contentsSeqId=" + frm.contentsSeqId.value;
 		
 		location.href = locStr;
 	}
@@ -85,10 +97,10 @@
 		<td width="800" valign="top">
 			<div style="margin-left: 30px; width: 750px;">
 
-				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">Auto Write > 자동등록</div>
+				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">Auto Write > 예약등록</div>
 				<div style="width: 100%; margin-top: 30px;">
 					<img src="images/title_dot.gif"/>
-					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">자동등록</span>
+					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">예약등록</span>
 				</div>
 
 				<div style="margin-top: 5px;">
@@ -99,8 +111,7 @@
 							<col width="10" />
 							<col width="/" />
 						</colgroup>
-
-
+						
 						<tbody>
 							<tr>
 								<td colspan="3"></td>
@@ -166,6 +177,33 @@
 								</td>
 							</tr>
 
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>예약기간</b></td>
+								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<img src="images/calendar.gif" onclick="fnPopUpCalendar(reserveStartDate,reserveStartDate,'yyyymmdd')"/>
+									<input name="reserveStartDate" class="s_id" type="text" size="8" style="width: 100px;" value="<%=reserveStartDate%>">
+									<input name="reserveStartTime" class="s_id" type="text" size="8" style="width: 60px;" value="00:00">
+									~
+									<img src="images/calendar.gif" onclick="fnPopUpCalendar(reserveEndDate,reserveEndDate,'yyyymmdd')"/>
+									<input name="reserveEndDate" class="s_id" type="text" size="8" style="width: 100px;" value="<%=reserveEndDate%>">
+									<input name="reserveEndTime" class="s_id" type="text" size="8" style="width: 60px;" value="24:00">
+								</td>
+							</tr>
+							
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>예약간격</b></td>
+								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<select name="reserveTerm" style="width: 250px;">
+										<option value="30">30분</option>
+										<option value="120">1시간</option>
+										<option value="240">2시간</option>
+										<option value="480">4시간</option>
+									</select>
+								</td>
+							</tr>
+							
 							<tr>
 								<td class="subject5">&nbsp;&nbsp;<b>제목</b></td>
 								<td><img src="/images/board_line.gif" width="1" height="22" /></td>

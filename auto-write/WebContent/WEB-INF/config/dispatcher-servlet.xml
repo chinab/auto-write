@@ -58,6 +58,45 @@
 			</list>
 		</property>
 	</bean>
+
+	<!-- Quartz 스케쥴러 시작 -->
+	<!-- 스케쥴 팩토리 -->
+	<!-- trigger 를 장착하고 실행시킨다. -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		autowire="no">
+		<property name="triggers">
+			<list>
+				<ref bean="ReserveTrigger" />
+				<!--
+				<ref bean="OcimsTrigger" />
+				<ref bean="TestTrigger" />
+				<ref bean="startRFCServerTrigger"/>
+				<ref bean="BaronetTrigger" />
+				<ref bean="doantcTrigger" />
+				-->
+			</list>
+		</property>
+	</bean>
+
+	<!-- 크론 트리거 설정 -->
+	<!--
+		SimpleTriggerBean 과 CronTriggerBean 두가지를 쓸수 있는데 앞의 것은 몇분마다 실행 뭐 이럴 때
+		스는 것이고... cronExpression은 매년 3월 2일 아니면 매일 새벽 1시 마다 실행등을 할 때 쓰인다.
+		
+		SimpleTriggerBean 은 주기를 설정하는 property 로 repeatInterval 를 갖고
+		CronTriggerBean 은 주기를 설정하는 property 로 cronExpression 을 사용한다.
+	-->
+	<bean id="ReserveTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ReserveJob" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+		<!-- 초,분,시,일,월,주의 일,년 -->
+	</bean>
+
+	<!-- 잡 설정 -->
+	<bean id="ReserveJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="com.autowrite.scheduling.ReserveJob" />
+	</bean>
+	<!-- Quartz 스케쥴러 끝 -->
 	
 	<!-- 접속통계 작업 수행 Bean 설정 -->
 <!-- 	<bean id="sysLogging" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
