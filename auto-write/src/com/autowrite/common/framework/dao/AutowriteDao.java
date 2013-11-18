@@ -3,6 +3,8 @@ package com.autowrite.common.framework.dao;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.autowrite.common.framework.entity.AutowriteEntity;
 import com.autowrite.common.framework.entity.SiteEntity;
 
@@ -10,11 +12,19 @@ public interface AutowriteDao {
 
 	public abstract Long writeAutowriteMaster(Map param);
 	
+	public abstract Long writeAutowriteReserveMaster(Map param);
+	
 	public abstract Long writeAutowriteSite(Map param);
+	
+	public abstract Long writeAutowriteReserveSite(Map param);
 	
 	public abstract void writeAutowriteLog(Map param);
 
+	public abstract List<AutowriteEntity> listAutowriteReserve(Map param);
+
 	public abstract List<AutowriteEntity> listAutowriteMaster(Map param);
+
+	public abstract Long countListAutowriteReserve(Map param);
 
 	public abstract Long countListAutowriteMaster(Map param);
 
@@ -28,6 +38,10 @@ public interface AutowriteDao {
 
 	public abstract AutowriteEntity getAutowriteInfo(Map param);
 
+	public abstract void deleteAutowriteReserveMaster(Map param);
+	
+	public abstract void deleteAutowriteReserveSite(Map param);
+	
 	public abstract void deleteAutowriteMaster(Map param);
 	
 	public abstract void deleteAutowriteSite(Map param);
@@ -37,4 +51,11 @@ public interface AutowriteDao {
 	public abstract AutowriteEntity getRestoredAutowrite(Map param);
 
 	public abstract List<String> getSiteSeqIdList(Map param);
+
+	public abstract AutowriteEntity getReservedAutowriteEntity(Map param);
+
+	public abstract List<String> getReservedSiteSeqIdList(Map param);
+
+	public abstract void modifyAutowriteReserveMaster(Map param);
+	
 }

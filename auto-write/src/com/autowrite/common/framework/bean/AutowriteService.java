@@ -55,6 +55,18 @@ public class AutowriteService extends CommonService{
 		List<SiteEntity> siteEntityList = siteDao.listPrivateSite(param);
 		autowriteEntity.setSiteEntityList(siteEntityList);
 		
+		getSelectedContents(param, autowriteEntity);
+		
+		return autowriteEntity;
+	}
+
+
+	/**
+	 * 본문 리스트 중 선택 된 본문을 AutowriteEntity에 세팅.
+	 * @param param
+	 * @param autowriteEntity
+	 */
+	private void getSelectedContents(Map param, AutowriteEntity autowriteEntity) {
 		List<BoardEntity> contentsEntityList = contentsDao.listPrivateContents(param);
 		autowriteEntity.setContentsEntityList(contentsEntityList);
 		
@@ -72,11 +84,40 @@ public class AutowriteService extends CommonService{
 				autowriteEntity.setSelectedContentsEntity(contentsEntityList.get(0));
 			}
 		}
-		
-		return autowriteEntity;
 	}
 
 	
+	/**
+	 * 자동등록 예약 리스트
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	public AutowriteListEntity listAutowriteReserve(Map param) throws Exception {
+		setCondition(param);
+		
+		AutowriteListEntity listEntity = new AutowriteListEntity();
+		
+		try {
+			Long pageNum = (Long) param.get("PAGE_NUM");
+			Long pageSize = (Long) param.get("PAGE_SIZE");
+			listEntity.setPageNum(pageNum);
+			listEntity.setPageSize(pageSize);
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+		
+		Long autowriteCount = autowriteDao.countListAutowriteReserve(param);
+		listEntity.setTotalListCount(autowriteCount);
+		
+		List<AutowriteEntity> autowriteList = autowriteDao.listAutowriteReserve(param);
+		
+		listEntity.setAutowriteList(autowriteList);
+		
+		return listEntity;
+	}
+
+
 	/**
 	 * 자동등록 마스터 리스트
 	 * @param param
@@ -97,17 +138,23 @@ public class AutowriteService extends CommonService{
 			e.printStackTrace();
 		}
 		
-		Long boardCount = autowriteDao.countListAutowriteMaster(param);
-		listEntity.setTotalListCount(boardCount);
+		Long autowriteCount = autowriteDao.countListAutowriteMaster(param);
+		listEntity.setTotalListCount(autowriteCount);
 		
-		List<AutowriteEntity> boardList = autowriteDao.listAutowriteMaster(param);
+		List<AutowriteEntity> autowriteList = autowriteDao.listAutowriteMaster(param);
 		
-		listEntity.setAutowriteList(boardList);
+		listEntity.setAutowriteList(autowriteList);
 		
 		return listEntity;
 	}
 
 
+	/**
+	 * 자동등록 사이트 목록
+	 * 
+	 * @param param
+	 * @return
+	 */
 	public AutowriteListEntity listAutowriteSite(Map param) {
 		setCondition(param);
 		
@@ -122,17 +169,23 @@ public class AutowriteService extends CommonService{
 			e.printStackTrace();
 		}
 		
-		Long boardCount = autowriteDao.countListAutowriteSite(param);
-		listEntity.setTotalListCount(boardCount);
+		Long autowriteCount = autowriteDao.countListAutowriteSite(param);
+		listEntity.setTotalListCount(autowriteCount);
 		
-		List<AutowriteEntity> boardList = autowriteDao.listAutowriteSite(param);
+		List<AutowriteEntity> autowriteList = autowriteDao.listAutowriteSite(param);
 		
-		listEntity.setAutowriteList(boardList);
+		listEntity.setAutowriteList(autowriteList);
 		
 		return listEntity;
 	}
 
 
+	/**
+	 * 자동등록 사이트 로그 목록
+	 * 
+	 * @param param
+	 * @return
+	 */
 	public AutowriteListEntity listAutowriteLog(Map param) {
 		setCondition(param);
 		
@@ -147,12 +200,12 @@ public class AutowriteService extends CommonService{
 			e.printStackTrace();
 		}
 		
-		Long boardCount = autowriteDao.countListAutowriteLog(param);
-		listEntity.setTotalListCount(boardCount);
+		Long autowriteCount = autowriteDao.countListAutowriteLog(param);
+		listEntity.setTotalListCount(autowriteCount);
 		
-		List<AutowriteEntity> boardList = autowriteDao.listAutowriteLog(param);
+		List<AutowriteEntity> autowriteList = autowriteDao.listAutowriteLog(param);
 		
-		listEntity.setAutowriteList(boardList);
+		listEntity.setAutowriteList(autowriteList);
 		
 		return listEntity;
 	}
@@ -177,6 +230,69 @@ public class AutowriteService extends CommonService{
 
 
 	/**
+	 * autowrite 예약 저장.
+	 * @param req
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	public AutowriteListEntity writeAutowriteReservation(HttpServletRequest req, Map param) throws Exception {
+		setCondition(param);
+		
+		String[] siteSeqidArray = req.getParameterValues("siteSeqIdList");
+		
+		String seqId = req.getParameter("seqId");
+		
+		if ( seqId != null && seqId.length() > 0 ){
+			modifyAutowriteReservation(param, siteSeqidArray);
+		} else {
+			writeAutowriteReservation(param, siteSeqidArray);
+		}
+		
+		return listAutowriteMaster(param);
+	}
+
+
+	/**
+	 * autowrite 예약 사이트 저장.
+	 * @param param
+	 * @param siteSeqidArray
+	 */
+	private void writeAutowriteReservation(Map param, String[] siteSeqidArray) {
+		Long autowriteMasterSeqId = autowriteDao.writeAutowriteReserveMaster(param);
+		param.put("RESERVE_MASTER_SEQ_ID", autowriteMasterSeqId);
+		
+		writeAutowriteReservationSite(param, siteSeqidArray);
+	}
+
+
+	/**
+	 * autowrite 예약 사이트 업데이트
+	 * @param param
+	 * @param siteSeqidArray
+	 */
+	private void modifyAutowriteReservation(Map param, String[] siteSeqidArray) {
+		param.put("RESERVE_MASTER_SEQ_ID", param.get("SEQ_ID"));
+		
+		autowriteDao.modifyAutowriteReserveMaster(param);
+		
+		// 서브테이블은 삭제 후 insert
+		autowriteDao.deleteAutowriteReserveSite(param);
+		
+		writeAutowriteReservationSite(param, siteSeqidArray);
+	}
+	
+	
+	private void writeAutowriteReservationSite(Map param, String[] siteSeqidArray) {
+		for ( int ii = 0 ; ii < siteSeqidArray.length ; ii ++ ) {
+			param.put("SITE_SEQ_ID", siteSeqidArray[ii]);
+			
+			Long autowriteSiteSeqId = autowriteDao.writeAutowriteReserveSite(param);
+		}
+	}
+	
+	
+	/**
 	 * autowrite 재실행 
 	 * @param param
 	 * @return
@@ -194,7 +310,7 @@ public class AutowriteService extends CommonService{
 
 
 	/**
-	 * 각 사이트별로 executeHttpConnection 실행.
+	 * 각 사이트별로 자동등록 실행.
 	 * @param param
 	 * @param siteSeqidArray
 	 */
@@ -219,7 +335,7 @@ public class AutowriteService extends CommonService{
 	
 	
 	/**
-	 * 각 사이트별로 executeHttpConnection 실행.
+	 * 각 사이트별로 자동등록 실행.
 	 * @param param
 	 * @param siteSeqidArray
 	 */
@@ -243,6 +359,10 @@ public class AutowriteService extends CommonService{
 	}
 	
 	
+	/**
+	 * HTTP CLIENT를 호출하고 기록을 남긴다.
+	 * @param param
+	 */
 	private void executeHttpConnection(Map param) {
 		String successYn = "Y";
 		String responseContent = "";
@@ -368,6 +488,11 @@ public class AutowriteService extends CommonService{
 	}
 
 
+	/**
+	 * 자동등록 기록을 모두 삭제한다.
+	 * @param req
+	 * @param param
+	 */
 	public void deleteAutowrite(HttpServletRequest req, Map param) {
 		setCondition(param);
 		
@@ -379,54 +504,32 @@ public class AutowriteService extends CommonService{
 	}
 	
 	
-	public AutowriteListEntity modifyAutowrite(HttpServletRequest req, Map param) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * 예약 등록 내역을 읽어온다.
+	 * 
+	 * @param req
+	 * @param param
+	 * @return
+	 */
+	public AutowriteEntity getReservedAutowriteEntity(HttpServletRequest req, Map param) {
+		String autowriteReserveSeqid = (String) param.get("RESERVE_MASTER_SEQ_ID");
+		
+		AutowriteEntity autowriteEntity = null;
+		
+		if ( autowriteReserveSeqid != null && autowriteReserveSeqid.length() > 0 ){
+			autowriteEntity = autowriteDao.getReservedAutowriteEntity(param);
+			
+			List<SiteEntity> siteEntityList = siteDao.listReservedSite(param);
+			autowriteEntity.setSiteEntityList(siteEntityList);
+			
+//			List<String> siteSeqIdList = autowriteDao.getReservedSiteSeqIdList(param);
+//			autowriteEntity.setSite_seq_id_list(siteSeqIdList);
+			
+			getSelectedContents(param, autowriteEntity);
+		} else {
+			autowriteEntity = getDefaultAutowriteEntity(req, param);
+		}
+		
+		return autowriteEntity;
 	}
-	
-//	public AutowriteListEntity modifyAutowrite(HttpServletRequest req, Map param) throws Exception {
-//		String menuCode = param.get("category").toString();
-//		
-//		String tableName = getTableNameAsMenuCode(menuCode);
-//		
-//		param.put("TABLE_NAME", tableName);
-//		
-//		setCondition(param);
-//		
-//		fileUpload(req, param);
-//		
-//		if ( menuCode.startsWith("02") || menuCode.startsWith("03") ){
-//			autowriteDao.modifyAutowriteAdmin(param);
-//		} else {
-//			autowriteDao.modifyAutowrite(param);
-//		}
-//		
-//		return listAutowrite(param);
-//	}
-//
-//	public AutowriteListEntity deleteAutowrite(HttpServletRequest req, Map param) throws Exception {
-//		String menuCode = param.get("category").toString();
-//		
-//		String tableName = getTableNameAsMenuCode(menuCode);
-//		param.put("TABLE_NAME", tableName);
-//		
-//		param.put("DEL_YN", "Y");
-//		
-//		autowriteDao.boardUpdateDelYn(param);
-//		
-//		return listAutowrite(param);
-//	}
-//
-//
-//	public AutowriteEntity readAutowrite(Map param) throws Exception {
-//		String menuCode = param.get("CATEGORY").toString();
-//		
-//		param.put("TABLE_NAME", getTableNameAsMenuCode(menuCode));
-//		
-//		AutowriteEntity boardEntity = autowriteDao.readAutowrite(param);
-//		
-//		setWriterImagePath(param, boardEntity);
-//		
-//		return boardEntity;
-//	}
 }

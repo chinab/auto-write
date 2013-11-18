@@ -109,5 +109,10 @@ public class SiteDaoImpl implements SiteDao {
 		return (List<SiteParameterEntity>)sqlHelper.queryForList("site.parameter.list", param);
 	}
 
+	@Override
+	public List<SiteEntity> listReservedSite(Map param) {
+		return (List<SiteEntity>)sqlHelper.queryForList("site.reserved.list", param);
+	}
+
 	
 }

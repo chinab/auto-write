@@ -187,6 +187,54 @@ COMMENT = '자동등록 사이트 목록';
 
 
 
+CREATE  TABLE `autowrite_reserve_master` (
+  `seq_id` BIGINT NOT NULL AUTO_INCREMENT ,
+  
+  `contents_seq_id` BIGINT NULL ,
+  
+  `title` VARCHAR(4000) NULL ,
+  
+  `content` LONGTEXT NULL ,
+  
+  `reserve_start_date` VARCHAR(45) NULL ,
+  
+  `reserve_start_time` VARCHAR(45) NULL ,
+  
+  `reserve_end_date` VARCHAR(45) NULL ,
+  
+  `reserve_end_time` VARCHAR(45) NULL ,
+  
+  `reserve_term` VARCHAR(45) NULL ,
+  
+  `use_yn` VARCHAR(45) NULL DEFAULT 'Y' ,
+  
+  `writer_seq_id` BIGINT NULL ,
+  
+  `writer_id` VARCHAR(255) NULL ,
+  
+  `write_datetime` DATETIME NULL ,
+  
+  PRIMARY KEY (`seq_id`) )
+
+COMMENT = '자동등록 예약';
+
+
+
+CREATE  TABLE `autowrite_reserve_site` (
+  `seq_id` BIGINT NOT NULL AUTO_INCREMENT ,
+  
+  `reserve_master_seq_id` BIGINT NULL ,
+
+  `site_seq_id` BIGINT NULL ,
+
+  PRIMARY KEY (`seq_id`) , 
+  
+  INDEX `AUTOWRITE_RESERVE_SITE_MASTER_SEQ_ID` (`reserve_master_seq_id` ASC) )
+  
+COMMENT = '자동등록 예약 사이트 목록';
+
+
+
 CREATE  TABLE `autowrite_log` (
   `seq_id` BIGINT NOT NULL AUTO_INCREMENT ,
   

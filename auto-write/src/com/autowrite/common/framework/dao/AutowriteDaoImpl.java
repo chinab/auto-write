@@ -50,12 +50,55 @@ public class AutowriteDaoImpl implements AutowriteDao {
 		sqlHelper.insert("autowrite.log.write", param);
 	}
 
+
+	@Override
+	public Long writeAutowriteReserveMaster(Map param) {
+		long seqId = 0;
+		
+		try {
+			seqId = (Long) sqlHelper.insert("autowrite.reserve.master.write", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return seqId;
+	}
+
+
+	@Override
+	public Long writeAutowriteReserveSite(Map param) {
+		long seqId = 0;
+		
+		try {
+			seqId = (Long) sqlHelper.insert("autowrite.reserve.site.write", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return seqId;
+	}
+
+
+	@Override
+	public Long countListAutowriteReserve(Map param) {
+		return (Long) sqlHelper.queryForObject("autowrite.reserve.list.count", param);
+	}
+	
+
 	@Override
 	public Long countListAutowriteMaster(Map param) {
 		return (Long) sqlHelper.queryForObject("autowrite.master.list.count", param);
 	}
 
 	
+	@Override
+	public List<AutowriteEntity> listAutowriteReserve(Map param) {
+		return (List<AutowriteEntity>)sqlHelper.queryForList("autowrite.reserve.list", param);
+	}
+
+
 	@Override
 	public List<AutowriteEntity> listAutowriteMaster(Map param) {
 		return (List<AutowriteEntity>)sqlHelper.queryForList("autowrite.master.list", param);
@@ -91,6 +134,18 @@ public class AutowriteDaoImpl implements AutowriteDao {
 
 
 	@Override
+	public void deleteAutowriteReserveMaster(Map param) {
+		sqlHelper.delete("autowrite.reserve.master.delete", param);
+	}
+	
+	
+	@Override
+	public void deleteAutowriteReserveSite(Map param) {
+		sqlHelper.delete("autowrite.reserve.site.delete", param);
+	}
+	
+	
+	@Override
 	public void deleteAutowriteMaster(Map param) {
 		sqlHelper.delete("autowrite.master.delete", param);
 	}
@@ -118,4 +173,28 @@ public class AutowriteDaoImpl implements AutowriteDao {
 	public List<String> getSiteSeqIdList(Map param) {
 		return (List<String>) sqlHelper.queryForList("autowrite.site.seqid.list", param);
 	}
+
+
+	@Override
+	public AutowriteEntity getReservedAutowriteEntity(Map param) {
+		return (AutowriteEntity) sqlHelper.queryForObject("autowrite.reserve.master.read", param);
+	}
+	
+	
+	@Override
+	public List<String> getReservedSiteSeqIdList(Map param) {
+		return (List<String>) sqlHelper.queryForList("autowrite.reserve.site.seqid.list", param);
+	}
+
+
+	@Override
+	public void modifyAutowriteReserveMaster(Map param) {
+		try {
+			sqlHelper.insert("autowrite.reserve.master.update", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
 }

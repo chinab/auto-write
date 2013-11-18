@@ -48,6 +48,38 @@ public class AutowriteController extends CommonController{
 		logger = Logger.getLogger(getClass());
 	}
 	
+	@RequestMapping("/autowriteReserveList.do")
+	public ModelAndView autowriteReserveList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+		ModelAndView model = null;
+		
+		model = setJsp(req, "autowrite/autowriteReserveList");
+		
+		Map param = new HashMap();
+		
+		String searchKey = req.getParameter("searchKey");
+		String searchValue = req.getParameter("searchValue");
+		if ( searchKey != null && searchKey.length() > 0) {
+			param.put("SEARCH_KEY", searchKey);
+		}
+		if ( searchValue != null && searchValue.toString().length() > 0 ) {
+			param.put("SEARCH_VALUE", searchValue);
+		}
+		
+		setDefaultParameter(req, e, model, param);
+		
+		AutowriteListEntity autowriteListEntity = autowriteService.listAutowriteReserve(param);
+		List<AutowriteEntity> autowriteList = autowriteListEntity.getAutowriteList();
+		
+		autowriteListEntity.setSearchKey(searchKey);
+		autowriteListEntity.setSearchValue(searchValue);
+		
+		model.addObject("AutowriteList", autowriteList);
+		model.addObject("AutowriteListEntity", autowriteListEntity);
+		
+		return model;
+	}
+	
+	
 	@RequestMapping("/autowriteMasterList.do")
 	public ModelAndView autowriteMasterList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
 		ModelAndView model = null;
@@ -215,6 +247,86 @@ public class AutowriteController extends CommonController{
 		
 		
 		String redirectUrl = "autowriteMasterList.do?jsp=autowrite/autowriteMasterList";
+		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
+		
+		return model;
+	}
+	
+	
+	@RequestMapping("/autowriteReserveWriteForm.do")
+	public ModelAndView autowriteReserveWriteForm(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		String autowriteReserveSeqid = req.getParameter("autowriteReserveSeqid");
+		if ( autowriteReserveSeqid != null && autowriteReserveSeqid.length() > 0 ) {
+			  param.put("RESERVE_MASTER_SEQ_ID", autowriteReserveSeqid);
+		}
+		
+		String selectedContentsKey = req.getParameter("contentsSeqId");
+		if ( selectedContentsKey != null && selectedContentsKey.length() > 0 ) {
+			  param.put("CONTENTS_SEQ_ID", selectedContentsKey);
+		}
+		
+		if ( userInfo != null ) {
+			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
+			param.put("USER_SEQ_ID", userInfo.getSeq_id());		// for contents table read
+			param.put("WRITER_ID", userInfo.getId());
+			param.put("WRITER_IP", req.getRemoteAddr());
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+		AutowriteEntity autowriteEntity = autowriteService.getReservedAutowriteEntity(req, param);
+		
+		ModelAndView model = setJsp(req, "autowrite/autowriteReserveWrite");
+		
+		model.addObject("AutowriteEntity", autowriteEntity);
+		
+		return model;
+	}
+	
+	
+	@RequestMapping("/autowriteReserveWrite.do")
+	public ModelAndView autowriteReserveWrite(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
+		Map param;
+		param = new HashMap();
+		param.put("Code", "S");
+		param.put("Text", "Success");
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		if ( userInfo != null ) {
+			param.put("SEQ_ID", req.getParameter("seqId"));
+			param.put("CONTENTS_SEQ_ID", req.getParameter("contentsSeqId"));
+			param.put("TITLE", req.getParameter("title"));
+			param.put("CONTENT", req.getParameter("content"));
+			param.put("RESERVE_START_DATE", req.getParameter("reserveStartDate"));
+			param.put("RESERVE_START_TIME", req.getParameter("reserveStartTime"));
+			param.put("RESERVE_END_DATE", req.getParameter("reserveEndDate"));
+			param.put("RESERVE_END_TIME", req.getParameter("reserveEndTime"));
+			param.put("RESERVE_TERM", req.getParameter("reserveTerm"));
+			param.put("USE_YN", req.getParameter("useYn"));
+			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
+			param.put("WRITER_ID", userInfo.getId());
+			param.put("WRITER_IP", req.getRemoteAddr());
+			param.put("WRITE_DATETIME", req.getParameter("write_datetime"));
+		} else {
+			throw new Exception("Login please.");
+		}
+		
+		AutowriteListEntity autowriteListEntity = autowriteService.writeAutowriteReservation(req, param);
+		List<AutowriteEntity> autowriteList = autowriteListEntity.getAutowriteList();
+		
+		
+		String redirectUrl = "autowriteReserveList.do?jsp=autowrite/autowriteReserveList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
 		
 		return model;

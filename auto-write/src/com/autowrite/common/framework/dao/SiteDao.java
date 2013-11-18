@@ -28,6 +28,8 @@ public interface SiteDao {
 
 	public abstract List<SiteEntity> listMasterSite(Map param);
 
+	public abstract List<SiteEntity> listReservedSite(Map param);
+
 	public abstract Long countListPrivateSite(Map param);
 
 	public abstract Long countListMasterSite(Map param);

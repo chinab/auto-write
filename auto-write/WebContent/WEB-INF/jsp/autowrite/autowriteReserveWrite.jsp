@@ -28,14 +28,15 @@
 	
 	Calendar calendar = Calendar.getInstance();
 	
-	String reserveStartDate = "";
-	String reserveEndDate = "";
+	String reservePivotDate = "" + calendar.get(Calendar.YEAR);
+	reservePivotDate += "" + (calendar.get(Calendar.MONTH) + 1);
+	reservePivotDate += "" + calendar.get(Calendar.DAY_OF_MONTH);
 	
-	reserveStartDate = "" + calendar.get(Calendar.YEAR);
-	reserveStartDate += "" + (calendar.get(Calendar.MONTH) + 1);
-	reserveStartDate += "" + calendar.get(Calendar.DAY_OF_MONTH);
-	
-	reserveEndDate = reserveStartDate;
+	String reserveStartDate = autowriteEntity.getReserve_start_date(reservePivotDate);
+	String reserveStartTime = autowriteEntity.getReserve_start_time("00:00");
+	String reserveEndDate = autowriteEntity.getReserve_end_date(reservePivotDate);
+	String reserveEndTime = autowriteEntity.getReserve_end_time("24:00");
+	String reserveTerm = autowriteEntity.getReserve_term();
 %>
 
 <html>
@@ -52,7 +53,7 @@
 
 
 <script>
-	function autowriteWrite(){
+	function autowriteReserveWrite(){
 		var frm = document.writeForm;
 		
 		if(frm.title.value.length == 0) {
@@ -68,7 +69,7 @@
 			return false;
 		}
 		
-		frm.action = "autowriteWrite.do";
+		frm.action = "autowriteReserveWrite.do";
 		frm.method = "post";
 		
 		frm.submit();
@@ -77,7 +78,7 @@
 	function changeContents(){
 		var frm = document.writeForm;
 		
-		var locStr = "autowriteWriteForm.do?jsp=autowrite/autowriteReserveWrite&contentsSeqId=" + frm.contentsSeqId.value;
+		var locStr = "autowriteWriteForm.do?jsp=autowrite/autowriteReserveWrite&contentsSeqId=" + frm.contentsSeqId.value + "&contentsSeqId=" + frm.seqId.value;
 		
 		location.href = locStr;
 	}
@@ -88,6 +89,8 @@
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
 <form name="writeForm">
+	<input type="hidden" name="seqId" value="<%=autowriteEntity.getSeq_id()%>"/>
+	
 <table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
@@ -178,16 +181,25 @@
 							</tr>
 
 							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>예약 사용여부</b></td>
+								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="useYn" type="radio" value="Y" <%=autowriteEntity.getUse_yn("Y")%>> 사용
+									<input name="useYn" type="radio" value="N" <%=autowriteEntity.getUse_yn("N")%>> 미사용
+								</td>
+							</tr>
+							
+							<tr>
 								<td class="subject5">&nbsp;&nbsp;<b>예약기간</b></td>
 								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
 									<img src="images/calendar.gif" onclick="fnPopUpCalendar(reserveStartDate,reserveStartDate,'yyyymmdd')"/>
 									<input name="reserveStartDate" class="s_id" type="text" size="8" style="width: 100px;" value="<%=reserveStartDate%>">
-									<input name="reserveStartTime" class="s_id" type="text" size="8" style="width: 60px;" value="00:00">
+									<input name="reserveStartTime" class="s_id" type="text" size="8" style="width: 60px;" value="<%=reserveStartTime%>">
 									~
 									<img src="images/calendar.gif" onclick="fnPopUpCalendar(reserveEndDate,reserveEndDate,'yyyymmdd')"/>
 									<input name="reserveEndDate" class="s_id" type="text" size="8" style="width: 100px;" value="<%=reserveEndDate%>">
-									<input name="reserveEndTime" class="s_id" type="text" size="8" style="width: 60px;" value="24:00">
+									<input name="reserveEndTime" class="s_id" type="text" size="8" style="width: 60px;" value="<%=reserveEndTime%>">
 								</td>
 							</tr>
 							
@@ -196,10 +208,10 @@
 								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
 									<select name="reserveTerm" style="width: 250px;">
-										<option value="30">30분</option>
-										<option value="120">1시간</option>
-										<option value="240">2시간</option>
-										<option value="480">4시간</option>
+										<option value="30" <%=autowriteEntity.getReserve_termSelectedStr("30") %>>30분</option>
+										<option value="120" <%=autowriteEntity.getReserve_termSelectedStr("120") %>>1시간</option>
+										<option value="240" <%=autowriteEntity.getReserve_termSelectedStr("240") %>>2시간</option>
+										<option value="480" <%=autowriteEntity.getReserve_termSelectedStr("480") %>>4시간</option>
 									</select>
 								</td>
 							</tr>
@@ -221,7 +233,7 @@
 					</table>
 
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="자동등록" OnClick="autowriteWrite();" class="input_gr">
+						<input class="in_btn" type="button" value="예약등록" OnClick="autowriteReserveWrite();" class="input_gr">
 						&nbsp;&nbsp;
 						<input class="in_btnc" type="button" value="취소" OnClick="history.back();" class="input_gr">
 					</div>

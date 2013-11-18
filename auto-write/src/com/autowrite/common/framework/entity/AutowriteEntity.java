@@ -30,6 +30,14 @@ public class AutowriteEntity extends CommonEntity {
 	private String try_count;
 	private String try_datetime;
 	
+	// for reserve
+	private String reserve_start_date;
+	private String reserve_start_time;
+	private String reserve_end_date;
+	private String reserve_end_time;
+	private String reserve_term;
+	private String use_yn;
+	  
 	// for log
 	private String autowrite_site_seq_id;
 	
@@ -174,6 +182,80 @@ public class AutowriteEntity extends CommonEntity {
 	}
 	public void setTry_datetime(String try_datetime) {
 		this.try_datetime = try_datetime;
+	}
+	public String writeReserve_start_datetime() {
+		return getWriteBoardDateTime(reserve_start_date, reserve_start_time);
+	}
+	public String getReserve_start_date() {
+		return reserve_start_date;
+	}
+	public String getReserve_start_date(String DefaultValue) {
+		return nvl(reserve_start_date, DefaultValue);
+	}
+	public void setReserve_start_date(String reserve_start_date) {
+		this.reserve_start_date = reserve_start_date;
+	}
+	public String getReserve_start_time() {
+		return reserve_start_time;
+	}
+	public String getReserve_start_time(String DefaultValue) {
+		return nvl(reserve_start_time, DefaultValue);
+	}
+	public void setReserve_start_time(String reserve_start_time) {
+		this.reserve_start_time = reserve_start_time;
+	}
+	public String writeReserve_end_datetime() {
+		return getWriteBoardDateTime(reserve_end_date, reserve_end_time);
+	}
+	public String getReserve_end_date() {
+		return reserve_end_date;
+	}
+	public String getReserve_end_date(String DefaultValue) {
+		return nvl(reserve_end_date, DefaultValue);
+	}
+	public void setReserve_end_date(String reserve_end_date) {
+		this.reserve_end_date = reserve_end_date;
+	}
+	public String getReserve_end_time() {
+		return reserve_end_time;
+	}
+	public String getReserve_end_time(String DefaultValue) {
+		return nvl(reserve_end_time, DefaultValue);
+	}
+	public void setReserve_end_time(String reserve_end_time) {
+		this.reserve_end_time = reserve_end_time;
+	}
+	public String getReserve_term() {
+		return reserve_term;
+	}
+	public String getReserve_termSelectedStr(String reserveTerm) {
+		String checkedStr = "";
+		if ( reserveTerm.equals(reserve_term) ) {
+			checkedStr = "selected=\"selected\"";
+		} else {
+			checkedStr = "";
+		}
+		return checkedStr;
+	}
+	public void setReserve_term(String reserve_term) {
+		this.reserve_term = reserve_term;
+	}
+	public String getUse_yn(String use_yn) {
+		String checkedStr = "";
+		if ( "Y".equals(use_yn) ) {
+			checkedStr = "checked=\"checked\"";
+		} else if ( use_yn == null ) {
+			checkedStr = "checked=\"checked\"";
+		} else {
+			checkedStr = "";
+		}
+		return checkedStr;
+	}
+	public String getUse_yn() {
+		return use_yn;
+	}
+	public void setUse_yn(String use_yn) {
+		this.use_yn = use_yn;
 	}
 	public String getAutowrite_site_seq_id() {
 		return autowrite_site_seq_id;

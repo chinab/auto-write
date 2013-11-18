@@ -124,8 +124,12 @@ public class Sexbam extends AutowriterCommon {
     public void writeBoard(AutowriteEntity autowriteInfo) throws Exception {
     	// delete URL
     	// http://uuubam.com/index.php?mid=10444580&category=203497&document_srl=9436029&act=procBoardDeleteDocument
+    	
     	String contentKey = deleteBoard(autowriteInfo);
     	autowriteInfo.setContentKey(contentKey);
+    	
+    	// 삭제하지 않으면 MODIFY BOARD
+    	deleteBoard(autowriteInfo);
     	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
@@ -170,16 +174,16 @@ public class Sexbam extends AutowriterCommon {
     	
 		System.out.println("DELETE URL:" + deleteUrl);
 		
-//		HttpPost httpost = new HttpPost(deleteUrl);
-////		List<NameValuePair> nvps = setNvpsParams(autowriteInfo);
-////		httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
-////        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
-//        
-//        HttpResponse response = httpclient.execute(httpost);            
-////        HttpEntity entity = response.getEntity();
-////        String responseBody = parseResponse(entity);
-////		System.out.println(responseBody);
-//        httpost.releaseConnection();
+		HttpPost httpost = new HttpPost(deleteUrl);
+//		List<NameValuePair> nvps = setNvpsParams(autowriteInfo);
+//		httpost.setEntity(new UrlEncodedFormEntity(nvps, autowriteInfo.getSiteEntity().getSite_encoding()));
+//        httpost.setHeader("Content-Type", "application/x-www-form-urlencoded;");
+        
+        HttpResponse response = httpclient.execute(httpost);            
+//        HttpEntity entity = response.getEntity();
+//        String responseBody = parseResponse(entity);
+//		System.out.println(responseBody);
+        httpost.releaseConnection();
         
         return contentKey;
 	}

@@ -42,6 +42,26 @@
 	</statement>
 	
 	
+	<statement id="site.reserved.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				S.SEQ_ID, S.MASTER_SEQ_ID, S.DOMAIN, S.SITE_NAME, S.SITE_ID, S.SITE_PASSWD, S.USE_YN, S.WRITER_SEQ_ID, S.WRITER_ID, S.WRITE_DATETIME
+			from
+				AUTOWRITE_RESERVE_SITE R, SITE_PRIVATE S
+			where
+				R.RESERVE_MASTER_SEQ_ID = #RESERVE_MASTER_SEQ_ID#
+				AND S.SEQ_ID = R.SITE_SEQ_ID
+			order by
+				SEQ_ID desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+	
 	<statement id="site.master.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
 		select count(1) from (
 			select @RNUM:=0, Q.* from (
@@ -116,7 +136,7 @@
 		)
 	</statement>
 	
-	
+	 
 	<statement id="site.private.update" parameterClass="java.util.HashMap">
 		update
 			SITE_PRIVATE
@@ -484,6 +504,60 @@
 	</insert>
 	
 	
+	<statement id="autowrite.reserve.master.update" parameterClass="java.util.HashMap">
+		update
+			AUTOWRITE_RESERVE_MASTER
+		set
+			CONTENTS_SEQ_ID = #CONTENTS_SEQ_ID#, 
+			TITLE = #TITLE#, 
+			CONTENT = #CONTENT#, 
+			RESERVE_START_DATE = #RESERVE_START_DATE#, 
+			RESERVE_START_TIME = #RESERVE_START_TIME#, 
+			RESERVE_END_DATE = #RESERVE_END_DATE#, 
+			RESERVE_END_TIME = #RESERVE_END_TIME#, 
+			RESERVE_TERM = #RESERVE_TERM#, 
+			USE_YN = #USE_YN#, 
+			WRITER_SEQ_ID = #WRITER_SEQ_ID#, 
+			WRITER_ID = #WRITER_ID#
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<insert id="autowrite.reserve.master.write" parameterClass="java.util.HashMap" >
+	    <![CDATA[
+	        insert into AUTOWRITE_RESERVE_MASTER (
+				CONTENTS_SEQ_ID, TITLE, CONTENT, 
+				RESERVE_START_DATE, RESERVE_START_TIME, RESERVE_END_DATE, 
+				RESERVE_END_TIME, RESERVE_TERM, USE_YN, 
+				WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+			) values (
+				#CONTENTS_SEQ_ID#, #TITLE#, #CONTENT#, 
+				#RESERVE_START_DATE#, #RESERVE_START_TIME#, #RESERVE_END_DATE#, 
+				#RESERVE_END_TIME#, #RESERVE_TERM#, #USE_YN#, 
+				#WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
+			)
+	    ]]>
+	    <selectKey keyProperty="seqId" resultClass="Long">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+	
+	<insert id="autowrite.reserve.site.write" parameterClass="java.util.HashMap" >
+	    <![CDATA[
+	        insert into AUTOWRITE_RESERVE_SITE (
+				RESERVE_MASTER_SEQ_ID, SITE_SEQ_ID
+			) values (
+				#RESERVE_MASTER_SEQ_ID#, #SITE_SEQ_ID#
+			)
+	    ]]>
+	    <selectKey keyProperty="seqId" resultClass="Long">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+	
 	<statement id="autowrite.master.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
 		select count(1) from (
 			select @RNUM:=0, Q.* from (
@@ -513,6 +587,49 @@
 				, (select count(1) from AUTOWRITE_SITE where AUTOWRITE_MASTER_SEQ_ID = M.SEQ_ID and SUCCESS_YN = 'N') FAIL_COUNT
 			from
 				AUTOWRITE_MASTER M
+			where
+				WRITER_SEQ_ID = #USER_SEQ_ID#
+			order by
+				WRITE_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+	
+	<statement id="autowrite.reserve.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					AUTOWRITE_RESERVE_MASTER
+				where
+					WRITER_SEQ_ID = #USER_SEQ_ID#
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="autowrite.reserve.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AutowriteEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, CONTENTS_SEQ_ID, TITLE, CONTENT, 
+				RESERVE_START_DATE, RESERVE_START_TIME, RESERVE_END_DATE, 
+				RESERVE_END_TIME, RESERVE_TERM, USE_YN, 
+				WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+			from
+				AUTOWRITE_RESERVE_MASTER
 			where
 				WRITER_SEQ_ID = #USER_SEQ_ID#
 			order by
@@ -645,6 +762,45 @@
 	</statement>
 	
 		
+	<statement id="autowrite.reserve.master.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AutowriteEntity">
+		select
+			SEQ_ID, CONTENTS_SEQ_ID, TITLE, CONTENT, 
+			RESERVE_START_DATE, RESERVE_START_TIME, RESERVE_END_DATE, 
+			RESERVE_END_TIME, RESERVE_TERM, USE_YN, 
+			WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+		from
+			AUTOWRITE_RESERVE_MASTER
+		where
+			SEQ_ID = #RESERVE_MASTER_SEQ_ID#
+	</statement>
+	
+		
+	<statement id="autowrite.reserve.site.seqid.list" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select
+			SITE_SEQ_ID
+		from
+			AUTOWRITE_RESERVE_SITE
+		where
+			RESERVE_MASTER_SEQ_ID = #RESERVE_MASTER_SEQ_ID#
+	</statement>
+	
+	
+	<statement id="autowrite.reserve.master.delete" parameterClass="java.util.HashMap">
+		delete from
+			AUTOWRITE_RESERVE_MASTER
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="autowrite.reserve.site.delete" parameterClass="java.util.HashMap">
+		delete from
+			AUTOWRITE_RESERVE_SITE
+		where
+			RESERVE_MASTER_SEQ_ID = #RESERVE_MASTER_SEQ_ID#
+	</statement>
+	
+	
 	<statement id="autowrite.master.delete" parameterClass="java.util.HashMap">
 		delete from
 			AUTOWRITE_MASTER
