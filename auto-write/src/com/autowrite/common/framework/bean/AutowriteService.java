@@ -598,7 +598,7 @@ public class AutowriteService extends CommonService{
 				
 				siteLoop(param, siteSeqIdList);
 				
-				reserveRemainMinute = Integer.parseInt(autowriteEntity.getReserve_term());
+				reserveRemainMinute = Integer.parseInt(autowriteEntity.getReserve_term()) - 1;
 			} else {
 				reserveRemainMinute--;
 			}
