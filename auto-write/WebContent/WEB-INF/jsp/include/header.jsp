@@ -14,7 +14,7 @@
 	<meta http-equiv="Cache-Control" content="No-cache" />
 	<meta http-equiv="Content-Script-Type" content="text/javascript" />
 	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta http-equiv="X-UA-Compatitble" content="IE=7" />
 </head>
 
 <link href='http://api.mobilis.co.kr/webfonts/css/?fontface=NanumGothickWeb' rel='stylesheet' type='text/css'/>
