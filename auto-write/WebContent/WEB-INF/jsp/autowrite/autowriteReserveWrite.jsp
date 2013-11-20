@@ -210,7 +210,7 @@
 									<%
 										}
 									%>
-									</select>
+									</select>시
 									~
 									<img src="images/calendar.gif" onclick="fnPopUpCalendar(reserveEndDate,reserveEndDate,'yyyymmdd')"/>
 									<input name="reserveEndDate" class="s_id" type="text" size="8" style="width: 100px;" value="<%=reserveEndDate%>">
@@ -229,7 +229,7 @@
 									<%
 										}
 									%>
-									</select>
+									</select>시
 								</td>
 							</tr>
 							
