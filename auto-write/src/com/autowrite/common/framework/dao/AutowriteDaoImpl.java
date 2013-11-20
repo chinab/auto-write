@@ -196,5 +196,28 @@ public class AutowriteDaoImpl implements AutowriteDao {
 			e.printStackTrace();
 		}
 	}
+
+
+	@Override
+	public List<AutowriteEntity> getEffectiveReservedAutowriteEntity() {
+		return (List<AutowriteEntity>) sqlHelper.queryForList("autowrite.effective.reserve.master.list");
+	}
+	
+	
+	@Override
+	public List<String> getEffectiveReservedSite(Map param) {
+		return (List<String>) sqlHelper.queryForList("autowrite.effective.reserve.site.list", param);
+	}
+
+
+	@Override
+	public void updateReserveRemainMinute(Map param) {
+		try {
+			sqlHelper.insert("autowrite.reserve.remain.minute.update", param);
+		} catch ( Exception e ){
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
 	
 }

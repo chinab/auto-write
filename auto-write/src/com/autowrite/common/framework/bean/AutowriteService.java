@@ -243,7 +243,7 @@ public class AutowriteService extends CommonService{
 		
 		String seqId = req.getParameter("seqId");
 		
-		if ( seqId != null && seqId.length() > 0 ){
+		if ( seqId != null && !"null".equals(seqId) && seqId.length() > 0 ){
 			modifyAutowriteReservation(param, siteSeqidArray);
 		} else {
 			writeAutowriteReservation(param, siteSeqidArray);
@@ -505,6 +505,20 @@ public class AutowriteService extends CommonService{
 	
 	
 	/**
+	 * 자동등록 예약 목록을 모두 삭제한다.
+	 * @param req
+	 * @param param
+	 */
+	public void deleteReserveAutowrite(HttpServletRequest req, Map param) {
+		setCondition(param);
+		
+		autowriteDao.deleteAutowriteReserveMaster(param);
+		
+		autowriteDao.deleteAutowriteReserveSite(param);
+	}
+	
+	
+	/**
 	 * 예약 등록 내역을 읽어온다.
 	 * 
 	 * @param req
@@ -518,9 +532,35 @@ public class AutowriteService extends CommonService{
 		
 		if ( autowriteReserveSeqid != null && autowriteReserveSeqid.length() > 0 ){
 			autowriteEntity = autowriteDao.getReservedAutowriteEntity(param);
+			List<SiteEntity> siteEntityFullList = siteDao.listPrivateSite(param);
 			
-			List<SiteEntity> siteEntityList = siteDao.listReservedSite(param);
-			autowriteEntity.setSiteEntityList(siteEntityList);
+			List<SiteEntity> reservedSiteEntityList = siteDao.listReservedSite(param);
+			
+			if ( reservedSiteEntityList.size() > 0 ) {
+				SiteEntity reservedSiteEntity = null;
+				SiteEntity fullSiteEntity = null;
+				String fullSiteSeqId = null;
+				String reservedSiteSeqId = null;
+				
+				for ( int ii = 0 ; ii < siteEntityFullList.size() ; ii ++) {
+					fullSiteEntity = siteEntityFullList.get(ii);
+					fullSiteEntity.setUse_yn("N");
+					
+					fullSiteSeqId = fullSiteEntity.getSeq_id();
+					
+					for ( int jj = 0 ; jj < reservedSiteEntityList.size() ; jj ++ ){
+						reservedSiteEntity = reservedSiteEntityList.get(jj);
+						reservedSiteSeqId = reservedSiteEntity.getSeq_id();
+						
+						if ( fullSiteSeqId.equals(reservedSiteSeqId) ){
+							fullSiteEntity.setUse_yn("Y");
+						}
+					}
+					
+				}
+			}
+				
+			autowriteEntity.setSiteEntityList(siteEntityFullList);
 			
 //			List<String> siteSeqIdList = autowriteDao.getReservedSiteSeqIdList(param);
 //			autowriteEntity.setSite_seq_id_list(siteSeqIdList);
@@ -531,5 +571,42 @@ public class AutowriteService extends CommonService{
 		}
 		
 		return autowriteEntity;
+	}
+
+
+	public void executeReservedAutowrite() {
+		Map param = new HashMap();
+		
+		List<AutowriteEntity> autowriteEntityList = autowriteDao.getEffectiveReservedAutowriteEntity();
+		
+		for ( int ii = 0 ; ii < autowriteEntityList.size() ; ii++ ) {
+			AutowriteEntity autowriteEntity = autowriteEntityList.get(ii);
+			int reserveRemainMinute = autowriteEntity.getReserve_remain_minute();
+			
+			param.put("RESERVE_MASTER_SEQ_ID", autowriteEntity.getSeq_id());
+			
+			if ( reserveRemainMinute == 0 ) {
+				List<String> siteSeqIdList = autowriteDao.getEffectiveReservedSite(param);
+				
+				param.put("CONTENTS_SEQ_ID", autowriteEntity.getContents_seq_id());
+				param.put("TITLE", autowriteEntity.getTitle());
+				param.put("CONTENT", autowriteEntity.getContent());
+				param.put("USER_SEQ_ID", autowriteEntity.getWriter_seq_id());
+				param.put("WRITER_SEQ_ID", autowriteEntity.getWriter_seq_id());
+				param.put("WRITER_ID", autowriteEntity.getWriter_id());
+				param.put("WRITER_IP", "RESERVE_SYSTEM");
+				
+				siteLoop(param, siteSeqIdList);
+				
+				reserveRemainMinute = Integer.parseInt(autowriteEntity.getReserve_term());
+			} else {
+				reserveRemainMinute--;
+			}
+			
+			param.put("RESERVE_REMAIN_MINUTE", reserveRemainMinute);
+			
+			autowriteDao.updateReserveRemainMinute(param);
+			
+		}
 	}
 }

@@ -57,5 +57,11 @@ public interface AutowriteDao {
 	public abstract List<String> getReservedSiteSeqIdList(Map param);
 
 	public abstract void modifyAutowriteReserveMaster(Map param);
+
+	public abstract List<AutowriteEntity> getEffectiveReservedAutowriteEntity();
+
+	public abstract List<String> getEffectiveReservedSite(Map param);
+
+	public abstract void updateReserveRemainMinute(Map param);
 	
 }

@@ -78,7 +78,7 @@
 	function changeContents(){
 		var frm = document.writeForm;
 		
-		var locStr = "autowriteWriteForm.do?jsp=autowrite/autowriteReserveWrite&contentsSeqId=" + frm.contentsSeqId.value + "&contentsSeqId=" + frm.seqId.value;
+		var locStr = "autowriteReserveWriteForm.do?jsp=autowrite/autowriteReserveWrite&contentsSeqId=" + frm.contentsSeqId.value + "&autowriteReserveSeqid=" + frm.seqId.value;
 		
 		location.href = locStr;
 	}
@@ -195,11 +195,41 @@
 								<td class="subject">
 									<img src="images/calendar.gif" onclick="fnPopUpCalendar(reserveStartDate,reserveStartDate,'yyyymmdd')"/>
 									<input name="reserveStartDate" class="s_id" type="text" size="8" style="width: 100px;" value="<%=reserveStartDate%>">
-									<input name="reserveStartTime" class="s_id" type="text" size="8" style="width: 60px;" value="<%=reserveStartTime%>">
+									<select name="reserveStartTime" class="s_id" style="width: 60px;">
+									<%
+										String reserveStartTimeSelectedStr = "";
+									
+										for ( int ii = 1 ; ii <= 24 ; ii ++) {
+											if ( (ii + "").equals(reserveStartTime) ){
+												reserveStartTimeSelectedStr = "selected=\"selecdted\"";
+											} else {
+												reserveStartTimeSelectedStr = "";
+											}
+									%>
+										<option value="<%=ii%>" <%=reserveStartTimeSelectedStr %>><%=ii%></option>
+									<%
+										}
+									%>
+									</select>
 									~
 									<img src="images/calendar.gif" onclick="fnPopUpCalendar(reserveEndDate,reserveEndDate,'yyyymmdd')"/>
 									<input name="reserveEndDate" class="s_id" type="text" size="8" style="width: 100px;" value="<%=reserveEndDate%>">
-									<input name="reserveEndTime" class="s_id" type="text" size="8" style="width: 60px;" value="<%=reserveEndTime%>">
+									<select name="reserveEndTime" class="s_id" style="width: 60px;">
+									<%
+										String reserveEndTimeSelectedStr = "";
+									
+										for ( int ii = 1 ; ii <= 24 ; ii ++) {
+											if ( (ii + "").equals(reserveEndTime) ){
+												reserveEndTimeSelectedStr = "selected=\"selecdted\"";
+											} else {
+												reserveEndTimeSelectedStr = "";
+											}
+									%>
+										<option value="<%=ii%>" <%=reserveEndTimeSelectedStr %>><%=ii%></option>
+									<%
+										}
+									%>
+									</select>
 								</td>
 							</tr>
 							
@@ -208,6 +238,7 @@
 								<td><img src="/images/board_line.gif" width="1" height="22" /></td>
 								<td class="subject">
 									<select name="reserveTerm" style="width: 250px;">
+										<option value="10" <%=autowriteEntity.getReserve_termSelectedStr("10") %>>10분</option>
 										<option value="30" <%=autowriteEntity.getReserve_termSelectedStr("30") %>>30분</option>
 										<option value="120" <%=autowriteEntity.getReserve_termSelectedStr("120") %>>1시간</option>
 										<option value="240" <%=autowriteEntity.getReserve_termSelectedStr("240") %>>2시간</option>

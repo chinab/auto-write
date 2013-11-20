@@ -130,6 +130,7 @@ public class SiteController extends CommonController{
 			param.put("SITE_REGION", req.getParameter("siteRegion"));
 			param.put("SITE_SUB_REGION", req.getParameter("siteSubRegion"));
 			param.put("USE_YN", req.getParameter("useYn"));
+			param.put("WRITE_TYPE_CODE", req.getParameter("siteWriteTypeCode"));
 			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
 			param.put("WRITER_ID", userInfo.getId());
 			param.put("WRITER_IP", req.getRemoteAddr());
@@ -220,6 +221,7 @@ public class SiteController extends CommonController{
 			param.put("SITE_REGION", req.getParameter("siteRegion"));
 			param.put("SITE_SUB_REGION", req.getParameter("siteSubRegion"));
 			param.put("USE_YN", req.getParameter("useYn"));
+			param.put("WRITE_TYPE_CODE", req.getParameter("siteWriteTypeCode"));
 			param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
 			param.put("WRITER_ID", userInfo.getId());
 			param.put("WRITER_IP", req.getRemoteAddr());

@@ -247,6 +247,22 @@
 									
 								</td>
 							</tr>
+							<tr>
+								<td class="subject5">&nbsp;&nbsp;<b>글 등록방식</b></td>
+								<td><img src="images/board_line.gif" width="1" height="22" /></td>
+								<td class="subject">
+									<input name="siteWriteTypeCode" type="radio" value="D" <%=siteEntity.getWrite_type_codeCheckedStr("D") %>>
+									&nbsp;&nbsp;삭제 및 등록&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input name="siteWriteTypeCode" type="radio" value="M" <%=siteEntity.getWrite_type_codeCheckedStr("M") %>>
+									&nbsp;&nbsp;수정&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<input name="siteWriteTypeCode" type="radio" value="J" <%=siteEntity.getWrite_type_codeCheckedStr("J") %>>
+									&nbsp;&nbsp;점프&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<b></b>
+								</td>
+								<td class="subject">
+									
+								</td>
+							</tr>
 							
 						</tbody>
 					</table>

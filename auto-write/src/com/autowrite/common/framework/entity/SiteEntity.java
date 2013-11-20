@@ -45,6 +45,11 @@ public class SiteEntity extends CommonEntity{
 	
 	private String use_yn;
 	
+	// "D" : delete and write
+	// "M" : modify
+	// "J" : jump
+	private String write_type_code;
+	
 	public List<SiteCategoryEntity> getSiteCategoryList() {
 		return siteCategoryList;
 	}
@@ -230,6 +235,21 @@ public class SiteEntity extends CommonEntity{
 	}
 	public void setUse_yn(String use_yn) {
 		this.use_yn = use_yn;
+	}
+	public String getWrite_type_codeCheckedStr(String writeTypeCode) {
+		String checkedStr = "";
+		if ( writeTypeCode != null && writeTypeCode.equals(write_type_code) ) {
+			checkedStr = "checked=\"checked\"";
+		} else {
+			checkedStr = "";
+		}
+		return checkedStr;
+	}
+	public String getWrite_type_code() {
+		return write_type_code;
+	}
+	public void setWrite_type_code(String write_type_code) {
+		this.write_type_code = write_type_code;
 	}
 	
 }

@@ -71,7 +71,7 @@
 				return;
 			}
 			
-			frm.action = "autowriteDelete.do";
+			frm.action = "autowriteReserveDelete.do";
 			frm.method = "post";
 			frm.submit();
 		}
@@ -109,6 +109,7 @@
 							<col width="70" />
 							<col width="70" />
 							<col width="70" />
+							<col width="70" />
 						</colgroup>
 						<tbody>
 
@@ -130,7 +131,7 @@
 								<td><input name="selectedSeqId" type="checkbox" value="<%=autowriteEntity.getSeq_id()%>"></td>
 								<td><%=autowriteEntity.getSeq_id()%></td>
 								<td>
-									<a href="autowriteReserveWriteForm.do?jsp=autowrite/autowriteReserveWrite&autowriteReserveSeqid=<%=autowriteEntity.getSeq_id()%>">
+									<a href="autowriteReserveWriteForm.do?jsp=autowrite/autowriteReserveWrite&autowriteReserveSeqid=<%=autowriteEntity.getSeq_id()%>&contentsSeqId=<%=autowriteEntity.getContents_seq_id()%>">
 										<%=autowriteEntity.getTitleLength(autowriteEntity.getTitle(), 30)%>
 									</a>
 								</td>
@@ -138,6 +139,14 @@
 								<td><%=autowriteEntity.writeReserve_end_datetime()%></td>
 								<td><%=autowriteEntity.getWriteBoardDateTime(autowriteEntity.getWrite_datetime())%></td>
 								<td><%=autowriteEntity.getUse_yn()%></td>
+							</tr>
+							<%
+								}
+							
+								if ( autowriteMasterList.size() == 0 ) {
+							%>
+							<tr>
+								<td colspan="7">글이 없습니다.</td>
 							</tr>
 							<%
 								}

@@ -48,6 +48,11 @@ public class AutowriteController extends CommonController{
 		logger = Logger.getLogger(getClass());
 	}
 	
+	@RequestMapping("/executeReservedAutowrite.do")
+	public void executeReservedAutowrite(HttpServletRequest req){
+		autowriteService.executeReservedAutowrite();
+	}
+	
 	@RequestMapping("/autowriteReserveList.do")
 	public ModelAndView autowriteReserveList(String jsp, HttpServletRequest req, HttpSession e) throws Exception {
 		ModelAndView model = null;
@@ -397,6 +402,30 @@ public class AutowriteController extends CommonController{
 		}
 		
 		String redirectUrl = "autowriteMasterList.do?jsp=autowrite/autowriteMasterList";
+		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
+		
+		return model;
+	}
+	
+	@RequestMapping("/autowriteReserveDelete.do")
+	public ModelAndView autowriteReserveDelete(String p, HttpServletRequest req, ServletResponse res) throws Exception {
+		
+		Map param = new HashMap();
+		
+		HttpSession httpSession = req.getSession(true);
+		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
+		
+		setDefaultParameter(req, httpSession, null, param);
+		
+		String[] seqIdArray = req.getParameterValues("selectedSeqId");
+		
+		for ( int ii = 0 ; ii < seqIdArray.length ; ii ++ ) {
+			param.put("SEQ_ID", seqIdArray[ii]);
+			
+			autowriteService.deleteReserveAutowrite(req, param);
+		}
+		
+		String redirectUrl = "autowriteReserveList.do?jsp=autowrite/autowriteReserveList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
 		
 		return model;

@@ -84,6 +84,8 @@ CREATE  TABLE `site_private` (
   
   `use_yn` VARCHAR(10) NULL ,
   
+  `write_type_code` VARCHAR(10) NULL ,
+  
   `writer_seq_id` BIGINT NULL ,
 
   `writer_id` VARCHAR(45) NULL ,
@@ -205,6 +207,8 @@ CREATE  TABLE `autowrite_reserve_master` (
   `reserve_end_time` VARCHAR(45) NULL ,
   
   `reserve_term` VARCHAR(45) NULL ,
+  
+  `reserve_remain_minute` INT(11) NULL DEFAULT 30,
   
   `use_yn` VARCHAR(45) NULL DEFAULT 'Y' ,
   

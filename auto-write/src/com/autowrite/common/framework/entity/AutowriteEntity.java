@@ -36,6 +36,7 @@ public class AutowriteEntity extends CommonEntity {
 	private String reserve_end_date;
 	private String reserve_end_time;
 	private String reserve_term;
+	private int reserve_remain_minute;
 	private String use_yn;
 	  
 	// for log
@@ -239,6 +240,12 @@ public class AutowriteEntity extends CommonEntity {
 	}
 	public void setReserve_term(String reserve_term) {
 		this.reserve_term = reserve_term;
+	}
+	public int getReserve_remain_minute() {
+		return reserve_remain_minute;
+	}
+	public void setReserve_remain_minute(int reserve_remain_minute) {
+		this.reserve_remain_minute = reserve_remain_minute;
 	}
 	public String getUse_yn(String use_yn) {
 		String checkedStr = "";

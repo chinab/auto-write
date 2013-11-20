@@ -26,7 +26,8 @@
 	<statement id="site.private.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
 		select @RNUM:=0, Q.* from (
 			select
-				SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, USE_YN, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+				SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, 
+				USE_YN, WRITE_TYPE_CODE, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
 			from
 				SITE_PRIVATE
 			where
@@ -45,7 +46,8 @@
 	<statement id="site.reserved.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
 		select @RNUM:=0, Q.* from (
 			select
-				S.SEQ_ID, S.MASTER_SEQ_ID, S.DOMAIN, S.SITE_NAME, S.SITE_ID, S.SITE_PASSWD, S.USE_YN, S.WRITER_SEQ_ID, S.WRITER_ID, S.WRITE_DATETIME
+				S.SEQ_ID, S.MASTER_SEQ_ID, S.DOMAIN, S.SITE_NAME, S.SITE_ID, S.SITE_PASSWD, 
+				S.USE_YN, S.WRITE_TYPE_CODE, S.WRITER_SEQ_ID, S.WRITER_ID, S.WRITE_DATETIME
 			from
 				AUTOWRITE_RESERVE_SITE R, SITE_PRIVATE S
 			where
@@ -110,14 +112,14 @@
 			, SITE_NAME
 			, SITE_ID, SITE_PASSWD
 			, SITE_KEYWORD, SITE_CATEGORY, SITE_REGION, SITE_SUB_REGION 
-			, USE_YN, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
+			, USE_YN, WRITE_TYPE_CODE, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
 		) values (
 			#MASTER_SEQ_ID#
 			, (select DOMAIN from SITE_MASTER where SEQ_ID = #MASTER_SEQ_ID#)
 			, (select SITE_NAME from SITE_MASTER where SEQ_ID = #MASTER_SEQ_ID#)
 			, #SITE_ID#, #SITE_PASSWD#
 			, #SITE_KEYWORD#, #SITE_CATEGORY#, #SITE_REGION#, #SITE_SUB_REGION#
-			, #USE_YN#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
+			, #USE_YN#, #WRITE_TYPE_CODE#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
 		)
 	</statement>
 	
@@ -151,6 +153,7 @@
 			SITE_REGION = #SITE_REGION#,
 			SITE_SUB_REGION = #SITE_SUB_REGION#,
 			USE_YN = #USE_YN#, 
+			WRITE_TYPE_CODE = #WRITE_TYPE_CODE#, 
 			WRITER_SEQ_ID = #WRITER_SEQ_ID#, 
 			WRITER_ID = #WRITER_ID#
 		where
@@ -187,7 +190,7 @@
 		select
 			SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD
 			, SITE_KEYWORD, SITE_CATEGORY, SITE_REGION, SITE_SUB_REGION 
-			, USE_YN, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
+			, USE_YN, WRITE_TYPE_CODE, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
 		from
 			SITE_PRIVATE
 		where
@@ -739,7 +742,7 @@
 	<statement id="autowrite.site.info.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
 		select
 			P.SEQ_ID, M.SEQ_ID AS MASTER_SEQ_ID, M.DOMAIN, M.SITE_NAME, P.SITE_ID, P.SITE_PASSWD
-			, P.SITE_KEYWORD, P.SITE_CATEGORY, P.SITE_REGION, P.SITE_SUB_REGION
+			, P.SITE_KEYWORD, P.SITE_CATEGORY, P.SITE_REGION, P.SITE_SUB_REGION, P.WRITE_TYPE_CODE
 			, P.WRITER_SEQ_ID, P.WRITER_ID, P.WRITE_DATETIME
 			, M.LOGIN_URL, M.WRITE_URL, M.MODIFY_URL, M.DELETE_URL
 			, M.LOGIN_TYPE, M.WRITE_TYPE, M.MODIFY_TYPE, M.DELETE_TYPE
@@ -761,7 +764,44 @@
 			SEQ_ID = #AUTOWRITE_MASTER_SEQ_ID#
 	</statement>
 	
+	
+	<statement id="autowrite.effective.reserve.master.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AutowriteEntity">
+		<![CDATA[
+		select
+			SEQ_ID, CONTENTS_SEQ_ID, TITLE, CONTENT, 
+			RESERVE_START_DATE, RESERVE_START_TIME, RESERVE_END_DATE, 
+			RESERVE_END_TIME, RESERVE_TERM, RESERVE_REMAIN_MINUTE, USE_YN, 
+			WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+		from
+			AUTOWRITE_RESERVE_MASTER
+		where
+			USE_YN = "Y"
+			and  (RESERVE_START_DATE + 0)*10000 +  RESERVE_START_TIME*100 <= DATE_FORMAT(sysdate(), '%Y%m%d%H%i') + 0
+			and  (RESERVE_END_DATE + 0)*10000 +  RESERVE_END_TIME*100 >= DATE_FORMAT(sysdate(), '%Y%m%d%H%i') + 0
+		]]>
+	</statement>
+	
 		
+	<statement id="autowrite.effective.reserve.site.list" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+		select
+			SITE_SEQ_ID
+		from
+			AUTOWRITE_RESERVE_SITE
+		where
+			RESERVE_MASTER_SEQ_ID = #RESERVE_MASTER_SEQ_ID#
+	</statement>
+	
+		
+	<statement id="autowrite.reserve.remain.minute.update" parameterClass="java.util.HashMap">
+		update
+			AUTOWRITE_RESERVE_MASTER
+		set
+			RESERVE_REMAIN_MINUTE = #RESERVE_REMAIN_MINUTE#
+		where
+			SEQ_ID = #RESERVE_MASTER_SEQ_ID#
+	</statement>
+	
+	
 	<statement id="autowrite.reserve.master.read" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AutowriteEntity">
 		select
 			SEQ_ID, CONTENTS_SEQ_ID, TITLE, CONTENT, 
@@ -807,14 +847,14 @@
 		where
 			SEQ_ID = #SEQ_ID#
 	</statement>
-		
+	
 	<statement id="autowrite.site.delete" parameterClass="java.util.HashMap">
 		delete from
 			AUTOWRITE_SITE
 		where
 			AUTOWRITE_MASTER_SEQ_ID = #SEQ_ID#
 	</statement>
-		
+	
 	<statement id="autowrite.log.delete" parameterClass="java.util.HashMap">
 		delete from
 			AUTOWRITE_LOG

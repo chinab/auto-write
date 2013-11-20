@@ -128,12 +128,25 @@ public class Sexbam extends AutowriterCommon {
     	String contentKey = deleteBoard(autowriteInfo);
     	autowriteInfo.setContentKey(contentKey);
     	
-    	// 삭제하지 않으면 MODIFY BOARD
-    	deleteBoard(autowriteInfo);
+    	
     	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String writeUrl = getFullUrl(siteInfo, siteInfo.getWrite_url()); 
 		
+    	String writeTypeCode = siteInfo.getWrite_type_code();
+    	if ( "D".equals(writeTypeCode) ) {
+    		// 삭제하지 않으면 MODIFY BOARD
+    		System.out.println("============== DELETE MODE");
+        	deleteBoard(autowriteInfo);
+    	} else if ( "J".equals(writeTypeCode) ){
+    		System.out.println("============== JUMP MODE");
+    		// no action
+    	} else if ( "M".equals(writeTypeCode) ){
+    		System.out.println("============== MODIFY MODE");
+    		// no action
+    	} else {
+    		// no action
+    	}
     	System.out.println("============== writeUrl:" + writeUrl);
     	
     	
