@@ -268,12 +268,12 @@ public class AutowriteController extends CommonController{
 		setDefaultParameter(req, httpSession, null, param);
 		
 		String autowriteReserveSeqid = req.getParameter("autowriteReserveSeqid");
-		if ( autowriteReserveSeqid != null && autowriteReserveSeqid.length() > 0 ) {
+		if ( autowriteReserveSeqid != null && !"null".equals(autowriteReserveSeqid) && autowriteReserveSeqid.length() > 0 ) {
 			  param.put("RESERVE_MASTER_SEQ_ID", autowriteReserveSeqid);
 		}
 		
 		String selectedContentsKey = req.getParameter("contentsSeqId");
-		if ( selectedContentsKey != null && selectedContentsKey.length() > 0 ) {
+		if ( selectedContentsKey != null && !"null".equals(selectedContentsKey) && selectedContentsKey.length() > 0 ) {
 			  param.put("CONTENTS_SEQ_ID", selectedContentsKey);
 		}
 		

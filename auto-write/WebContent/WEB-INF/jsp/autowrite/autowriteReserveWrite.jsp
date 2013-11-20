@@ -144,6 +144,7 @@
 										}
 									%>
 									</select>
+									&nbsp;&nbsp;&nbsp;&nbsp;<b>본문을 먼저 선택하세요.</b>
 								</td>
 							</tr>
 
@@ -186,6 +187,7 @@
 								<td class="subject">
 									<input name="useYn" type="radio" value="Y" <%=autowriteEntity.getUse_yn("Y")%>> 사용
 									<input name="useYn" type="radio" value="N" <%=autowriteEntity.getUse_yn("N")%>> 미사용
+									&nbsp;&nbsp;&nbsp;&nbsp;<b>사용에 체크가 되어야 예약기능이 동작합니다.</b>
 								</td>
 							</tr>
 							
