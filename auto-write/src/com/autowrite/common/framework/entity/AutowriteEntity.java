@@ -226,6 +226,24 @@ public class AutowriteEntity extends CommonEntity {
 	public void setReserve_end_time(String reserve_end_time) {
 		this.reserve_end_time = reserve_end_time;
 	}
+	public String writeListReserve_term(){
+		String hour = "";
+		String minute = "";
+		
+		if ( reserve_term != null && reserve_term.length() > 0 ) {
+			int hourValue = new Integer(reserve_term)/60;
+			if ( hourValue > 0 ) {
+				hour = hourValue + "시간";
+			}
+			
+			int minuteValue = new Integer(reserve_term)%60;
+			if ( minuteValue != 0 ){
+				minute = " " + minuteValue + "분";
+			}
+		}
+		
+		return hour + minute;
+	}
 	public String getReserve_term() {
 		return reserve_term;
 	}
@@ -240,6 +258,22 @@ public class AutowriteEntity extends CommonEntity {
 	}
 	public void setReserve_term(String reserve_term) {
 		this.reserve_term = reserve_term;
+	}
+	public String writeReserve_remain_minute() {
+		String hour = "";
+		String minute = "";
+		
+		int hourValue = reserve_remain_minute/60;
+		if ( hourValue > 0 ) {
+			hour = hourValue + "시간";
+		}
+		
+		int minuteValue = reserve_remain_minute%60;
+		if ( minuteValue != 0 ){
+			minute = " " + minuteValue + "분";
+		}
+		
+		return hour + minute + " 후";
 	}
 	public int getReserve_remain_minute() {
 		return reserve_remain_minute;
@@ -257,6 +291,13 @@ public class AutowriteEntity extends CommonEntity {
 			checkedStr = "";
 		}
 		return checkedStr;
+	}
+	public String writeUse_yn() {
+		if ( "Y".equals(use_yn) ){
+			return "사용";
+		} else {
+			return "미사용";
+		}
 	}
 	public String getUse_yn() {
 		return use_yn;

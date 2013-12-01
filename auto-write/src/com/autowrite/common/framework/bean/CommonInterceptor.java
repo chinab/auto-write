@@ -89,15 +89,15 @@ public class CommonInterceptor implements HandlerInterceptor {
 				return false;
 			}
 			
-			if ( !checkAuth(userInfo, request, requestedURI) ){
-				sendError(response, "권한이 없습니다.");
-				return false;
-			}
-			
-			if ( !checkBoardLimit(userInfo, request) ){
-				sendError(response, "하루 " + Constant.BOARD_WRITE_LIMIT + "개까지 업로드 가능합니다.");
-				return false;
-			}
+//			if ( !checkAuth(userInfo, request, requestedURI) ){
+//				sendError(response, "권한이 없습니다.");
+//				return false;
+//			}
+//			
+//			if ( !checkBoardLimit(userInfo, request) ){
+//				sendError(response, "하루 " + Constant.BOARD_WRITE_LIMIT + "개까지 업로드 가능합니다.");
+//				return false;
+//			}
 		}
 		
 		return true;

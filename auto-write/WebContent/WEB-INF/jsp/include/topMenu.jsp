@@ -36,7 +36,7 @@
 					<div class="Menus_t"><a href="contentsList.do?jsp=contents/contentsList" onfocus="blur()" >본문설정</a></div>
 					<div class="Menus_t"><a href="siteList.do?jsp=site/siteList" onfocus="blur()" >사이트설정</a></div>
 					<div class="Menus_t"><a href="businessInfoList.do?jsp=individual/businessInfoList" onfocus="blur()" >개인설정</a></div>
-					<div class="Menus_t"><a href="javascript:alert('준비중');" onfocus="blur()" >알림마당</a></div>
+					<div class="Menus_t"><a href="boardListView.do?jsp=board/boardList&category=020000" onfocus="blur()" >알림마당</a></div>
 					<%
 						if ( "M".equals(userEntity.getType_code()) ) {
 					%>

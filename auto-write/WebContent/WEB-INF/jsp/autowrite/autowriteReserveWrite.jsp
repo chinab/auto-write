@@ -30,9 +30,10 @@
 	
 	String reservePivotDate = "" + calendar.get(Calendar.YEAR);
 	reservePivotDate += "" + (calendar.get(Calendar.MONTH) + 1);
-	reservePivotDate += "" + calendar.get(Calendar.DAY_OF_MONTH);
-	if ( reservePivotDate.length() == 1 ) {
-		reservePivotDate += "0" + reservePivotDate;
+	if ( calendar.get(Calendar.DAY_OF_MONTH) < 10 ) {
+		reservePivotDate += "0" + calendar.get(Calendar.DAY_OF_MONTH);
+	} else {
+		reservePivotDate += "" + calendar.get(Calendar.DAY_OF_MONTH);
 	}
 	
 	String reserveStartDate = autowriteEntity.getReserve_start_date(reservePivotDate);

@@ -472,27 +472,27 @@ public class BoardService {
 	public BoardListEntity writeBoard(HttpServletRequest req, Map param) throws Exception {
 		String menuCode = param.get("category").toString();
 		
-		String tableName = getTableNameAsMenuCode(menuCode);
-		
-		param.put("TABLE_NAME", tableName);
-		
+//		String tableName = getTableNameAsMenuCode(menuCode);
+//		param.put("TABLE_NAME", tableName);
+		param.put("TABLE_NAME", "T_BOARD_NOTICE");
+				
 		setCondition(param);
 		
 		// 업소정보, 라인업 - 이전 글 지움.
-		if ( menuCode.startsWith("02") || menuCode.startsWith("03") ){
-			boardDao.deleteRecentLineUp(param);
-		}
+//		if ( menuCode.startsWith("02") || menuCode.startsWith("03") ){
+//			boardDao.deleteRecentLineUp(param);
+//		}
 		
 		long seqId = boardDao.writeBoardWithFile(param);
 		param.put("SEQ_ID", seqId);
 		this.fileUpload(req, param);
 		
 		// 라인업 - 배너 컨텍스트 업데이트
-		if ( menuCode.startsWith("03") ){
-			adminService.updateBannerContext();
-		}
-		
-		setBoardMainEntityToContext(param, tableName);
+//		if ( menuCode.startsWith("03") ){
+//			adminService.updateBannerContext();
+//		}
+//		
+//		setBoardMainEntityToContext(param, tableName);
 		
 		return listBoard(param);
 	}

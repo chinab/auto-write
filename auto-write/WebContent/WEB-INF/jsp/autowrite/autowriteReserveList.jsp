@@ -119,7 +119,8 @@
 								<th>제목</th>
 								<th>예약시작</th>
 								<th>예약종료</th>
-								<th>등록일시</th>
+								<th>예약간격</th>
+								<th>다음예약</th>
 								<th>사용여부</th>
 							</tr>
 							
@@ -137,8 +138,9 @@
 								</td>
 								<td><%=autowriteEntity.writeReserve_start_datetime()%></td>
 								<td><%=autowriteEntity.writeReserve_end_datetime()%></td>
-								<td><%=autowriteEntity.getWriteBoardDateTime(autowriteEntity.getWrite_datetime())%></td>
-								<td><%=autowriteEntity.getUse_yn()%></td>
+								<td><%=autowriteEntity.writeListReserve_term()%></td>
+								<td><%=autowriteEntity.writeReserve_remain_minute()%></td>
+								<td><%=autowriteEntity.writeUse_yn()%></td>
 							</tr>
 							<%
 								}

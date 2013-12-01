@@ -417,7 +417,7 @@ public class AutowriteService extends CommonService{
 			String serviceClassName = siteInfo.getService_class_name();
 			String serviceFullClassName = Constant.AUTOWRITE_SERVICE_PACKAGE + "." + serviceClassName;
 			
-			if ( serviceClassName == null ){
+			if ( serviceClassName == null || serviceClassName.trim().length() == 0 ){
 				successYn = "N";
 				responseContent = siteInfo.getSite_name() + "사이트의 클래스 명을 설정해야 함.";
 			}
