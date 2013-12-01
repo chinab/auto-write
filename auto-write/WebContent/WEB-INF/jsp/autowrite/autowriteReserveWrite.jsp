@@ -31,6 +31,9 @@
 	String reservePivotDate = "" + calendar.get(Calendar.YEAR);
 	reservePivotDate += "" + (calendar.get(Calendar.MONTH) + 1);
 	reservePivotDate += "" + calendar.get(Calendar.DAY_OF_MONTH);
+	if ( reservePivotDate.length() == 1 ) {
+		reservePivotDate += "0" + reservePivotDate;
+	}
 	
 	String reserveStartDate = autowriteEntity.getReserve_start_date(reservePivotDate);
 	String reserveStartTime = autowriteEntity.getReserve_start_time("00:00");
@@ -242,9 +245,9 @@
 									<select name="reserveTerm" style="width: 250px;">
 										<option value="10" <%=autowriteEntity.getReserve_termSelectedStr("10") %>>10분</option>
 										<option value="30" <%=autowriteEntity.getReserve_termSelectedStr("30") %>>30분</option>
-										<option value="120" <%=autowriteEntity.getReserve_termSelectedStr("120") %>>1시간</option>
-										<option value="240" <%=autowriteEntity.getReserve_termSelectedStr("240") %>>2시간</option>
-										<option value="480" <%=autowriteEntity.getReserve_termSelectedStr("480") %>>4시간</option>
+										<option value="60" <%=autowriteEntity.getReserve_termSelectedStr("60") %>>1시간</option>
+										<option value="120" <%=autowriteEntity.getReserve_termSelectedStr("120") %>>2시간</option>
+										<option value="240" <%=autowriteEntity.getReserve_termSelectedStr("240") %>>4시간</option>
 									</select>
 								</td>
 							</tr>
