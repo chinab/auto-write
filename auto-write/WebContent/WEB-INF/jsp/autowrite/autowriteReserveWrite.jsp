@@ -29,7 +29,13 @@
 	Calendar calendar = Calendar.getInstance();
 	
 	String reservePivotDate = "" + calendar.get(Calendar.YEAR);
-	reservePivotDate += "" + (calendar.get(Calendar.MONTH) + 1);
+	
+	if ( calendar.get(Calendar.MONTH) + 1 < 10 ) {
+		reservePivotDate += "0" + (calendar.get(Calendar.MONTH) + 1);
+	} else {
+		reservePivotDate += "" + (calendar.get(Calendar.MONTH) + 1);
+	}
+	
 	if ( calendar.get(Calendar.DAY_OF_MONTH) < 10 ) {
 		reservePivotDate += "0" + calendar.get(Calendar.DAY_OF_MONTH);
 	} else {
@@ -45,7 +51,7 @@
 
 <html>
 <head>
-<title>Auto Write</title>
+<title>Auto Write - <%=calendar.get(Calendar.DAY_OF_MONTH) %></title>
 </head>
 
 <!-- 헤더 스크립트 -->
