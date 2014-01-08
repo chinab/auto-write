@@ -51,7 +51,7 @@
 
 <html>
 <head>
-<title>Auto Write - <%=calendar.get(Calendar.DAY_OF_MONTH) %></title>
+<title>Auto Write</title>
 </head>
 
 <!-- 헤더 스크립트 -->
