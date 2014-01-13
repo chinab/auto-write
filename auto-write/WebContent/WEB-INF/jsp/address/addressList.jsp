@@ -164,6 +164,8 @@
 									<col width="/" />
 									<col width="100" />
 									<col width="100" />
+									<col width="100" />
+									<col width="100" />
 								</colgroup>
 								<tbody>
 		
@@ -172,6 +174,8 @@
 										<th>순번</th>
 										<th>이름</th>
 										<th>번호</th>
+										<th>접견</th>
+										<th>사이트</th>
 										<th>등록일</th>
 									</tr>
 									
@@ -199,6 +203,8 @@
 											</a>
 										</td>
 										<td><%=contentsEntity.getCell_phone()%></td>
+										<td><%=contentsEntity.getCompany_name()%></td>
+										<td><%=contentsEntity.getCompany_division()%></td>
 										<td><%=contentsEntity.getWriteBoardDateTime(contentsEntity.getWrite_datetime())%></td>
 									</tr>
 									<%
