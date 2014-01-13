@@ -16,7 +16,14 @@
 		contentsList = (List<AddressEntity>) request.getAttribute("AddressList");
 	}
 	
-	AddressListEntity contentsListEntity = (AddressListEntity) request.getAttribute("AddressListEntity");
+	AddressListEntity addressListEntity = (AddressListEntity) request.getAttribute("AddressListEntity");
+	
+	String searchKey = "";
+	String searchValue = "";
+	if ( addressListEntity != null ){
+		searchKey = addressListEntity.getSearchKey();
+		searchValue = addressListEntity.getSearchValue();
+	}
 	
 	if ( contentsList == null ){
 		contentsList = new ArrayList();
@@ -91,14 +98,21 @@
 			frm.submit();
 		}
 	}
+	
+	
+	function listSearch(){
+		var frm = document.searchForm;
+		
+		frm.action = "addressList.do";
+		frm.jsp.value = "address/addressList";
+		frm.method = "post";
+		frm.submit();
+	}
 </script>
 
 
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
-<form name="listForm">
-	<input type="hidden" name="jsp" value=""/>
-
 <table cellpadding="0" cellspacing="0" border="0" width="1000" align="center" style="margin-top: 30px;">
 	<tr>
 		<!--좌측메뉴-->
@@ -108,71 +122,93 @@
 		<td width="800" valign="top">
 			<div style="margin-left: 30px; width: 750px;">
 
-				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">주소록 > 주소록 리스트</div>
+				<div style="width: 100% line-height:120px; padding: 7px; border: solid 1px #eeeeee;">주소록 &gt; 주소록 리스트</div>
 				<div style="width: 100%; margin-top: 30px;">
 					<img src="images/title_dot.gif"/>
 					<span style="font-weight: bold; padding-left: 3px; font-size: 17px; color: #219075; font-family: Malgun Gothic;">주소록 리스트</span>
+					
+					<!--검색시작-->
+					<form name="searchForm">
+					<input type="hidden" name="jsp" value=""/>
+					
+					<fieldset class="search clfix">
+						<legend>검색</legend>
+						<b>Total : <%=addressListEntity.getTotalListCount() %>건  </b> &nbsp; &nbsp; &nbsp; &nbsp;
+						<select name="searchKey">
+							<option value="cell_phone" <%="cell_phone".equals(searchKey)?"selected":""%>>번호</option>
+							<option value="name" <%="name".equals(searchKey)?"selected":""%>>이름</option>
+						</select>
+						
+						<input type="text" class="s_id" name="searchValue" title="검색어를입력하세요" style="width:200;" value="<%=searchValue%>" onkeydown="javascript:if(event.keyCode==13)listSearch();"/>
+						<input class="in_btn" type="button" value="SEARCH"onclick="javascript:listSearch();" class="input_gr">
+					</fieldset>
+					</form>
+						
 				</div>
 
 				<div style="margin-top: 5px;">
-
-					<!--게시판 시작-->
-					<table class="list01">
-						<colgroup>
-							<col width="40" />
-							<col width="70" />
-							<col width="/" />
-							<col width="100" />
-							<col width="100" />
-						</colgroup>
-						<tbody>
-
-							<tr>
-								<th><input name="checkAll" type="checkbox" onClick="javascript:changeAllChecked('selectedSeqId');"></th>
-								<th>순번</th>
-								<th>이름</th>
-								<th>번호</th>
-								<th>등록일</th>
-							</tr>
-							
-							<!--글 목록 시작-->
-							<%
-								if ( contentsList.size() == 0 ) {
-									out.println("<tr><td colspan='5'><b>글이 없습니다</b></td></tr>");
-								} else {
-							%>
-							<%		
-									String regionStr = "";
-									String facilityNameStr = "";
+				
+					<form name="listForm">
+						<input type="hidden" name="jsp" value=""/>
+	
+							<!--게시판 시작-->
+							<table class="list01">
+								
+								<colgroup>
+									<col width="40" />
+									<col width="70" />
+									<col width="/" />
+									<col width="100" />
+									<col width="100" />
+								</colgroup>
+								<tbody>
+		
+									<tr>
+										<th><input name="checkAll" type="checkbox" onClick="javascript:changeAllChecked('selectedSeqId');"></th>
+										<th>순번</th>
+										<th>이름</th>
+										<th>번호</th>
+										<th>등록일</th>
+									</tr>
 									
-									long startSequence = contentsListEntity.getStartSequenceNumber();
-									
-									for ( int ii = 0 ; ii < contentsList.size() ; ii ++ ) {
-										AddressEntity contentsEntity = contentsList.get(ii);
-							%>
-							<tr>
-								<td><input name="selectedSeqId" type="checkbox" value="<%=contentsEntity.getSeq_id()%>"></td>
-								<td><%= startSequence-- %></td>
-								<td>
-									<a href="javascript:readContents('<%=contentsEntity.getSeq_id()%>');">
-										<%=contentsEntity.getName()%>
-									</a>
-								</td>
-								<td><%=contentsEntity.getCell_phone()%></td>
-								<td><%=contentsEntity.getWriteBoardDateTime(contentsEntity.getWrite_datetime())%></td>
-							</tr>
-							<%
-									}
-								}
-							%>
-
-						</tbody>
-					</table>
-
+									<!--글 목록 시작-->
+									<%
+										if ( contentsList.size() == 0 ) {
+											out.println("<tr><td colspan='5'><b>글이 없습니다</b></td></tr>");
+										} else {
+									%>
+									<%		
+											String regionStr = "";
+											String facilityNameStr = "";
+											
+											long startSequence = addressListEntity.getStartSequenceNumber();
+											
+											for ( int ii = 0 ; ii < contentsList.size() ; ii ++ ) {
+												AddressEntity contentsEntity = contentsList.get(ii);
+									%>
+									<tr>
+										<td><input name="selectedSeqId" type="checkbox" value="<%=contentsEntity.getSeq_id()%>"></td>
+										<td><%= startSequence-- %></td>
+										<td>
+											<a href="javascript:readContents('<%=contentsEntity.getSeq_id()%>');">
+												<%=contentsEntity.getName()%>
+											</a>
+										</td>
+										<td><%=contentsEntity.getCell_phone()%></td>
+										<td><%=contentsEntity.getWriteBoardDateTime(contentsEntity.getWrite_datetime())%></td>
+									</tr>
+									<%
+											}
+										}
+									%>
+		
+								</tbody>
+							</table>
+						</form>
 
 
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
-						<input class="in_btn" type="button" value="등록" OnClick="location.href='jspView.do?jsp=contents/contentsWrite';" class="input_gr">
+						<input class="in_btn" type="button" value="등록" OnClick="location.href='jspView.do?jsp=address/addressWrite';" class="input_gr">
 						&nbsp;&nbsp;
 						<input class="in_btnc2" type="button" value="수정" OnClick="modifyContents();" class="input_gr">
 						&nbsp;&nbsp;
@@ -188,7 +224,7 @@
 
 	</tr>
 </table>
-</form>
+
 
 <!--푸터-->
 <jsp:include page="../include/footer.jsp" flush="false" />
