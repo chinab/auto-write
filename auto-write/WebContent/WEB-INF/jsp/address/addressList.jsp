@@ -23,6 +23,10 @@
 	if ( addressListEntity != null ){
 		searchKey = addressListEntity.getSearchKey();
 		searchValue = addressListEntity.getSearchValue();
+		
+		if ( searchValue == null ) {
+			searchValue = "";
+		}
 	}
 	
 	if ( contentsList == null ){

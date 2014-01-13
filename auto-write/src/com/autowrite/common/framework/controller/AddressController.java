@@ -76,8 +76,15 @@ public class AddressController extends CommonController{
 		
 		setDefaultParameter(req, e, model, param);
 		
-		AddressListEntity addressListEntity = addressService.listPrivateAddress(param);
-		List<AddressEntity> addressList = addressListEntity.getAddressList();
+		AddressListEntity addressListEntity = null;
+		List<AddressEntity> addressList = null;
+		
+		if ( searchValue != null && searchValue.length() > 0 ) {
+			addressListEntity = addressService.listPrivateAddress(param);
+			addressList = addressListEntity.getAddressList();
+		} else {
+			addressListEntity = new AddressListEntity();
+		}
 		
 		addressListEntity.setSearchKey(searchKey);
 		addressListEntity.setSearchValue(searchValue);
