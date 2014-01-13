@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ADDRESS">
+	<statement id="address.private.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					AUTOWRITE_ADDRESS_CONTENTS
+				where
+					WRITER_SEQ_ID = #WRITER_SEQ_ID#
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="address.private.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AddressEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, NAME, CELL_PHONE, COMPANY_PHONE, HOME_PHONE, FAX, EXTENTION_NUMBER, ETC_NUMBER, EMAIL, BIRTH_DAY, MARRY_DAY, ANNIVERSARY, ETC_ANNIVERSARY, HOMEPAGE, COMPANY_NAME, COMPANY_DIVISION, COMPANY_CLASS, HOME_ZIPCODE, HOME_ADDRESS, COMPANY_ZIPCODE, COMPANY_ADDRESS, ETC_ZIPCODE, ETC_ADDRESS, MEMO, WRITE_DATETIME
+			from
+				AUTOWRITE_ADDRESS_CONTENTS
+			where
+				WRITER_SEQ_ID = #WRITER_SEQ_ID#
+			order by
+				WRITE_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+	
+	<statement id="address.private.write" parameterClass="java.util.HashMap">
+		insert into AUTOWRITE_ADDRESS_CONTENTS (
+			CONTENTS_NAME, TITLE, CONTENT, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME 
+		) values (
+			#CONTENTS_NAME#, #TITLE#, #CONTENT#, #WRITER_SEQ_ID#, #WRITER_ID#, sysdate()
+		)
+	</statement>
+	
+	
+	<statement id="address.private.select" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AddressEntity">
+		select
+			SEQ_ID, NAME, CELL_PHONE, COMPANY_PHONE, HOME_PHONE, FAX, EXTENTION_NUMBER, ETC_NUMBER, EMAIL, BIRTH_DAY, MARRY_DAY, ANNIVERSARY, ETC_ANNIVERSARY, HOMEPAGE, COMPANY_NAME, COMPANY_DIVISION, COMPANY_CLASS, HOME_ZIPCODE, HOME_ADDRESS, COMPANY_ZIPCODE, COMPANY_ADDRESS, ETC_ZIPCODE, ETC_ADDRESS, MEMO, WRITE_DATETIME
+		from
+			AUTOWRITE_ADDRESS_CONTENTS
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	
+	<statement id="address.private.delete" parameterClass="java.util.HashMap">
+		delete from
+			AUTOWRITE_ADDRESS_CONTENTS
+		where
+			SEQ_ID = #SEQ_ID#
+	</statement>
+	
+	<statement id="autorwrite.address.contents.list.count" parameterClass="java.util.HashMap" resultClass="java.lang.Long">
+		select count(1) from (
+			select @RNUM:=0, Q.* from (
+				select
+					*
+				from
+					AUTOWRITE_ADDRESS_CONTENTS
+				where
+					WRITER_SEQ_ID = #WRITER_SEQ_ID#
+				order by
+					WRITE_DATETIME desc
+			) Q
+			where
+				1=1
+				<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+						$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+				</isNotNull>
+		) R
+	</statement>
+	
+	
+	<statement id="autorwrite.address.contents.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.AddressEntity">
+		select @RNUM:=0, Q.* from (
+			select
+				SEQ_ID, NAME, CELL_PHONE, COMPANY_PHONE, HOME_PHONE, FAX, EXTENTION_NUMBER, ETC_NUMBER, EMAIL, BIRTH_DAY, MARRY_DAY, ANNIVERSARY, ETC_ANNIVERSARY, HOMEPAGE, COMPANY_NAME, COMPANY_DIVISION, COMPANY_CLASS, HOME_ZIPCODE, HOME_ADDRESS, COMPANY_ZIPCODE, COMPANY_ADDRESS, ETC_ZIPCODE, ETC_ADDRESS, MEMO, WRITE_DATETIME
+			from
+				AUTOWRITE_ADDRESS_CONTENTS
+			where
+				WRITER_SEQ_ID = #WRITER_SEQ_ID#
+			order by
+				WRITE_DATETIME desc
+		) Q
+		where
+			1=1
+			<isNotNull prepend="and" removeFirstPrepend="true" property="SEARCH_VALUE">
+					$SEARCH_KEY$ like concat('%', #SEARCH_VALUE#, '%')
+			</isNotNull>
+	</statement>
+	
+	<statement id="autorwrite.address.contents.write" parameterClass="com.autowrite.common.framework.entity.AddressEntity">
+		insert into AUTOWRITE_ADDRESS_CONTENTS (
+			NAME, CELL_PHONE, COMPANY_PHONE, HOME_PHONE, FAX, EXTENTION_NUMBER, ETC_NUMBER, EMAIL, BIRTH_DAY, MARRY_DAY, ANNIVERSARY, ETC_ANNIVERSARY, HOMEPAGE, COMPANY_NAME, COMPANY_DIVISION, COMPANY_CLASS, HOME_ZIPCODE, HOME_ADDRESS, COMPANY_ZIPCODE, COMPANY_ADDRESS, ETC_ZIPCODE, ETC_ADDRESS, MEMO, WRITER_SEQ_ID, WRITE_DATETIME
+		) values (
+			#name#, #cell_phone#, #company_phone#, #home_phone#, #fax#, #extention_number#, #etc_number#, #email#, #birth_day#, #marry_day#, #anniversary#, #etc_anniversary#, #homepage#, #company_name#, #company_division#, #company_class#, #home_zipcode#, #home_address#, #company_zipcode#, #company_address#, #etc_zipcode#, #etc_address#, #memo#, #writer_seq_id#, sysdate()
+		)
+	</statement>
+	
+	
+	
+</sqlMap>

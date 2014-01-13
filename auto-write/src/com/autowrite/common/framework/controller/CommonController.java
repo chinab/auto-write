@@ -50,6 +50,7 @@ public class CommonController implements Controller {
 		HttpSession httpSession = req.getSession(true);
 		UserEntity userInfo = (UserEntity)httpSession.getAttribute("userSessionKey");
 		param.put("USER_SEQ_ID", userInfo.getSeq_id());
+		param.put("WRITER_SEQ_ID", userInfo.getSeq_id());
 		param.put("USER_INFO", userInfo);
 		
 //		List menus = userInfo.getMenuList();

@@ -14,4 +14,5 @@
 	<sqlMap resource="sqlmap/Board_SQL.xml" />
 	<sqlMap resource="sqlmap/Memo_SQL.xml" />
 	<sqlMap resource="sqlmap/AutoWrite_SQL.xml" />
+	<sqlMap resource="sqlmap/Address_SQL.xml" />
 </sqlMapConfig>
