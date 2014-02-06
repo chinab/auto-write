@@ -1,6 +1,8 @@
 package com.autowrite.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.EofSensorInputStream;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -176,5 +179,51 @@ public class Mysecond extends AutowriterCommon {
 		nvps.add(new BasicNameValuePair("wr_2", "B"));
 		
 		return nvps;
+	}
+	
+	@Override
+	public String getContentKey(AutowriteEntity autowriteInfo, HttpEntity entity, String paramName, String keyStr) throws Exception {
+		EofSensorInputStream content = (EofSensorInputStream) entity.getContent();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(content, autowriteInfo.getSiteEntity().getSite_encoding()));
+		String curr = null;
+		String preCurr = null;
+		String contentKey = null;
+		
+		try {
+			
+			System.out.println("============= parse response =============");
+			
+			while((curr = reader.readLine()) != null ){
+				if ( curr.contains(keyStr) ){
+					System.out.println("curr:" + curr);
+					System.out.println("preCurr:" + preCurr);
+					try {
+						contentKey = preCurr.substring(preCurr.indexOf(paramName), preCurr.indexOf("&amp;sca"));
+						
+						contentKey = contentKey.substring(paramName.length(), contentKey.length());
+						
+						if ( contentKey.contains("&amp;") ) {
+							contentKey = contentKey.substring(0, contentKey.indexOf("&amp;"));
+						}
+						
+						System.out.println("contentKey = [" + contentKey + "]");
+						
+						if ( contentKey!= null ){
+							return contentKey;
+						}
+					} catch ( StringIndexOutOfBoundsException e ) {
+						System.out.println(preCurr);
+					} 
+				}
+				
+				preCurr = curr;
+			}
+		} catch ( Exception e ) {
+			throw e;
+		} finally {
+			content.close();
+		}
+		
+		return null;
 	}
 }
