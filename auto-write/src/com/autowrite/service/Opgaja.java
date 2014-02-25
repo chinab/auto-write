@@ -147,8 +147,14 @@ public class Opgaja extends AutowriterCommon {
 			e.printStackTrace();
 			throw e;
 		}
-
-    	String deleteUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=s2_3&category=203497&act=procBoardDeleteDocument&document_srl=" + contentKey;
+    	
+    	String categoryStr = siteInfo.getSite_category();
+    	if ( categoryStr == null || categoryStr.trim().length() == 0 ) {
+    		throw new Exception("사이트 대분류(category_srl)를 설정하세요.");
+    	}
+    	String deleteUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=s2_3&category=" + categoryStr + "&act=procBoardDeleteDocument&document_srl=" + contentKey;
+    	    	
+//    	String deleteUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=s2_3&category=203497&act=procBoardDeleteDocument&document_srl=" + contentKey;
     	
 		System.out.println("deleteUrl:" + deleteUrl);
 		
