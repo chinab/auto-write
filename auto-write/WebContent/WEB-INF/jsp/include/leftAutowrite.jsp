@@ -6,6 +6,8 @@
 			<li class="Menu_tex"><a href="autowriteWriteForm.do?jsp=autowrite/autowriteWrite" onfocus="blur()" >자동등록</a><li>
 			<li class="Menu_tex"><a href="autowriteReserveList.do?jsp=autowrite/autowriteReserveList" onfocus="blur()" >예약목록</a><li>
 			<li class="Menu_tex"><a href="autowriteWriteForm.do?jsp=autowrite/autowriteReserveWrite" onfocus="blur()" >예약등록</a><li>
+			<!-- 
 			<li class="Menu_tex"><a href="jspView.do?jsp=jump/jumpList" onfocus="blur()" >JUMP</a><li>
+			-->
 			</ul>
 		</td>
