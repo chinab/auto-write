@@ -22,7 +22,7 @@
 
 <html>
 <head>
-<title>자동등록</title>
+<title>Auto Write</title>
 </head>
 
 <!-- 헤더 스크립트 -->
