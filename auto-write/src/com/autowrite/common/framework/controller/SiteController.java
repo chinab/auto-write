@@ -300,9 +300,15 @@ public class SiteController extends CommonController{
 			throw new Exception("Login please.");
 		}
 		
-		SiteListEntity siteListEntity = siteService.deletePrivateSite(req, param);
-		List<SiteEntity> siteList = siteListEntity.getSiteList();
+		String[] seqIdArray = req.getParameterValues("selectedSeqId");
 		
+		for ( int ii = 0 ; ii < seqIdArray.length ; ii ++ ) {
+			param.put("SEQ_ID", seqIdArray[ii]);
+			
+			siteService.deletePrivateSite(req, param);
+		}
+		
+		siteService.deletePrivateSite(req, param);
 		String redirectUrl = "siteList.do?jsp=site/siteList";
 		ModelAndView model = new ModelAndView(new RedirectView(redirectUrl));
 		

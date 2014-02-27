@@ -123,12 +123,10 @@ public class SiteService extends CommonService{
 	}
 	
 	
-	public SiteListEntity deletePrivateSite(HttpServletRequest req, Map param) throws Exception {
+	public void deletePrivateSite(HttpServletRequest req, Map param) throws Exception {
 		setCondition(param);
 		
 		siteDao.deletePrivateSite(param);
-		
-		return listPrivateSite(param);
 	}
 	
 	

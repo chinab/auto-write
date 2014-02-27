@@ -27,6 +27,67 @@
 <!--탑메뉴-->
 <jsp:include page="../include/topMenu.jsp" flush="false" />
 
+<script>
+	function readContents(seqId){
+		var hrefStr = "siteRead.do?jsp=site/siteWrite";
+		hrefStr += "&seqId=" + seqId;
+		
+		location.href = hrefStr;
+	}
+	
+	function modifyContents(){
+		var frm = document.listForm;
+		
+		var checkedCount = 0;
+		var seqId;
+		
+		for ( var ii = 0 ; ii < frm.selectedSeqId.length ; ii ++ ) {
+			if ( frm.selectedSeqId[ii].checked == true ){
+				seqId = frm.selectedSeqId[ii].value;
+				checkedCount ++;
+			}
+		}
+		
+		if ( checkedCount == 0 ) {
+			alert("대상을 선택 해 주세요.");
+			return;
+		} else if ( checkedCount > 1 ) {
+			alert("하나만 선택 해 주세요.");
+			return;
+		} else {
+			var hrefStr = "siteRead.do?jsp=site/siteWrite";
+			hrefStr += "&seqId=" + seqId;
+			
+			location.href = hrefStr;
+		}
+	}
+	
+	function deleteContents(){
+		var frm = document.listForm;
+		
+		var checkedCount = 0;
+		
+		for ( var ii = 0 ; ii < frm.selectedSeqId.length ; ii ++ ) {
+			if ( frm.selectedSeqId[ii].checked == true ){
+				checkedCount ++;
+			}
+		}
+		
+		if ( checkedCount == 0 ) {
+			alert("대상을 선택 해 주세요.");
+			return;
+		} else {
+			if ( !confirm("선택한 대상을 삭제하시겠습니까?") ){
+				return;
+			}
+			
+			frm.action = "siteDelete.do";
+			frm.method = "post";
+			frm.submit();
+		}
+	}
+</script>
+
 <body>
 	<form name="listForm" method="post">
 		<input type="hidden" name="seqId" value=""/>
@@ -113,9 +174,9 @@
 					<div style="width: 100%; margin-top: 15px; text-align: center;">
 						<input class="in_btn" type="button" value="등록" OnClick="javascript:location.href='siteRead.do?jsp=site/siteWrite';" class="input_gr">
 						&nbsp;&nbsp;
-						<input class="in_btnc2" type="button" value="수정" OnClick="alert('working');" class="input_gr">
+						<input class="in_btnc2" type="button" value="수정" OnClick="modifyContents();" class="input_gr">
 						&nbsp;&nbsp;
-						<input class="in_btnc" type="button" value="삭제" OnClick="alert('working');" class="input_gr">
+						<input class="in_btnc" type="button" value="삭제" OnClick="deleteContents();" class="input_gr">
 					</div>
 					
 					<!--페이지링크-->
@@ -129,7 +190,7 @@
 
 	</tr>
 </table>
-
+	</form>
 
 <!--푸터-->
 <jsp:include page="../include/footer.jsp" flush="false" />
