@@ -29,7 +29,7 @@
 	<table width="1000" cellpadding="0" cellspacing="0" border="0" align="center">
 		<tr>
 			<td>
-				<div class="Top_Logo"><a href="/" onfocus="blur()"><img src="images/top_logo.gif"></a></div>
+				<div class="Top_Logo"><a href="./autowriteMasterList.do?jsp=autowrite/autowriteMasterList" onfocus="blur()"><img src="images/top_logo.gif"></a></div>
 				
 				<div class="Top_Main_menus">
 					<div class="Menus_tl"><a href="autowriteMasterList.do?jsp=autowrite/autowriteMasterList" onfocus="blur()" >자동등록</a></div>
