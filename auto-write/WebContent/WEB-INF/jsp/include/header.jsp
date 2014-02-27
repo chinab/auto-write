@@ -8,13 +8,13 @@
 
 <META NAME="ROBOTS" CONTENT="ALL">
 <head>
-	<meta http-equiv="X-UA-Compatitble" content="IE=7" />
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<!-- 	<meta http-equiv="X-UA-Compatible" content="IE=edge" /> -->
 	<meta http-equiv="expires" content="-1" > 
 	<meta http-equiv="Pragma" content="No-cache" />
 	<meta http-equiv="Cache-Control" content="No-cache" />
 	<meta http-equiv="Content-Script-Type" content="text/javascript" />
 	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<title>AUTOWRITE</title>
 </head>
 
 <link href='http://api.mobilis.co.kr/webfonts/css/?fontface=NanumGothickWeb' rel='stylesheet' type='text/css'/>
