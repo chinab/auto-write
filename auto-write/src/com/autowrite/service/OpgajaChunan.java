@@ -229,6 +229,12 @@ public class OpgajaChunan extends AutowriterCommon {
 		// 3920392: 시화
 		// 203504 : 평택
 		// 8505551 : 광명
+    	// ================= 추가분
+    	// mid=s2_4
+    	// 13753050 : 천안
+    	// 13753050 : 대전
+    	// 203767 : 청주
+    	// 13753050 : 음성
 //    	nvps.add(new BasicNameValuePair("category_srl", "203497"));
     	nvps.add(new BasicNameValuePair("category_srl", categoryStr));
 		

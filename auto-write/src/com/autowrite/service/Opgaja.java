@@ -183,6 +183,8 @@ public class Opgaja extends AutowriterCommon {
 //    	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=s2_3&category=203497";
     	String listUrl = "http://" + autowriteInfo.getSiteEntity().getDomain() + "/index.php?mid=s2_3&category=" + categoryStr;
     	
+    	System.out.println("listUrl:" + listUrl);
+    	
     	HttpPost httpost = new HttpPost(listUrl);
 		HttpResponse response = httpclient.execute(httpost);
 		HttpEntity entity = response.getEntity();
