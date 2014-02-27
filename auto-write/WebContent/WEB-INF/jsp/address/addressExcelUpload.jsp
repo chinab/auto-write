@@ -18,10 +18,6 @@
 	}
 %>
 
-<html>
-<head>
-<title>Auto Write</title>
-</head>
 
 <!-- 헤더 스크립트 -->
 <jsp:include page="../include/header.jsp" flush="false" />

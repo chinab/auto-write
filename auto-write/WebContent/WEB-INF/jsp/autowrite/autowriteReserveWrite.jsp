@@ -49,11 +49,6 @@
 	String reserveTerm = autowriteEntity.getReserve_term();
 %>
 
-<html>
-<head>
-<title>Auto Write</title>
-</head>
-
 <!-- 헤더 스크립트 -->
 <jsp:include page="../include/header.jsp" flush="false" />
 <!-- 헤더 스크립트 끝 -->
@@ -93,8 +88,6 @@
 		location.href = locStr;
 	}
 </script>
-
-<body>
 
 <!--메인컨텐츠 전체-->
 <!--시작지점-->
