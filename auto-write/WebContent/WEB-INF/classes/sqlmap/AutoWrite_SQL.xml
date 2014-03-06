@@ -26,14 +26,15 @@
 	<statement id="site.private.list" parameterClass="java.util.HashMap" resultClass="com.autowrite.common.framework.entity.SiteEntity">
 		select @RNUM:=0, Q.* from (
 			select
-				SEQ_ID, MASTER_SEQ_ID, DOMAIN, SITE_NAME, SITE_ID, SITE_PASSWD, 
-				USE_YN, WRITE_TYPE_CODE, WRITER_SEQ_ID, WRITER_ID, WRITE_DATETIME
+				p.SEQ_ID, p.MASTER_SEQ_ID, m.DOMAIN, m.SITE_NAME, p.SITE_ID, p.SITE_PASSWD, 
+				p.USE_YN, p.WRITE_TYPE_CODE, p.WRITER_SEQ_ID, p.WRITER_ID, p.WRITE_DATETIME
 			from
-				SITE_PRIVATE
+				SITE_PRIVATE p, SITE_MASTER m
 			where
-				WRITER_SEQ_ID = #USER_SEQ_ID#
+				p.MASTER_SEQ_ID = m.SEQ_ID
+				and p.WRITER_SEQ_ID = #USER_SEQ_ID#
 			order by
-				WRITE_DATETIME desc
+				p.WRITE_DATETIME desc
 		) Q
 		where
 			1=1
