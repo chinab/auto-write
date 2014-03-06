@@ -122,10 +122,10 @@
 					<!--게시판 시작-->
 					<table class="list01">
 						<colgroup>
-							<col width="70" />
-							<col width="70" />
+							<col width="50" />
+							<col width="50" />
+							<col width="150" />
 							<col width="/" />
-							<col width="100" />
 							<col width="100" />
 						</colgroup>
 						<tbody>
@@ -133,9 +133,9 @@
 							<tr>
 								<th><input name="checkAll" type="checkbox" onClick="javascript:changeAllChecked('selectedSeqId');"></th>
 								<th>순번</th>
+								<th>본문이름</th>
 								<th>제목</th>
 								<th>등록일</th>
-								<th>기본글여부</th>
 							</tr>
 							
 							<!--글 목록 시작-->
@@ -161,8 +161,12 @@
 										<%=contentsEntity.getContents_name()%>
 									</a>
 								</td>
+								<td>
+									<a href="javascript:readContents('<%=contentsEntity.getSeq_id()%>');">
+										<%=contentsEntity.getTitle()%>
+									</a>
+								</td>
 								<td><%=contentsEntity.getWriteBoardDateTime()%></td>
-								<td><%=contentsEntity.getBlind_yn()%></td>
 							</tr>
 							<%
 								}
