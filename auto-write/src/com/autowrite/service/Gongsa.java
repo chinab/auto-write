@@ -125,7 +125,6 @@ public class Gongsa extends AutowriterCommon {
     	
     	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
     	String keyStr = siteInfo.getSite_keyword();
-    	keyStr = "인천 엣지";
     	
     	if ( keyStr == null || keyStr.trim().length() == 0 ) {
     		throw new Exception("사이트 키워드를 설정하세요.");

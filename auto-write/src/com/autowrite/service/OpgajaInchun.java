@@ -134,7 +134,8 @@ public class OpgajaInchun extends AutowriterCommon {
     private void deleteBoard(AutowriteEntity autowriteInfo) throws Exception {
     	String paramName = "document_srl=";
     	// TODO : 키워드 디비화
-    	String keyStr = "인천 엣지";
+    	SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String keyStr = siteInfo.getSite_keyword();
     	
     	String contentKey = null;
     	

@@ -140,7 +140,8 @@ public class Jayjay extends AutowriterCommon {
 		nvps.add(new BasicNameValuePair("up_contents", contentStr));
 		
 		// 업소명
-		nvps.add(new BasicNameValuePair("up_name", "[인천-엣지]"));
+		
+		nvps.add(new BasicNameValuePair("up_name", "[인천-더블유]"));
 		
 		// 업소명
 		nvps.add(new BasicNameValuePair("add1", "인천 계양구 계산동"));
@@ -151,7 +152,7 @@ public class Jayjay extends AutowriterCommon {
 		nvps.add(new BasicNameValuePair("up_addr", "인천 계산동 계양구청 도보5분거리"));
 		
 		// 연락처
-		nvps.add(new BasicNameValuePair("up_person", "인천엣지실장"));
+		nvps.add(new BasicNameValuePair("up_person", "인천더블유실장"));
 		
 		// 담당자
 		nvps.add(new BasicNameValuePair("up_tel", "010-4636-8473"));

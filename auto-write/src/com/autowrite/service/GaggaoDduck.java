@@ -221,8 +221,9 @@ public class GaggaoDduck extends AutowriterCommon {
 		nvps.add(new BasicNameValuePair("wr_subject_color", "#0033ff"));
 		
 		// 분류
-		// TODO : 지역-업소명 변수추가.
-		nvps.add(new BasicNameValuePair("ca_name", "인천-엣지"));
+		SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String keyStr = siteInfo.getSite_keyword();
+		nvps.add(new BasicNameValuePair("ca_name", keyStr));
 		
 		return nvps;
 	}
