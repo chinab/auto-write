@@ -205,9 +205,11 @@ public class Bamsamo extends AutowriterCommon {
 		// #9900cc:보라
 		nvps.add(new BasicNameValuePair("wr_subject_color", "#0033ff"));
 		
+		SiteEntity siteInfo = autowriteInfo.getSiteEntity();
+    	String keyStr = siteInfo.getSite_keyword();
 		// 분류
 		// 
-		nvps.add(new BasicNameValuePair("ca_name", "인천-엣지"));
+		nvps.add(new BasicNameValuePair("ca_name", keyStr));
 		
 		return nvps;
 	}
