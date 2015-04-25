@@ -1,0 +1,1 @@
+auto write to another site using apache httpclient
